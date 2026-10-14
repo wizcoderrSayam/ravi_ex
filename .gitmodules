@@ -1,0 +1,4 @@
+[submodule "packages/ecommerce"]
+	path = packages/ecommerce
+	url = git@github.com:carepeerinfotech/ecommerce.git
+	branch = main
