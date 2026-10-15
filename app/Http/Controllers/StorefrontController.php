@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Carepeerinfotech\Ecommerce\Models\Category;
 use Carepeerinfotech\Ecommerce\Models\Product;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Str;
 use Illuminate\View\View;
 
 /**
@@ -18,9 +19,21 @@ class StorefrontController extends Controller
 
     private const HOME_SECTION_SIZE = 4;
 
+    /** The home page's "Shop for …" rows, in display order, keyed by top-level category slug. */
+    private const HOME_SHOP_SECTIONS = [
+        'girls' => 'Shop for Girls',
+        'boys' => 'Shop for Boys',
+        'men' => 'Shop for Men',
+        'women' => 'Shop for Women',
+    ];
+
+    /** Kids' rows are a carousel of category cards; the rest keep the intro panel and tile grid. */
+    private const HOME_CAROUSEL_SECTIONS = ['girls', 'boys'];
+
     public function home(): View
     {
         return view('shop.home', [
+            'shopSections' => $this->shopSections(),
             'newArrivals' => $this->newArrivalsQuery()->take(self::HOME_SECTION_SIZE)->get(),
             'bestsellers' => $this->productQuery()->featured()->take(self::HOME_SECTION_SIZE)->get(),
         ]);
@@ -44,11 +57,6 @@ class StorefrontController extends Controller
     public function girls(): View
     {
         return $this->category('girls');
-    }
-
-    public function accessories(): View
-    {
-        return $this->category('accessories');
     }
 
     public function newArrivals(): View
@@ -82,6 +90,51 @@ class StorefrontController extends Controller
                 ->whereIn('category_id', $category->children->pluck('id')->push($category->id))
                 ->get(),
         ]);
+    }
+
+    /**
+     * Each active top-level category, introduced by its name and description, with
+     * its active subcategories as tiles. A tile links to its parent's listing with
+     * the subcategory filter preselected.
+     *
+     * @return list<array{title: string, name: string, description: ?string, url: string, layout: 'carousel'|'band', tiles: list<array{name: string, image: ?string, url: string}>}>
+     */
+    private function shopSections(): array
+    {
+        $parents = Category::query()
+            ->active()
+            ->whereNull('parent_id')
+            ->whereIn('slug', array_keys(self::HOME_SHOP_SECTIONS))
+            ->with(['children' => fn ($children) => $children->active()->with('images')])
+            ->get()
+            ->keyBy('slug');
+
+        $sections = [];
+
+        foreach (self::HOME_SHOP_SECTIONS as $slug => $title) {
+            $parent = $parents->get($slug);
+
+            if ($parent === null || $parent->children->isEmpty()) {
+                continue;
+            }
+
+            $parentUrl = route('shop.'.$slug);
+
+            $sections[] = [
+                'title' => $title,
+                'name' => $parent->name,
+                'description' => $parent->description,
+                'url' => $parentUrl,
+                'layout' => in_array($slug, self::HOME_CAROUSEL_SECTIONS, true) ? 'carousel' : 'band',
+                'tiles' => $parent->children->map(fn (Category $subcategory): array => [
+                    'name' => $subcategory->name,
+                    'image' => $subcategory->imageUrl(),
+                    'url' => $parentUrl.'#'.Str::after($subcategory->slug, $slug.'-'),
+                ])->all(),
+            ];
+        }
+
+        return $sections;
     }
 
     /**

@@ -9,7 +9,6 @@ Route::controller(StorefrontController::class)->name('shop.')->group(function ()
     Route::get('/women', 'women')->name('women');
     Route::get('/boys', 'boys')->name('boys');
     Route::get('/girls', 'girls')->name('girls');
-    Route::get('/accessories', 'accessories')->name('accessories');
     Route::get('/new-arrivals', 'newArrivals')->name('new-arrivals');
     Route::get('/search', 'search')->name('search');
     Route::get('/wishlist', 'wishlist')->name('wishlist');

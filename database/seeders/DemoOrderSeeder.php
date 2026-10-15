@@ -303,23 +303,23 @@ class DemoOrderSeeder extends Seeder
     private function orders(): array
     {
         return [
-            ['customer' => 0, 'days_ago' => 58, 'status' => 'delivered', 'payment' => 'paytm', 'coupon' => null, 'items' => [['women-lehnga-set', 'M', 1]]],
-            ['customer' => 1, 'days_ago' => 55, 'status' => 'delivered', 'payment' => 'cod', 'coupon' => null, 'items' => [['pure-silk-sherwani', 'L', 1], ['velvet-safa', 'Free Size', 1], ['heritage-punjabi-jutti', 'Free Size', 1]]],
-            ['customer' => 2, 'days_ago' => 51, 'status' => 'delivered', 'payment' => 'paytm', 'coupon' => 'WELCOME10', 'items' => [['sharara-suit', 'S', 1], ['heritage-kurti', 'S', 1]]],
+            ['customer' => 0, 'days_ago' => 58, 'status' => 'delivered', 'payment' => 'paytm', 'coupon' => null, 'items' => [['chikankari-co-ord-set', 'M', 1]]],
+            ['customer' => 1, 'days_ago' => 55, 'status' => 'delivered', 'payment' => 'cod', 'coupon' => null, 'items' => [['pure-silk-sherwani', 'L', 1]]],
+            ['customer' => 2, 'days_ago' => 51, 'status' => 'delivered', 'payment' => 'paytm', 'coupon' => 'WELCOME10', 'items' => [['royal-co-ord-set', 'S', 1], ['sharara-set-with-dupatta', '8Y', 1]]],
             ['customer' => 3, 'days_ago' => 47, 'status' => 'delivered', 'payment' => 'cod', 'coupon' => null, 'items' => [['festive-sherwani', 'XL', 1]]],
             ['customer' => 4, 'days_ago' => 44, 'status' => 'delivered', 'payment' => 'paytm', 'coupon' => null, 'items' => [['rosette-tiered-party-frock', '6Y', 2]]],
-            ['customer' => 5, 'days_ago' => 40, 'status' => 'cancelled', 'payment' => 'paytm', 'coupon' => null, 'items' => [['chikankari-lehenga', 'M', 1]]],
+            ['customer' => 5, 'days_ago' => 40, 'status' => 'cancelled', 'payment' => 'paytm', 'coupon' => null, 'items' => [['plum-embroidered-lehenga-choli', '6Y', 1]]],
             ['customer' => 6, 'days_ago' => 36, 'status' => 'delivered', 'payment' => 'paytm', 'coupon' => 'SHAGUN500', 'items' => [['chikankari-jodhpuri-suit', 'L', 1]]],
-            ['customer' => 6, 'days_ago' => 33, 'status' => 'cancelled', 'payment' => 'cod', 'coupon' => null, 'items' => [['festive-trouser', 'XL', 1]]],
-            ['customer' => 7, 'days_ago' => 31, 'status' => 'delivered', 'payment' => 'cod', 'coupon' => null, 'items' => [['velvet-punjabi-suit', 'L', 1], ['chikankari-jewellery-set', 'Free Size', 1]]],
+            ['customer' => 6, 'days_ago' => 33, 'status' => 'cancelled', 'payment' => 'cod', 'coupon' => null, 'items' => [['royal-nehru-jacket', 'XL', 1]]],
+            ['customer' => 7, 'days_ago' => 31, 'status' => 'delivered', 'payment' => 'cod', 'coupon' => null, 'items' => [['gota-patti-kurta-set', '10Y', 1]]],
             ['customer' => 8, 'days_ago' => 26, 'status' => 'shipped', 'payment' => 'paytm', 'coupon' => null, 'items' => [['banarasi-pathani-suit', 'M', 1], ['regal-nehru-jacket', 'M', 1]]],
             ['customer' => 0, 'days_ago' => 20, 'status' => 'shipped', 'payment' => 'cod', 'coupon' => null, 'items' => [['festive-co-ord-set', 'M', 1]]],
-            ['customer' => 9, 'days_ago' => 15, 'status' => 'shipped', 'payment' => 'paytm', 'coupon' => 'WELCOME10', 'items' => [['heritage-anarkali', 'S', 1], ['chikankari-potli', 'Free Size', 1]]],
+            ['customer' => 9, 'days_ago' => 15, 'status' => 'shipped', 'payment' => 'paytm', 'coupon' => 'WELCOME10', 'items' => [['zari-embroidered-co-ord-set', 'S', 1]]],
             ['customer' => 1, 'days_ago' => 10, 'status' => 'processing', 'payment' => 'paytm', 'coupon' => null, 'items' => [['ivory-waistcoat-party-set', '8Y', 1]]],
-            ['customer' => 2, 'days_ago' => 6, 'status' => 'processing', 'payment' => 'paytm', 'coupon' => null, 'items' => [['velvet-saree', 'M', 1]]],
-            ['customer' => 3, 'days_ago' => 4, 'status' => 'processing', 'payment' => 'cod', 'coupon' => null, 'items' => [['mirror-work-shirt', 'XL', 2]]],
-            ['customer' => 7, 'days_ago' => 2, 'status' => 'pending', 'payment' => 'paytm', 'coupon' => null, 'items' => [['regal-bridal-lehenga', 'L', 1]]],
-            ['customer' => 8, 'days_ago' => 1, 'status' => 'pending', 'payment' => 'cod', 'coupon' => null, 'items' => [['olive-denim-jacket', 'L', 1]]],
+            ['customer' => 2, 'days_ago' => 6, 'status' => 'processing', 'payment' => 'paytm', 'coupon' => null, 'items' => [['rosette-ball-gown', '4Y', 1]]],
+            ['customer' => 3, 'days_ago' => 4, 'status' => 'processing', 'payment' => 'cod', 'coupon' => null, 'items' => [['chikankari-kurta-pyjama', 'XL', 2]]],
+            ['customer' => 7, 'days_ago' => 2, 'status' => 'pending', 'payment' => 'paytm', 'coupon' => null, 'items' => [['jacket-lehenga-set', '12Y', 1]]],
+            ['customer' => 8, 'days_ago' => 1, 'status' => 'pending', 'payment' => 'cod', 'coupon' => null, 'items' => [['banarasi-indo-western', 'L', 1]]],
         ];
     }
 }

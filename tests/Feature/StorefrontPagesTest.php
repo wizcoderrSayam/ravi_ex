@@ -31,7 +31,6 @@ class StorefrontPagesTest extends TestCase
             'women' => ['shop.women', 'Women Ethnic &amp; Designer Wear | Ravi Exclusive Amritsar', 'Women'],
             'boys' => ['shop.boys', 'Boys Ethnic &amp; Designer Wear | Ravi Exclusive Amritsar', 'Boys'],
             'girls' => ['shop.girls', 'Girls Ethnic &amp; Designer Wear | Ravi Exclusive Amritsar', 'Girls'],
-            'accessories' => ['shop.accessories', 'Accessories Ethnic &amp; Designer Wear | Ravi Exclusive Amritsar', 'Accessories'],
             'new arrivals' => ['shop.new-arrivals', 'New Arrivals — Ravi Exclusive | Amritsar', 'New Arrivals'],
             'search' => ['shop.search', 'Search — Ravi Exclusive', null],
             'wishlist' => ['shop.wishlist', 'Your Wishlist — Ravi Exclusive', null],
@@ -47,6 +46,7 @@ class StorefrontPagesTest extends TestCase
         $response->assertSee("<title>{$title}</title>", false);
         $response->assertSee(asset('assets/css/style.css'), false);
         $response->assertSee('id="cartDrawer"', false);
+        $response->assertSee('id="toTop"', false);
         $response->assertDontSee('.html"', false);
 
         if ($routeName === 'shop.home' || $routeName === 'shop.wishlist') {
@@ -103,9 +103,9 @@ class StorefrontPagesTest extends TestCase
         $response = $this->get(route('shop.boys'));
 
         $response->assertOk();
-        $this->assertSame(16, $boysProductCount);
+        $this->assertSame(13, $boysProductCount);
         $this->assertSame($boysProductCount, substr_count($response->getContent(), '<article class="pcard"'));
-        $response->assertSee('<span class="count" id="count">16 items</span>', false);
+        $response->assertSee('<span class="count" id="count">13 items</span>', false);
         $response->assertSee('Ivory Embroidered Kurta Set');
         $response->assertDontSee('Festive Sherwani');
         $response->assertSee('<div class="empty" id="emptyMsg"  hidden >', false);
@@ -115,8 +115,8 @@ class StorefrontPagesTest extends TestCase
     {
         $response = $this->get(route('shop.girls'));
 
-        $response->assertSeeInOrder(['>Party Dresses <', '>Festive Gowns <', '>Lehengas <', '>Kurta Sets <', '>Ethnic Sets <', '>Accessories <'], false);
-        $response->assertSee('<a class="chip" href="#festive-gowns" data-sub-link="festive-gowns" data-sub-name="Festive Gowns">', false);
+        $response->assertSeeInOrder(['>Lehenga <', '>Sharara / Palazzo <', '>Patiala Salwar Suits / Farshi Salwar <', '>Frocks &amp; Gowns <'], false);
+        $response->assertSee('<a class="chip" href="#lehenga" data-sub-link="lehenga" data-sub-name="Lehenga">', false);
     }
 
     public function test_product_card_carries_what_the_storefront_script_reads(): void
@@ -126,10 +126,10 @@ class StorefrontPagesTest extends TestCase
         $response = $this->get(route('shop.men'));
 
         $response->assertSee('data-id="'.$sherwani->id.'" data-code="RE-0035" data-name="Festive Sherwani" data-cat="men" data-cat-name="Men"', false);
-        $response->assertSee('data-sub="Sherwanis" data-sub-slug="sherwanis" data-price="5399" data-mrp="7199" data-new="0"', false);
+        $response->assertSee('data-sub="Indo-Westerns" data-sub-slug="indo-westerns" data-price="5399" data-mrp="7199" data-new="0"', false);
         $response->assertSee('data-stock="1" data-fabric="Silk Blend"', false);
-        $response->assertSee('data-sizes="S|M|L|XL|XXL|3XL" data-search="festive sherwani sherwanis men silk blend"', false);
-        $response->assertSee('<img class="ph" src="/assets/images/products/men-sherwanis-1.jpg" alt="Festive Sherwani"', false);
+        $response->assertSee('data-sizes="S|M|L|XL|XXL|3XL" data-search="festive sherwani indo-westerns men silk blend"', false);
+        $response->assertSee('<img class="ph" src="/assets/images/categories/men-indo-westerns.webp" alt="Festive Sherwani"', false);
         $response->assertSee('<span class="ptag off">25% off</span>', false);
         $response->assertSee('<div class="price"><b>₹5,399</b><s>₹7,199</s><em>25% off</em></div>', false);
     }

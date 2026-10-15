@@ -73,7 +73,7 @@ class ProductCard extends Component
         $this->isNew = $product->created_at?->gte(now()->subDays(StorefrontController::NEW_ARRIVAL_DAYS)) ?? false;
         $this->inStock = $product->inStock();
 
-        // The short description reads "Fabric: Silk" (or "Material: …" for accessories).
+        // The short description reads "Fabric: Silk".
         $this->fabric = Str::contains((string) $product->short_description, ': ') ? Str::after($product->short_description, ': ') : '';
         $this->sizes = $product->variants
             ->where('is_active', true)

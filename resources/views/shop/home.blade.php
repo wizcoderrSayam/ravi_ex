@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('title', 'Ravi Exclusive — Shop Ethnic & Designer Wear Online | Amritsar')
-@section('description', 'Shop designer ethnic wear for Men, Women and Accessories from Ravi Exclusive, Katra Jaimal Singh, Amritsar.')
+@section('description', 'Shop designer ethnic wear for Kids, Men and Women from Ravi Exclusive, Katra Jaimal Singh, Amritsar.')
 @section('page', 'home')
 
 @section('content')
@@ -11,22 +11,19 @@
     <div class="row align-items-center hero-grid g-5">
       <div class="col-lg-6 hero-copy" data-aos="fade-right">
         <span class="eyebrow">New Season · Festive Edit</span>
-        <h1>Dressed up for every <em>Rasam</em>.</h1>
+        <h1>Celebrating Every Occasion, the <em>Traditional</em> Way.</h1>
         <p>
-          Hand-embroidered lehengas, statement suits and festive
-          silhouettes for every celebration. Fresh in at our Katra Jaimal
-          Singh store.
+          From their first festive outfit to the big family wedding, dress
+          your little ones in styles made for memories.
         </p>
         <div class="hero-ctas">
-          <a href="{{ route('shop.women') }}" class="btn btn-red">Shop Women</a
-          ><a href="{{ route('shop.women') }}#punjabi-suits" class="btn btn-line"
-            >Explore Suits</a
+          <a href="{{ route('shop.boys') }}" class="btn btn-red">Shop Boys' Wear</a
+          ><a href="{{ route('shop.girls') }}" class="btn btn-line"
+            >Shop Girls' Wear</a
           >
         </div>
         <div class="hero-mini">
-          <span>✦ Sharara &amp; palazzo suits</span
-          ><span>✦ Frock-style suits</span
-          ><span>✦ Occasionwear edits</span>
+          <span>✦ Dressing Generations Since 1961</span>
         </div>
       </div>
       <div
@@ -65,7 +62,7 @@
         <div class="trust-item">
           <i>✦</i>
           <p>
-            <b>Amritsari style</b
+            <b>Punjabi Style From The Holy City of Amritsar</b
             ><span>Handpicked from Katra Jaimal Singh</span>
           </p>
         </div>
@@ -109,144 +106,145 @@
   </div>
 </div>
 
-<!-- categories -->
-<section>
+<!--
+  shop by category, one section per audience. Kids' sections are a carousel of
+  category cards; the others are a band: an intro panel (title, line of copy, link)
+  alternating sides, beside the subcategories as a lookbook grid.
+-->
+@foreach ($shopSections as $section)
+@php
+  $isReversed = $loop->even;
+  $tileCount = count($section['tiles']);
+  // Up to 4 tiles sit level in one row; 5–6 wrap into staggered rows of 3.
+  $gridColumns = $tileCount > 4 ? 3 : $tileCount;
+@endphp
+@if ($section['layout'] === 'carousel')
+<section class="cat-section" aria-labelledby="shop-{{ $loop->index }}" data-carousel>
   <div class="container">
     <div class="head" data-aos="fade-up">
       <div>
-        <span class="eyebrow"
-          >Shop by Category · <span class="pa">ਸਾਰੇ ਪਰਿਵਾਰ ਲਈ</span></span
-        >
-        <h2>For the whole parivaar</h2>
+        <span class="eyebrow">Shop by category</span>
+        <h2 id="shop-{{ $loop->index }}">{{ $section['title'] }}</h2>
+      </div>
+      <div class="cat-rail-actions">
+        <a href="{{ $section['url'] }}">Shop all {{ $section['name'] }} →</a>
+        <button type="button" class="cat-rail-btn" data-rail-prev aria-label="Previous {{ $section['name'] }} categories">‹</button>
+        <button type="button" class="cat-rail-btn" data-rail-next aria-label="More {{ $section['name'] }} categories">›</button>
       </div>
     </div>
-    <div class="row row-cols-2 row-cols-md-3 row-cols-lg-5 g-3 cats">
-      <div class="col" data-aos="zoom-in" data-aos-delay="0">
-        <a class="cat" href="{{ route('shop.boys') }}" style="background: #1f5c55">
-          <img
-            class="art"
-            src="{{ asset('assets') }}/images/categories/boys.jpg"
-            alt="Boys"
-            loading="lazy"
-            onerror="this.remove()"
-          />
-          <div class="t">
-            <!-- <small>Festive · Party · Wedding</small> -->
-            <h3>Boys</h3>
-          </div>
+    {{-- --cards: up to 4 sit in view on desktop, any more slide in; narrower screens show fewer. --}}
+    <div
+      class="cat-rail"
+      style="--cards: {{ $tileCount }}"
+      data-rail
+      data-aos="fade-up"
+      data-aos-delay="100"
+    >
+      @foreach ($section['tiles'] as $tile)
+        <a class="cat" href="{{ $tile['url'] }}">
+          @if ($tile['image'])
+            <img
+              class="art"
+              src="{{ $tile['image'] }}"
+              alt="{{ $tile['name'] }}"
+              loading="lazy"
+              onerror="this.remove()"
+            />
+          @endif
+          <div class="t"><h3>{{ $tile['name'] }}</h3></div>
         </a>
+      @endforeach
+    </div>
+    {{-- One dot per card position; main.js fills these, as the count depends on how many cards fit. --}}
+    <div class="cat-rail-dots" data-rail-dots></div>
+  </div>
+</section>
+@else
+<section class="shop-section" aria-labelledby="shop-{{ $loop->index }}">
+  <div class="container">
+    <div class="shop-band @if ($isReversed) is-reversed @endif @if ($tileCount <= 2) is-compact @endif">
+      <div class="shop-intro" data-aos="{{ $isReversed ? 'fade-left' : 'fade-right' }}">
+        <h2 id="shop-{{ $loop->index }}">{{ $section['title'] }}</h2>
+        @if ($section['description'])
+          <p>{{ $section['description'] }}</p>
+        @endif
+        <a class="btn btn-red" href="{{ $section['url'] }}">Shop all {{ $section['name'] }}</a>
+        <span class="shop-intro-count">{{ $tileCount }} {{ \Illuminate\Support\Str::plural('category', $tileCount) }}</span>
       </div>
-      <div class="col" data-aos="zoom-in" data-aos-delay="100">
-        <a class="cat" href="{{ route('shop.girls') }}" style="background: #d63a7a">
-          <img
-            class="art"
-            src="{{ asset('assets') }}/images/categories/girls.jpg"
-            alt="Girls"
-            loading="lazy"
-            onerror="this.remove()"
-          />
-          <div class="t">
-            <!-- <small>Ages 1–14</small> -->
-            <h3>Girls</h3>
-          </div>
-        </a>
-      </div>
-      <div class="col" data-aos="zoom-in" data-aos-delay="200">
-        <a class="cat" href="{{ route('shop.women') }}" style="background: #a91e23">
-          <img
-            class="art"
-            src="{{ asset('assets') }}/images/categories/women.jpg"
-            alt="Women"
-            loading="lazy"
-            onerror="this.remove()"
-          />
-          <div class="t">
-            <!-- <small>Punjabi Suits · Lehengas · Bridal</small> -->
-            <h3>Women</h3>
-          </div>
-        </a>
-      </div>
-      <div class="col" data-aos="zoom-in" data-aos-delay="300">
-        <a class="cat" href="{{ route('shop.men') }}" style="background: #1e2f5c">
-          <img
-            class="art"
-            src="{{ asset('assets') }}/images/categories/men.jpg"
-            alt="Men"
-            loading="lazy"
-            onerror="this.remove()"
-          />
-          <div class="t">
-            <!-- <small>Sherwanis · Kurta Pyjama · Pathani</small> -->
-            <h3>Men</h3>
-          </div>
-        </a>
-      </div>
-      <div class="col" data-aos="zoom-in" data-aos-delay="400">
-        <a
-          class="cat"
-          href="{{ route('shop.accessories') }}"
-          style="background: #8a6a2e"
-        >
-          <img
-            class="art"
-            src="{{ asset('assets') }}/images/categories/accessories.jpg"
-            alt="Accessories"
-            loading="lazy"
-            onerror="this.remove()"
-          />
-          <div class="t">
-            <!-- <small>Pagg · Juttis · Jewellery</small> -->
-            <h3>Accessories</h3>
-          </div>
-        </a>
+      <div
+        class="shop-grid cols-{{ $gridColumns }}{{ $tileCount <= 4 ? ' is-level' : '' }}"
+        data-aos="{{ $isReversed ? 'fade-right' : 'fade-left' }}"
+        data-aos-delay="120"
+      >
+        @foreach ($section['tiles'] as $tile)
+          <a class="shop-tile" href="{{ $tile['url'] }}">
+            <span class="shop-tile-media">
+              @if ($tile['image'])
+                <img
+                  src="{{ $tile['image'] }}"
+                  alt="{{ $tile['name'] }}"
+                  loading="lazy"
+                  onerror="this.remove()"
+                />
+              @endif
+              <img
+                class="shop-tile-logo"
+                src="{{ asset('assets') }}/images/logo.webp"
+                alt=""
+                aria-hidden="true"
+                loading="lazy"
+                onerror="this.remove()"
+              />
+            </span>
+            <span class="shop-tile-name">{{ $tile['name'] }}</span>
+          </a>
+        @endforeach
       </div>
     </div>
   </div>
 </section>
+@endif
+@endforeach
 
 <!-- wedding edit -->
 <section class="vyah">
   <div class="container">
     <div class="head center" data-aos="fade-up">
       <div>
-        <span class="eyebrow light"
-          ><span class="pa">ਵਿਆਹ</span> · The Punjabi Wedding Edit</span
-        >
-        <h2>Dressed for every rasam</h2>
-        <p>
-          From the mehndi night to the doli: outfits for the bride, the
-          groom and the whole baraat.
-        </p>
+        <span class="eyebrow light"><span class="pa">ਵਿਆਹ</span> · The Punjabi Wedding Edit</span>
+        <h2>Outfits for every occasion!</h2>
+        <p>From Mehndi to the Reception, Outfits That Steal the Show!</p>
       </div>
     </div>
+    {{-- Plain text, not links: these only highlight the occasions we dress for. --}}
     <div class="row row-cols-1 row-cols-sm-2 row-cols-lg-4 g-3 vyah-grid">
       <div class="col" data-aos="fade-up" data-aos-delay="0">
-        <a class="vy" href="{{ route('shop.women') }}#party-lehengas"
-          ><span class="pa">ਮਹਿੰਦੀ</span>
+        <div class="vy">
+          <span class="pa">ਮਹਿੰਦੀ</span>
           <h3>Mehndi &amp; Sangeet</h3>
-          <small>Party lehengas · Anarkalis</small></a
-        >
+          <small>Lehengas · Sharara · Co-ord sets</small>
+        </div>
       </div>
       <div class="col" data-aos="fade-up" data-aos-delay="100">
-        <a class="vy" href="{{ route('shop.women') }}#punjabi-suits"
-          ><span class="pa">ਸ਼ਗਨ</span>
-          <h3>Shagan &amp; Chunni</h3>
-          <small>Punjabi suits · Kurtis</small></a
-        >
+        <div class="vy">
+          <span class="pa">ਜਾਗੋ</span>
+          <h3>Jaggo &amp; Dhol</h3>
+          <small>Patiala suits · Kurta pajamas</small>
+        </div>
       </div>
       <div class="col" data-aos="fade-up" data-aos-delay="200">
-        <a class="vy" href="{{ route('shop.women') }}#bridal-lehengas"
-          ><span class="pa">ਲਾੜੀ</span>
-          <h3>The Bride</h3>
-          <small>Bridal lehengas</small></a
-        >
+        <div class="vy">
+          <span class="pa">ਸ਼ਗਨ</span>
+          <h3>Shagun &amp; Wedding</h3>
+          <small>Sherwanis · Jodhpuris · Lehengas</small>
+        </div>
       </div>
       <div class="col" data-aos="fade-up" data-aos-delay="300">
-        <a class="vy" href="{{ route('shop.men') }}#sherwanis"
-          ><span class="pa">ਲਾੜਾ</span>
-          <h3>The Groom</h3>
-          <small>Sherwanis · Safas · Juttis</small></a
-        >
+        <div class="vy">
+          <span class="pa">ਰਿਸੈਪਸ਼ਨ</span>
+          <h3>Cocktail &amp; Reception</h3>
+          <small>Indo-westerns · Coat suits · Gowns</small>
+        </div>
       </div>
     </div>
   </div>
@@ -299,23 +297,19 @@
       </div>
       <div class="col-lg-7" data-aos="fade-left" data-aos-delay="150">
         <span class="eyebrow">From the heart of Amritsar</span>
-        <h2>Rangeen bazaars, phulkari colours &amp; Punjabi shaan</h2>
+        <h2>Blending traditional craftsmanship with modern elegance</h2>
         <p>
-          Ravi Exclusive sits in Katra Jaimal Singh, one of Amritsar's
-          busiest clothing bazaars. We bring that bazaar energy home:
-          bright Punjabi suits for Lohri and Visakhi, karva chauth
-          lehengas, sherwanis and pagg for the groom, and festive pieces
-          for every rasam.
+          Established in 1961, Ravi Exclusive is more than a retail
+          showroom—it is a legacy built on trust, quality, and timeless
+          style. For generations, we have been dressing families with care,
+          offering a curated selection of premium fashion for men, women,
+          and children.
         </p>
-        <div class="fest">
-          <span><b class="pa">ਲੋਹੜੀ</b> Lohri</span
-          ><span><b class="pa">ਵਿਸਾਖੀ</b> Visakhi</span
-          ><span><b class="pa">ਕਰਵਾ ਚੌਥ</b> Karva Chauth</span
-          ><span><b class="pa">ਵਿਆਹ</b> Wedding season</span>
-        </div>
-        <a class="btn btn-red mt-22" href="{{ route('shop.women') }}#punjabi-suits"
-          >Shop Punjabi Suits</a
-        >
+        <p>
+          With over 10 lakh satisfied customers and a strong global
+          customer base, our commitment to excellence continues to define
+          who we are.
+        </p>
       </div>
     </div>
   </div>

@@ -8,16 +8,16 @@
 
 @section('content')
 <div class="container">
-  <nav class="crumb" aria-label="Breadcrumb"><a href="{{ route('shop.home') }}">Home</a> / <a href="{{ route('shop.'.$category->slug) }}">{{ $category->name }}</a><span id="crumbSub"></span></nav>
-  <h1 class="shop-title" id="shopTitle">{{ $category->name }}</h1>
+  <nav class="crumb" aria-label="Breadcrumb" data-aos="fade-up"><a href="{{ route('shop.home') }}">Home</a> / <a href="{{ route('shop.'.$category->slug) }}">{{ $category->name }}</a><span id="crumbSub"></span></nav>
+  <h1 class="shop-title" id="shopTitle" data-aos="fade-up" data-aos-delay="100">{{ $category->name }}</h1>
   <div class="row g-4 shop-layout">
-    <div class="col-lg-3">
+    <div class="col-lg-3" data-aos="fade-up">
       <aside class="side collapse d-lg-block" id="side">
         @include('partials.filter-panel')
       </aside>
     </div>
     <div class="col-lg-9">
-      <div class="toolbar">
+      <div class="toolbar" data-aos="fade-up" data-aos-delay="100">
         <nav class="chips" aria-label="Subcategories">
           <a class="chip on" href="#all" data-sub-link="">All <span class="chip-count" data-chip-count></span></a>
           @foreach ($category->children as $subcategory)

@@ -6,23 +6,22 @@
 
 @section('content')
 <div class="container">
-  <nav class="crumb" aria-label="Breadcrumb"><a href="{{ route('shop.home') }}">Home</a> / New Arrivals</nav>
-  <h1 class="shop-title" id="shopTitle">New Arrivals</h1>
+  <nav class="crumb" aria-label="Breadcrumb" data-aos="fade-up"><a href="{{ route('shop.home') }}">Home</a> / New Arrivals</nav>
+  <h1 class="shop-title" id="shopTitle" data-aos="fade-up" data-aos-delay="100">New Arrivals</h1>
   <div class="row g-4 shop-layout">
-    <div class="col-lg-3">
+    <div class="col-lg-3" data-aos="fade-up">
       <aside class="side collapse d-lg-block" id="side">
         @include('partials.filter-panel')
       </aside>
     </div>
     <div class="col-lg-9">
-      <div class="toolbar">
+      <div class="toolbar" data-aos="fade-up" data-aos-delay="100">
         <nav class="chips" aria-label="Categories">
           <a class="chip on" href="#all" data-sub-link="">All <span class="chip-count" data-chip-count></span></a>
           <a class="chip" href="#boys" data-sub-link="boys" data-sub-name="Boys">Boys <span class="chip-count" data-chip-count></span></a>
           <a class="chip" href="#girls" data-sub-link="girls" data-sub-name="Girls">Girls <span class="chip-count" data-chip-count></span></a>
           <a class="chip" href="#women" data-sub-link="women" data-sub-name="Women">Women <span class="chip-count" data-chip-count></span></a>
           <a class="chip" href="#men" data-sub-link="men" data-sub-name="Men">Men <span class="chip-count" data-chip-count></span></a>
-          <a class="chip" href="#accessories" data-sub-link="accessories" data-sub-name="Accessories">Accessories <span class="chip-count" data-chip-count></span></a>
         </nav>
         <div class="toolbar-actions">
           <button class="btn btn-line filter-btn d-lg-none" type="button" data-bs-toggle="collapse" data-bs-target="#side" aria-expanded="false" aria-controls="side">Filters</button>

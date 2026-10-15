@@ -145,7 +145,7 @@ class StoreContentSeedersTest extends TestCase
         $this->seed(DemoOrderSeeder::class);
 
         $this->assertSame(17, Order::count());
-        $this->assertSame(23, OrderItem::count());
+        $this->assertSame(19, OrderItem::count());
         $this->assertSame(10, PaymentTransaction::count());
         $this->assertSame(10, Shipment::count());
         $this->assertSame(8, User::where('is_customer', true)->count());
@@ -168,7 +168,7 @@ class StoreContentSeedersTest extends TestCase
         $this->seed(DatabaseSeeder::class);
 
         $this->assertTrue(Role::where('slug', 'super-admin')->exists());
-        $this->assertSame(129, Product::count());
+        $this->assertSame(58, Product::count());
         $this->assertSame(4, HomepageSection::count());
         $this->assertSame(6, CmsPage::count());
         $this->assertSame(17, Order::count());

@@ -9,7 +9,8 @@
   <link rel="stylesheet" href="{{ asset('assets/vendor/bootstrap/css/bootstrap.min.css') }}">
   <link rel="stylesheet" href="{{ asset('assets/vendor/aos/aos.css') }}">
   <link rel="stylesheet" href="{{ asset('assets/css/fonts.css') }}">
-  <link rel="stylesheet" href="{{ asset('assets/css/style.css') }}">
+  {{-- ?v= is the file's modified time, so browsers fetch the new file after every change. --}}
+  <link rel="stylesheet" href="{{ asset('assets/css/style.css') }}?v={{ filemtime(public_path('assets/css/style.css')) }}">
 </head>
 
 <body data-page="@yield('page')"@hasSection('category') data-cat="@yield('category')" data-cat-name="@yield('category_name')"@endif>
@@ -32,6 +33,6 @@
 
   <script src="{{ asset('assets/vendor/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
   <script src="{{ asset('assets/vendor/aos/aos.js') }}"></script>
-  <script src="{{ asset('assets/js/main.js') }}"></script>
+  <script src="{{ asset('assets/js/main.js') }}?v={{ filemtime(public_path('assets/js/main.js')) }}"></script>
 </body>
 </html>

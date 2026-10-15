@@ -46,7 +46,7 @@ class AdminDashboardTest extends TestCase
         $this->get(route('admin.dashboard'))->assertOk()->assertSee('DEMO-1017');
         $this->get(route('admin.orders.index'))->assertOk()->assertSee('DEMO-1017');
         $this->get(route('admin.orders.show', $shippedOrder))->assertOk()->assertSee($shippedOrder->courier_name)->assertSee('In Transit');
-        $this->get(route('admin.products.edit', $product))->assertOk()->assertSee('6203')->assertSee('/assets/images/products/men-sherwanis-1.jpg', false);
+        $this->get(route('admin.products.edit', $product))->assertOk()->assertSee('6203')->assertSee('/assets/images/categories/men-indo-westerns.webp', false);
         $this->get(route('admin.categories.edit', Category::firstWhere('slug', 'men')))->assertOk()->assertSee('/assets/images/categories/men.jpg', false);
         $this->get(route('admin.homepage.edit'))->assertOk()->assertSee('Dressed up for every Rasam.');
         $this->get(route('admin.pages.index'))->assertOk()->assertSee('Returns &amp; Exchanges', false);

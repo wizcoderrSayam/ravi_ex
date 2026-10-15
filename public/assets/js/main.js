@@ -359,8 +359,91 @@
     if (bar && bar.scrollWidth > bar.clientWidth) bar.scrollLeft = chip.offsetLeft - (bar.clientWidth - chip.offsetWidth) / 2;
   }
 
+  /* ---------- back to top: the ring fills as the page scrolls ---------- */
+  const reduceMotion = () => matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const toTop = $("toTop"), toTopBar = $("toTopBar");
+  let toTopQueued = false;
+  function drawToTop() {
+    toTopQueued = false;
+    const max = document.documentElement.scrollHeight - innerHeight;
+    toTopBar.style.strokeDashoffset = 100 - (max > 0 ? Math.min(100, scrollY / max * 100) : 0);
+    toTop.classList.toggle("show", scrollY > 300);
+  }
+  addEventListener("scroll", () => { if (!toTopQueued) { toTopQueued = true; requestAnimationFrame(drawToTop) } }, { passive: true });
+  addEventListener("resize", drawToTop);
+  // html already has scroll-behavior: smooth, so skip it for people who asked for less motion
+  toTop.addEventListener("click", () => scrollTo({ top: 0, behavior: reduceMotion() ? "instant" : "smooth" }));
+  drawToTop();
+
+  /* ---------- category carousels: a scroll-snap rail that steps one card at a time, loops, and auto-advances ---------- */
+  const CAROUSEL_DELAY = 4500;
+  document.querySelectorAll("[data-carousel]").forEach(carousel => {
+    const rail = carousel.querySelector("[data-rail]");
+    const prev = carousel.querySelector("[data-rail-prev]");
+    const next = carousel.querySelector("[data-rail-next]");
+    const dots = carousel.querySelector("[data-rail-dots]");
+    const cards = rail.children;
+    // a step is one card plus the gap after it; a position is where a card snaps to the left edge
+    const step = () => cards.length > 1 ? cards[1].offsetLeft - cards[0].offsetLeft : rail.clientWidth;
+    const maxScroll = () => rail.scrollWidth - rail.clientWidth;
+    const positions = () => maxScroll() > 1 ? Math.round(maxScroll() / step()) + 1 : 1;
+    const current = () => Math.min(positions() - 1, Math.round(rail.scrollLeft / step()));
+    function go(index) {
+      const count = positions();
+      const target = (index + count) % count; // past the end wraps to the start, and before the start to the end
+      rail.scrollTo({ left: Math.min(target * step(), maxScroll()), behavior: reduceMotion() ? "instant" : "smooth" });
+    }
+
+    // dots are rebuilt whenever the number of positions changes (it depends on how many cards fit)
+    function drawDots() {
+      const count = positions();
+      if (dots.children.length !== count) {
+        dots.replaceChildren(...Array.from({ length: count }, (_, i) => {
+          const dot = document.createElement("button");
+          dot.type = "button";
+          dot.setAttribute("aria-label", `Show card ${i + 1}`);
+          dot.addEventListener("click", () => { go(i); schedule() });
+          return dot;
+        }));
+      }
+      const on = current();
+      [...dots.children].forEach((dot, i) => {
+        dot.classList.toggle("is-on", i === on);
+        if (i === on) dot.setAttribute("aria-current", "true"); else dot.removeAttribute("aria-current");
+      });
+      // nothing to slide when every card fits
+      dots.hidden = prev.hidden = next.hidden = count < 2;
+    }
+
+    // auto-advance waits while a mouse is over it, keyboard focus is inside, it is off-screen or the tab is hidden;
+    // any click or swipe restarts the countdown so it never jumps straight after the visitor moves it
+    let hovering = false, focused = false, onScreen = false, timer = 0;
+    function schedule() {
+      clearTimeout(timer);
+      if (reduceMotion() || hovering || focused || !onScreen || document.hidden || positions() < 2) return;
+      timer = setTimeout(() => { go(current() + 1); schedule() }, CAROUSEL_DELAY);
+    }
+
+    prev.addEventListener("click", () => { go(current() - 1); schedule() });
+    next.addEventListener("click", () => { go(current() + 1); schedule() });
+    carousel.addEventListener("pointerenter", e => { if (e.pointerType === "mouse") { hovering = true; schedule() } });
+    carousel.addEventListener("pointerleave", e => { if (e.pointerType === "mouse") { hovering = false; schedule() } });
+    // only keyboard focus pauses it; a mouse click on an arrow should not stop the carousel for good
+    carousel.addEventListener("focusin", e => { focused = e.target.matches(":focus-visible"); schedule() });
+    carousel.addEventListener("focusout", e => { if (!carousel.contains(e.relatedTarget)) { focused = false; schedule() } });
+    rail.addEventListener("pointerdown", schedule, { passive: true });
+    document.addEventListener("visibilitychange", schedule);
+    new IntersectionObserver(([entry]) => { onScreen = entry.isIntersecting; schedule() }, { threshold: 0.4 }).observe(rail);
+
+    let dotsQueued = false;
+    rail.addEventListener("scroll", () => { if (!dotsQueued) { dotsQueued = true; requestAnimationFrame(() => { dotsQueued = false; drawDots() }) } }, { passive: true });
+    addEventListener("resize", () => { drawDots(); schedule() });
+    drawDots();
+  });
+
   /* ---------- init ---------- */
   $("yr").textContent = new Date().getFullYear();
   badges();
-  AOS.init({ duration: 800, easing: "ease-out-cubic", once: true, offset: 60 });
+  // once: true — sections fade in on the way down and never re-animate on the way up
+  AOS.init({ duration: 800, easing: "ease-out-cubic", once: true, offset: 60, disable: reduceMotion });
 })();

@@ -13,71 +13,45 @@
         <nav class="col-auto d-none d-lg-block mainnav" aria-label="Main">
           <ul id="mega">
             <li>
-              <a href="{{ route('shop.boys') }}"@if (request()->routeIs('shop.boys')) class="active"@endif>Boys</a>
-              <div class="drop">
-                <h4>Boys</h4>
-                <a href="{{ route('shop.boys') }}#kurta-sets">Kurta Sets</a>
-                <a href="{{ route('shop.boys') }}#sherwanis">Sherwanis</a>
-                <a href="{{ route('shop.boys') }}#pathani-suits">Pathani Suits</a>
-                <a href="{{ route('shop.boys') }}#wedding-wear">Wedding Wear</a>
-                <a href="{{ route('shop.boys') }}#jackets">Jackets</a>
-                <a href="{{ route('shop.boys') }}#shirts">Shirts</a>
-                <a class="all" href="{{ route('shop.boys') }}">Shop all Boys →</a>
-              </div>
-            </li>
-            <li>
               <a href="{{ route('shop.girls') }}"@if (request()->routeIs('shop.girls')) class="active"@endif>Girls</a>
               <div class="drop">
                 <h4>Girls</h4>
-                <a href="{{ route('shop.girls') }}#party-dresses">Party Dresses</a>
-                <a href="{{ route('shop.girls') }}#festive-gowns">Festive Gowns</a>
-                <a href="{{ route('shop.girls') }}#lehengas">Lehengas</a>
-                <a href="{{ route('shop.girls') }}#kurta-sets">Kurta Sets</a>
-                <a href="{{ route('shop.girls') }}#ethnic-sets">Ethnic Sets</a>
-                <a href="{{ route('shop.girls') }}#accessories">Accessories</a>
+                <a href="{{ route('shop.girls') }}#lehenga">Lehenga</a>
+                <a href="{{ route('shop.girls') }}#sharara-palazzo">Sharara / Palazzo</a>
+                <a href="{{ route('shop.girls') }}#patiala-farshi-salwar">Patiala Salwar Suits / Farshi Salwar</a>
+                <a href="{{ route('shop.girls') }}#frocks-gowns">Frocks &amp; Gowns</a>
                 <a class="all" href="{{ route('shop.girls') }}">Shop all Girls →</a>
               </div>
             </li>
             <li>
-              <a href="{{ route('shop.women') }}"@if (request()->routeIs('shop.women')) class="active"@endif>Women</a>
+              <a href="{{ route('shop.boys') }}"@if (request()->routeIs('shop.boys')) class="active"@endif>Boys</a>
               <div class="drop">
-                <h4>Women</h4>
-                <a href="{{ route('shop.women') }}#bridal-lehengas">Bridal Lehengas</a>
-                <a href="{{ route('shop.women') }}#party-lehengas">Party Lehengas</a>
-                <a href="{{ route('shop.women') }}#punjabi-suits">Punjabi Suits</a>
-                <a href="{{ route('shop.women') }}#anarkalis">Anarkalis</a>
-                <a href="{{ route('shop.women') }}#kurtis">Kurtis</a>
-                <a href="{{ route('shop.women') }}#sarees">Sarees</a>
-                <a href="{{ route('shop.women') }}#co-ord-sets">Co-ord Sets</a>
-                <a class="all" href="{{ route('shop.women') }}">Shop all Women →</a>
+                <h4>Boys</h4>
+                <a href="{{ route('shop.boys') }}#sherwani">Sherwani</a>
+                <a href="{{ route('shop.boys') }}#indo-westerns">Indo-Westerns</a>
+                <a href="{{ route('shop.boys') }}#coat-suits-tuxedos">Coat Suits / Tuxedos</a>
+                <a href="{{ route('shop.boys') }}#jodhpuri">Jodhpuri</a>
+                <a href="{{ route('shop.boys') }}#kurta-pajama">Kurta Pajama</a>
+                <a href="{{ route('shop.boys') }}#waistcoat-sets">Waistcoat Sets</a>
+                <a class="all" href="{{ route('shop.boys') }}">Shop all Boys →</a>
               </div>
             </li>
             <li>
               <a href="{{ route('shop.men') }}"@if (request()->routeIs('shop.men')) class="active"@endif>Men</a>
               <div class="drop">
                 <h4>Men</h4>
-                <a href="{{ route('shop.men') }}#sherwanis">Sherwanis</a>
-                <a href="{{ route('shop.men') }}#kurta-pyjama">Kurta Pyjama</a>
-                <a href="{{ route('shop.men') }}#indo-western">Indo-Western</a>
-                <a href="{{ route('shop.men') }}#nehru-jackets">Nehru Jackets</a>
-                <a href="{{ route('shop.men') }}#jodhpuri-suits">Jodhpuri Suits</a>
-                <a href="{{ route('shop.men') }}#pathani-suits">Pathani Suits</a>
-                <a href="{{ route('shop.men') }}#shirts">Shirts</a>
-                <a href="{{ route('shop.men') }}#jackets">Jackets</a>
-                <a href="{{ route('shop.men') }}#trousers">Trousers</a>
+                <a href="{{ route('shop.men') }}#kurta-pajamas">Kurta Pajamas</a>
+                <a href="{{ route('shop.men') }}#waistcoat-sets">Waistcoat Sets</a>
+                <a href="{{ route('shop.men') }}#indo-westerns">Indo-Westerns</a>
                 <a class="all" href="{{ route('shop.men') }}">Shop all Men →</a>
               </div>
             </li>
             <li>
-              <a href="{{ route('shop.accessories') }}"@if (request()->routeIs('shop.accessories')) class="active"@endif>Accessories</a>
+              <a href="{{ route('shop.women') }}"@if (request()->routeIs('shop.women')) class="active"@endif>Women</a>
               <div class="drop">
-                <h4>Accessories</h4>
-                <a href="{{ route('shop.accessories') }}#turbans-and-safas">Turbans &amp; Safas</a>
-                <a href="{{ route('shop.accessories') }}#jewellery">Jewellery</a>
-                <a href="{{ route('shop.accessories') }}#punjabi-juttis">Punjabi Juttis</a>
-                <a href="{{ route('shop.accessories') }}#clutches-and-potlis">Clutches &amp; Potlis</a>
-                <a href="{{ route('shop.accessories') }}#brooches-and-kalgis">Brooches &amp; Kalgis</a>
-                <a class="all" href="{{ route('shop.accessories') }}">Shop all Accessories →</a>
+                <h4>Women</h4>
+                <a href="{{ route('shop.women') }}#co-ord-sets">Co-ord Sets</a>
+                <a class="all" href="{{ route('shop.women') }}">Shop all Women →</a>
               </div>
             </li>
             <li><a href="{{ route('shop.new-arrivals') }}"@if (request()->routeIs('shop.new-arrivals')) class="active"@endif>New Arrivals</a></li>
@@ -96,7 +70,7 @@
       <div class="container">
         <form class="search" id="search" action="{{ route('shop.search') }}" method="get" role="search">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7" /><path d="m20 20-4-4" /></svg>
-          <input id="q" name="q" type="search" placeholder="Search sherwani, lehenga, Punjabi suit, juttis…" aria-label="Search products">
+          <input id="q" name="q" type="search" placeholder="Search sherwani, lehenga, kurta pajama, co-ord set…" aria-label="Search products">
           <button type="submit" class="btn btn-red">Search</button>
         </form>
       </div>

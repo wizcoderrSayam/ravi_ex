@@ -729,7 +729,265 @@ section[id] {
   font-size: 0.8rem;
 }
 
-/* ---------- category tiles ---------- */
+/* ---------- shop-for category bands ---------- */
+.shop-section + .shop-section {
+  padding-top: 0;
+}
+
+/* An intro panel beside a lookbook grid; .is-reversed swaps the sides. */
+.shop-band {
+  display: grid;
+  grid-template-columns: minmax(0, 4fr) minmax(0, 8fr);
+  gap: 48px;
+  align-items: center;
+}
+
+.shop-band.is-reversed {
+  grid-template-columns: minmax(0, 8fr) minmax(0, 4fr);
+}
+
+.shop-band.is-reversed .shop-intro {
+  order: 2;
+}
+
+/* A single tile would be huge in the wide column, so few tiles get a wider intro. */
+.shop-band.is-compact {
+  grid-template-columns: minmax(0, 8fr) minmax(0, 4fr);
+}
+
+.shop-band.is-compact.is-reversed {
+  grid-template-columns: minmax(0, 4fr) minmax(0, 8fr);
+}
+
+.shop-intro {
+  position: relative;
+  align-self: stretch;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 48px 40px 48px 52px;
+  background: var(--red-soft);
+  border-radius: 2px;
+}
+
+/* Phulkari border on the panel's outer edge. */
+.shop-intro:before {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: 12px;
+  background: var(--phulkari);
+  background-size: 24px 24px;
+}
+
+.shop-band.is-reversed .shop-intro {
+  padding: 48px 52px 48px 40px;
+}
+
+.shop-band.is-reversed .shop-intro:before {
+  left: auto;
+  right: 0;
+}
+
+.shop-intro h2 {
+  font-size: clamp(2.2rem, 3.4vw, 3rem);
+  color: var(--ink);
+}
+
+.shop-intro p {
+  max-width: 34ch;
+  margin: 14px 0 26px;
+  color: var(--muted);
+  line-height: 1.6;
+}
+
+.shop-intro-count {
+  margin-top: 14px;
+  font-size: 0.85rem;
+  color: var(--muted);
+}
+
+.shop-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 28px 20px;
+}
+
+.shop-grid.cols-1 {
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.shop-grid.cols-2 {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.shop-grid.cols-4 {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+/* Lookbook stagger: alternate columns sit lower, unless the tiles fit in one level row. */
+.shop-grid.cols-2:not(.is-level),
+.shop-grid.cols-3:not(.is-level),
+.shop-grid.cols-4:not(.is-level) {
+  padding-bottom: 44px;
+}
+
+.shop-grid.cols-2:not(.is-level) > .shop-tile:nth-child(2n),
+.shop-grid.cols-3:not(.is-level) > .shop-tile:nth-child(3n + 2),
+.shop-grid.cols-4:not(.is-level) > .shop-tile:nth-child(2n) {
+  transform: translateY(44px);
+}
+
+.shop-tile {
+  display: block;
+  color: var(--ink);
+}
+
+.shop-tile:hover {
+  color: var(--red);
+}
+
+.shop-tile:focus-visible {
+  outline: 2px solid var(--red);
+  outline-offset: 4px;
+}
+
+.shop-tile-media {
+  position: relative;
+  display: block;
+  aspect-ratio: 4 / 5;
+  overflow: hidden;
+  border-radius: 2px;
+  background: var(--red-soft);
+}
+
+.shop-tile-media img:not(.shop-tile-logo) {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 20%;
+  transition: transform 0.7s ease;
+}
+
+.shop-tile:hover .shop-tile-media img:not(.shop-tile-logo) {
+  transform: scale(1.05);
+}
+
+.shop-tile-logo {
+  position: absolute;
+  right: 10px;
+  bottom: 10px;
+  width: 30px;
+  height: 30px;
+  padding: 3px;
+  object-fit: contain;
+  border-radius: 50%;
+  background: #fff;
+}
+
+.shop-tile-name {
+  display: block;
+  margin-top: 12px;
+  font-family: "Cormorant Garamond", serif;
+  font-size: 1.3rem;
+  font-weight: 600;
+  line-height: 1.2;
+  transition: color 0.2s;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .shop-tile-media img:not(.shop-tile-logo) {
+    transition: none;
+  }
+}
+
+/* ---------- kids' category carousels ---------- */
+.cat-section + .cat-section,
+.cat-section + .shop-section {
+  padding-top: 0;
+}
+
+.cat-rail-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.cat-rail-actions a {
+  margin-right: 8px;
+}
+
+.cat-rail-btn {
+  width: 40px;
+  height: 40px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 0 3px;
+  border: 1px solid var(--line);
+  border-radius: 50%;
+  background: #fff;
+  color: var(--red);
+  font-size: 1.5rem;
+  line-height: 1;
+  transition: 0.2s;
+}
+
+.cat-rail-btn:hover:not(:disabled) {
+  background: var(--red);
+  border-color: var(--red);
+  color: #fff;
+}
+
+.cat-rail-btn[hidden] {
+  display: none;
+}
+
+/* Up to four cards in view on desktop (--cards is the section's card count); the rest scroll sideways, card by card. */
+.cat-rail {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: calc((100% - (min(var(--cards, 4), 4) - 1) * 20px) / min(var(--cards, 4), 4));
+  gap: 20px;
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none;
+}
+
+.cat-rail::-webkit-scrollbar {
+  display: none;
+}
+
+.cat-rail-dots {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 18px;
+}
+
+.cat-rail-dots[hidden] {
+  display: none;
+}
+
+.cat-rail-dots button {
+  width: 8px;
+  height: 8px;
+  padding: 0;
+  border: 0;
+  border-radius: 4px;
+  background: var(--line);
+  transition: width 0.3s, background-color 0.3s;
+}
+
+.cat-rail-dots button.is-on {
+  width: 22px;
+  background: var(--red);
+}
+
 .cat {
   position: relative;
   aspect-ratio: 2/3;
@@ -739,11 +997,17 @@ section[id] {
   display: flex;
   align-items: flex-end;
   padding: 20px;
-  height: 100%;
+  background: var(--maroon);
+  scroll-snap-align: start;
 }
 
 .cat:hover {
   color: #fff;
+}
+
+.cat:focus-visible {
+  outline: 2px solid var(--red);
+  outline-offset: 3px;
 }
 
 .cat .art {
@@ -777,11 +1041,29 @@ section[id] {
   font-size: 1.8rem;
 }
 
-.cat small {
-  font-size: 0.74rem;
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
-  opacity: 0.9;
+@media (max-width: 991.98px) {
+  .cat-rail {
+    grid-auto-columns: calc((100% - (min(var(--cards, 3), 3) - 1) * 16px) / min(var(--cards, 3), 3));
+    gap: 16px;
+  }
+}
+
+@media (max-width: 575.98px) {
+  .cat-rail {
+    grid-auto-columns: 66%;
+    gap: 12px;
+  }
+
+  .cat h3 {
+    font-size: 1.45rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cat .art,
+  .cat-rail-dots button {
+    transition: none;
+  }
 }
 
 /* ---------- wedding edit ---------- */
@@ -820,14 +1102,6 @@ section[id] {
   border-radius: 6px;
   background: linear-gradient(180deg, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0));
   overflow: hidden;
-  transition: 0.25s;
-}
-
-.vy:hover {
-  color: #fff;
-  transform: translateY(-4px);
-  border-color: var(--blush);
-  background: rgba(255, 255, 255, 0.08);
 }
 
 .vy:before {
@@ -915,26 +1189,6 @@ section[id] {
 
 .heritage p {
   color: var(--muted);
-}
-
-.fest {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-  margin-top: 20px;
-}
-
-.fest span {
-  padding: 8px 14px;
-  border-radius: 30px;
-  background: var(--red-soft);
-  font-size: 0.85rem;
-  color: var(--maroon);
-}
-
-.fest b {
-  margin-right: 6px;
-  color: var(--red);
 }
 
 /* ---------- product cards ---------- */
@@ -1919,6 +2173,79 @@ footer {
   box-shadow: 0 6px 18px rgba(0, 0, 0, 0.2);
 }
 
+/* back to top: the ring around the arrow fills as the page scrolls (stroke set in main.js) */
+.to-top {
+  position: fixed;
+  right: 20px;
+  bottom: 20px;
+  z-index: 1030;
+  width: 54px;
+  height: 54px;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: #fff;
+  color: var(--red);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.2);
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(12px);
+  transition: opacity 0.3s, visibility 0.3s, transform 0.3s, background 0.2s, color 0.2s;
+}
+
+.to-top.show {
+  opacity: 1;
+  visibility: visible;
+  transform: none;
+}
+
+.to-top:hover {
+  background: var(--red);
+  color: #fff;
+}
+
+.to-top:focus-visible {
+  outline: 2px solid var(--red);
+  outline-offset: 4px;
+}
+
+/* rotated so the ring starts filling from 12 o'clock */
+.to-top-ring {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  transform: rotate(-90deg);
+}
+
+.to-top-ring circle {
+  fill: none;
+  stroke: var(--line);
+  stroke-width: 3;
+}
+
+.to-top-ring .bar {
+  stroke: var(--red);
+  stroke-dasharray: 100;
+  stroke-dashoffset: 100;
+  stroke-linecap: round;
+  transition: stroke-dashoffset 0.15s linear, stroke 0.2s;
+}
+
+.to-top:hover .bar {
+  stroke: #fff;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .to-top,
+  .to-top-ring .bar {
+    transition: none;
+  }
+}
+
 .site-toast {
   position: fixed;
   bottom: 24px;
@@ -1950,6 +2277,67 @@ footer {
 }
 
 @media (max-width: 991.98px) {
+  /* Bands stack: intro on top, tiles swipe sideways. */
+  .shop-band,
+  .shop-band.is-reversed,
+  .shop-band.is-compact,
+  .shop-band.is-compact.is-reversed {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 20px;
+  }
+
+  .shop-band.is-reversed .shop-intro {
+    order: 0;
+  }
+
+  .shop-intro,
+  .shop-band.is-reversed .shop-intro {
+    padding: 34px 24px 26px;
+  }
+
+  .shop-intro:before,
+  .shop-band.is-reversed .shop-intro:before {
+    top: 0;
+    bottom: auto;
+    left: 0;
+    right: 0;
+    width: auto;
+    height: 10px;
+    background-size: 20px 20px;
+  }
+
+  .shop-intro p {
+    margin: 10px 0 20px;
+  }
+
+  .shop-grid,
+  .shop-grid.cols-1,
+  .shop-grid.cols-2,
+  .shop-grid.cols-3,
+  .shop-grid.cols-4 {
+    display: flex;
+    gap: 14px;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    padding-bottom: 8px;
+    scrollbar-width: none;
+  }
+
+  .shop-grid::-webkit-scrollbar {
+    display: none;
+  }
+
+  .shop-grid > .shop-tile {
+    flex: 0 0 34%;
+    scroll-snap-align: start;
+  }
+
+  .shop-grid.cols-2 > .shop-tile:nth-child(2n),
+  .shop-grid.cols-3 > .shop-tile:nth-child(3n + 2),
+  .shop-grid.cols-4 > .shop-tile:nth-child(2n) {
+    transform: none;
+  }
+
   :root {
     --header-h: 88px;
     --logo-size: 78px;
@@ -2111,17 +2499,12 @@ footer {
     --bs-btn-padding-x: 16px;
   }
 
-  .cat {
-    padding: 14px;
+  .shop-grid > .shop-tile {
+    flex-basis: 58%;
   }
 
-  .cat h3 {
-    font-size: 1.45rem;
-  }
-
-  .cat small {
-    font-size: 0.64rem;
-    letter-spacing: 0.1em;
+  .shop-tile-name {
+    font-size: 1.15rem;
   }
 
   .pbody {
@@ -2144,6 +2527,13 @@ footer {
 
   .wa-float {
     left: 14px;
+    bottom: 14px;
+    width: 50px;
+    height: 50px;
+  }
+
+  .to-top {
+    right: 14px;
     bottom: 14px;
     width: 50px;
     height: 50px;
