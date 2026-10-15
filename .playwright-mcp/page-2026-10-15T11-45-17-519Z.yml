@@ -1,0 +1,390 @@
+- generic [active] [ref=e1]:
+  - generic [ref=e2]:
+    - text: ਜੀ ਆਇਆਂ ਨੂੰ · Welcome to Ravi Exclusive, Katra Jaimal Singh, Amritsar · WhatsApp
+    - link "+91-814-814-62-62" [ref=e3] [cursor=pointer]:
+      - /url: tel:+918148146262
+  - banner [ref=e4]:
+    - generic [ref=e6]:
+      - link [ref=e8] [cursor=pointer]:
+        - /url: http://ravi_exclusiv.test
+        - img "Ravi Exclusive logo" [ref=e10]
+      - navigation "Main" [ref=e11]:
+        - list [ref=e12]:
+          - listitem [ref=e13]:
+            - link "Girls" [ref=e14] [cursor=pointer]:
+              - /url: http://ravi_exclusiv.test/girls
+          - listitem [ref=e15]:
+            - link "Boys" [ref=e16] [cursor=pointer]:
+              - /url: http://ravi_exclusiv.test/boys
+          - listitem [ref=e17]:
+            - link "Men" [ref=e18] [cursor=pointer]:
+              - /url: http://ravi_exclusiv.test/men
+          - listitem [ref=e19]:
+            - link "Women" [ref=e20] [cursor=pointer]:
+              - /url: http://ravi_exclusiv.test/women
+          - listitem [ref=e21]:
+            - link "New Arrivals" [ref=e22] [cursor=pointer]:
+              - /url: http://ravi_exclusiv.test/new-arrivals
+      - generic [ref=e24]:
+        - button "Search" [ref=e25] [cursor=pointer]
+        - link "Wishlist" [ref=e29] [cursor=pointer]:
+          - /url: http://ravi_exclusiv.test/wishlist
+          - generic [ref=e32]: "2"
+        - button "Cart" [ref=e33] [cursor=pointer]:
+          - generic [ref=e37]: "2"
+  - main [ref=e38]:
+    - generic [ref=e41]:
+      - generic [ref=e42]:
+        - text: New Season · Festive Edit
+        - heading [level=1] [ref=e43]:
+          - text: Celebrating Every Occasion, the
+          - emphasis [ref=e44]: Traditional
+          - text: Way.
+        - paragraph [ref=e45]: From their first festive outfit to the big family wedding, dress your little ones in styles made for memories.
+        - generic [ref=e46]:
+          - link "Shop Boys' Wear" [ref=e47] [cursor=pointer]:
+            - /url: http://ravi_exclusiv.test/boys
+          - link "Shop Girls' Wear" [ref=e48] [cursor=pointer]:
+            - /url: http://ravi_exclusiv.test/girls
+        - generic [ref=e49]: ✦ Dressing Generations Since 1961
+      - generic [ref=e52]:
+        - figure [ref=e53]:
+          - img "Embroidered bridal and festive Punjabi outfits from Ravi Exclusive" [ref=e54]
+        - figure [ref=e55]:
+          - img "Festive Punjabi fashion at the Ravi Exclusive store" [ref=e56]
+    - generic [ref=e59]:
+      - generic [ref=e61]:
+        - generic [ref=e62]: ✦
+        - paragraph [ref=e63]:
+          - generic [ref=e64]: Punjabi Style From The Holy City of Amritsar
+          - text: Handpicked from Katra Jaimal Singh
+      - generic [ref=e66]:
+        - generic [ref=e67]: ✂
+        - paragraph [ref=e68]:
+          - generic [ref=e69]: Fitting & alterations
+          - text: Ask us before you order
+      - generic [ref=e71]:
+        - generic [ref=e72]: ☏
+        - paragraph [ref=e73]:
+          - generic [ref=e74]: Order on WhatsApp
+          - text: Personal service, ji
+      - generic [ref=e76]:
+        - generic [ref=e77]: ⌂
+        - paragraph [ref=e78]:
+          - generic [ref=e79]: Aao ji, visit us
+          - text: 22, Katra Jaimal Singh
+    - region [ref=e80]:
+      - generic [ref=e81]:
+        - generic [ref=e82]:
+          - generic [ref=e83]:
+            - text: Shop by category
+            - heading "Shop for Girls" [level=2] [ref=e84]
+          - link "Shop all Girls →" [ref=e86] [cursor=pointer]:
+            - /url: http://ravi_exclusiv.test/girls
+        - generic [ref=e87]:
+          - link [ref=e88] [cursor=pointer]:
+            - /url: http://ravi_exclusiv.test/girls#lehenga
+            - img "Lehenga" [ref=e89]
+            - heading "Lehenga" [level=3] [ref=e91]
+          - link [ref=e92] [cursor=pointer]:
+            - /url: http://ravi_exclusiv.test/girls#sharara-palazzo
+            - img "Sharara / Palazzo" [ref=e93]
+            - heading "Sharara / Palazzo" [level=3] [ref=e95]
+          - link [ref=e96] [cursor=pointer]:
+            - /url: http://ravi_exclusiv.test/girls#patiala-farshi-salwar
+            - img "Patiala Salwar Suits / Farshi Salwar" [ref=e97]
+            - heading "Patiala Salwar Suits / Farshi Salwar" [level=3] [ref=e99]
+          - link [ref=e100] [cursor=pointer]:
+            - /url: http://ravi_exclusiv.test/girls#frocks-gowns
+            - img "Frocks & Gowns" [ref=e101]
+            - heading "Frocks & Gowns" [level=3] [ref=e103]
+    - region [ref=e104]:
+      - generic [ref=e105]:
+        - generic [ref=e106]:
+          - generic [ref=e107]:
+            - text: Shop by category
+            - heading "Shop for Boys" [level=2] [ref=e108]
+          - link "Shop all Boys →" [ref=e110] [cursor=pointer]:
+            - /url: http://ravi_exclusiv.test/boys
+        - generic [ref=e111]:
+          - link [ref=e112] [cursor=pointer]:
+            - /url: http://ravi_exclusiv.test/boys#sherwani
+            - img "Sherwani" [ref=e113]
+            - heading "Sherwani" [level=3] [ref=e115]
+          - link [ref=e116] [cursor=pointer]:
+            - /url: http://ravi_exclusiv.test/boys#indo-westerns
+            - img "Indo-Westerns" [ref=e117]
+            - heading "Indo-Westerns" [level=3] [ref=e119]
+          - link [ref=e120] [cursor=pointer]:
+            - /url: http://ravi_exclusiv.test/boys#coat-suits-tuxedos
+            - img "Coat Suits / Tuxedos" [ref=e121]
+            - heading "Coat Suits / Tuxedos" [level=3] [ref=e123]
+          - link [ref=e124] [cursor=pointer]:
+            - /url: http://ravi_exclusiv.test/boys#jodhpuri
+            - img "Jodhpuri" [ref=e125]
+            - heading "Jodhpuri" [level=3] [ref=e127]
+          - link [ref=e128] [cursor=pointer]:
+            - /url: http://ravi_exclusiv.test/boys#kurta-pajama
+            - img "Kurta Pajama" [ref=e129]
+            - heading "Kurta Pajama" [level=3] [ref=e131]
+          - link [ref=e132] [cursor=pointer]:
+            - /url: http://ravi_exclusiv.test/boys#waistcoat-sets
+            - img "Waistcoat Sets" [ref=e133]
+            - heading "Waistcoat Sets" [level=3] [ref=e135]
+    - region [ref=e136]:
+      - generic [ref=e138]:
+        - generic [ref=e139]:
+          - heading "Shop for Men" [level=2] [ref=e140]
+          - paragraph [ref=e141]: Kurta pajamas, waistcoat sets and indo-westerns for the groom, the baraat and every festive occasion in between.
+          - link "Shop all Men" [ref=e142] [cursor=pointer]:
+            - /url: http://ravi_exclusiv.test/men
+          - generic [ref=e143]: 3 categories
+        - generic [ref=e144]:
+          - link "Kurta Pajamas Kurta Pajamas" [ref=e145] [cursor=pointer]:
+            - /url: http://ravi_exclusiv.test/men#kurta-pajamas
+            - img "Kurta Pajamas" [ref=e147]
+            - generic [ref=e149]: Kurta Pajamas
+          - link "Waistcoat Sets Waistcoat Sets" [ref=e150] [cursor=pointer]:
+            - /url: http://ravi_exclusiv.test/men#waistcoat-sets
+            - img "Waistcoat Sets" [ref=e152]
+            - generic [ref=e154]: Waistcoat Sets
+          - link "Indo-Westerns Indo-Westerns" [ref=e155] [cursor=pointer]:
+            - /url: http://ravi_exclusiv.test/men#indo-westerns
+            - img "Indo-Westerns" [ref=e157]
+            - generic [ref=e159]: Indo-Westerns
+    - region [ref=e160]:
+      - generic [ref=e162]:
+        - generic [ref=e163]:
+          - heading "Shop for Women" [level=2] [ref=e164]
+          - paragraph [ref=e165]: "Ethnic co-ord sets for women: hand-picked occasion wear from the heart of Amritsar."
+          - link "Shop all Women" [ref=e166] [cursor=pointer]:
+            - /url: http://ravi_exclusiv.test/women
+          - generic [ref=e167]: 1 category
+        - link "Co-ord Sets Co-ord Sets" [ref=e169] [cursor=pointer]:
+          - /url: http://ravi_exclusiv.test/women#co-ord-sets
+          - img "Co-ord Sets" [ref=e171]
+          - generic [ref=e173]: Co-ord Sets
+    - generic [ref=e175]:
+      - generic [ref=e177]:
+        - generic [ref=e178]: ਵਿਆਹ · The Punjabi Wedding Edit
+        - heading "Outfits for every occasion!" [level=2] [ref=e179]
+        - paragraph [ref=e180]: From Mehndi to the Reception, Outfits That Steal the Show!
+      - generic [ref=e181]:
+        - generic [ref=e183]:
+          - generic [ref=e184]: ਮਹਿੰਦੀ
+          - heading "Mehndi & Sangeet" [level=3] [ref=e185]
+          - text: Lehengas · Sharara · Co-ord sets
+        - generic [ref=e187]:
+          - generic [ref=e188]: ਜਾਗੋ
+          - heading "Jaggo & Dhol" [level=3] [ref=e189]
+          - text: Patiala suits · Kurta pajamas
+        - generic [ref=e191]:
+          - generic [ref=e192]: ਸ਼ਗਨ
+          - heading "Shagun & Wedding" [level=3] [ref=e193]
+          - text: Sherwanis · Jodhpuris · Lehengas
+        - generic [ref=e195]:
+          - generic [ref=e196]: ਰਿਸੈਪਸ਼ਨ
+          - heading "Cocktail & Reception" [level=3] [ref=e197]
+          - text: Indo-westerns · Coat suits · Gowns
+    - generic [ref=e199]:
+      - generic [ref=e200]:
+        - generic [ref=e201]:
+          - text: Just In
+          - heading "New arrivals" [level=2] [ref=e202]
+        - link "View all →" [ref=e203] [cursor=pointer]:
+          - /url: http://ravi_exclusiv.test/new-arrivals
+      - generic [ref=e204]:
+        - article [ref=e206]:
+          - 'button "Quick view: Plum Embroidered Lehenga Choli" [ref=e207] [cursor=pointer]':
+            - img "Plum Embroidered Lehenga Choli" [ref=e208]
+            - generic [ref=e209]: New
+            - button "Add to wishlist" [ref=e210]: ♡
+            - generic [ref=e211]: Quick view
+          - generic [ref=e212]:
+            - generic [ref=e213]: Girls · Lehenga
+            - heading "Plum Embroidered Lehenga Choli" [level=4] [ref=e214] [cursor=pointer]
+            - generic [ref=e215]:
+              - generic [ref=e216]: ₹4,499
+              - generic [ref=e217]: ₹5,299
+              - emphasis [ref=e218]: 15% off
+        - article [ref=e220]:
+          - 'button "Quick view: Zari Embroidered Sherwani" [ref=e221] [cursor=pointer]':
+            - img "Zari Embroidered Sherwani" [ref=e222]
+            - generic [ref=e223]: New
+            - button "Add to wishlist" [ref=e224]: ♡
+            - generic [ref=e225]: Quick view
+          - generic [ref=e226]:
+            - generic [ref=e227]: Men · Indo-Westerns
+            - heading "Zari Embroidered Sherwani" [level=4] [ref=e228] [cursor=pointer]
+            - generic [ref=e229]: ₹7,749
+        - article [ref=e232]:
+          - 'button "Quick view: Sequinned Sherwani" [ref=e233] [cursor=pointer]':
+            - img "Sequinned Sherwani" [ref=e234]
+            - generic [ref=e235]: New
+            - button "Add to wishlist" [ref=e236]: ♡
+            - generic [ref=e237]: Quick view
+          - generic [ref=e238]:
+            - generic [ref=e239]: Men · Indo-Westerns
+            - heading "Sequinned Sherwani" [level=4] [ref=e240] [cursor=pointer]
+            - generic [ref=e241]: ₹18,349
+        - article [ref=e244]:
+          - 'button "Quick view: Velvet Sherwani" [ref=e245] [cursor=pointer]':
+            - img "Velvet Sherwani" [ref=e246]
+            - generic [ref=e247]: New
+            - button "Add to wishlist" [ref=e248]: ♡
+            - generic [ref=e249]: Quick view
+          - generic [ref=e250]:
+            - generic [ref=e251]: Men · Indo-Westerns
+            - heading "Velvet Sherwani" [level=4] [ref=e252] [cursor=pointer]
+            - generic [ref=e253]:
+              - generic [ref=e254]: ₹1,449
+              - generic [ref=e255]: ₹1,799
+              - emphasis [ref=e256]: 19% off
+    - generic [ref=e258]:
+      - generic [ref=e260]:
+        - text: Most Loved
+        - heading "Bestsellers" [level=2] [ref=e261]
+      - generic [ref=e262]:
+        - article [ref=e264]:
+          - 'button "Quick view: Festive Co-ord Set" [ref=e265] [cursor=pointer]':
+            - img "Festive Co-ord Set" [ref=e266]
+            - generic [ref=e267]: 15% off
+            - button "Add to wishlist" [ref=e268]: ♡
+            - generic [ref=e269]: Quick view
+          - generic [ref=e270]:
+            - generic [ref=e271]: Women · Co-ord Sets
+            - heading "Festive Co-ord Set" [level=4] [ref=e272] [cursor=pointer]
+            - generic [ref=e273]:
+              - generic [ref=e274]: ₹19,999
+              - generic [ref=e275]: ₹23,549
+              - emphasis [ref=e276]: 15% off
+        - article [ref=e278]:
+          - 'button "Quick view: Indo-Western cum Nawabi" [ref=e279] [cursor=pointer]':
+            - img "Indo-Western cum Nawabi" [ref=e280]
+            - generic [ref=e281]: New
+            - button "Add to wishlist" [ref=e282]: ♡
+            - generic [ref=e283]: Quick view
+          - generic [ref=e284]:
+            - generic [ref=e285]: Men · Indo-Westerns
+            - heading "Indo-Western cum Nawabi" [level=4] [ref=e286] [cursor=pointer]
+            - generic [ref=e287]: ₹17,649
+        - article [ref=e290]:
+          - 'button "Quick view: Rosette Tiered Party Frock" [ref=e291] [cursor=pointer]':
+            - img "Rosette Tiered Party Frock" [ref=e292]
+            - generic [ref=e293]: 30% off
+            - button "Add to wishlist" [ref=e294]: ♡
+            - generic [ref=e295]: Quick view
+          - generic [ref=e296]:
+            - generic [ref=e297]: Girls · Frocks & Gowns
+            - heading "Rosette Tiered Party Frock" [level=4] [ref=e298] [cursor=pointer]
+            - generic [ref=e299]:
+              - generic [ref=e300]: ₹2,749
+              - generic [ref=e301]: ₹3,949
+              - emphasis [ref=e302]: 30% off
+        - article [ref=e304]:
+          - 'button "Quick view: Ivory Waistcoat Party Set" [ref=e305] [cursor=pointer]':
+            - img "Ivory Waistcoat Party Set" [ref=e306]
+            - generic [ref=e307]: 25% off
+            - button "Add to wishlist" [ref=e308]: ♡
+            - generic [ref=e309]: Quick view
+          - generic [ref=e310]:
+            - generic [ref=e311]: Boys · Waistcoat Sets
+            - heading "Ivory Waistcoat Party Set" [level=4] [ref=e312] [cursor=pointer]
+            - generic [ref=e313]:
+              - generic [ref=e314]: ₹14,949
+              - generic [ref=e315]: ₹19,949
+              - emphasis [ref=e316]: 25% off
+    - generic [ref=e319]:
+      - generic [ref=e321]:
+        - generic [ref=e322]: ਅੰਮ੍ਰਿਤਸਰ
+        - generic [ref=e323]: Amritsar da andaaz
+      - generic [ref=e324]:
+        - text: From the heart of Amritsar
+        - heading "Blending traditional craftsmanship with modern elegance" [level=2] [ref=e325]
+        - paragraph [ref=e326]: Established in 1961, Ravi Exclusive is more than a retail showroom—it is a legacy built on trust, quality, and timeless style. For generations, we have been dressing families with care, offering a curated selection of premium fashion for men, women, and children.
+        - paragraph [ref=e327]: With over 10 lakh satisfied customers and a strong global customer base, our commitment to excellence continues to define who we are.
+    - generic [ref=e329]:
+      - generic [ref=e330]:
+        - text: "@ravi.exclusif"
+        - heading "Follow us on Instagram" [level=2] [ref=e331]
+      - generic [ref=e332]:
+        - link [ref=e334] [cursor=pointer]:
+          - /url: https://www.instagram.com/ravi.exclusif/
+          - img "Ravi Exclusive look" [ref=e335]
+        - link [ref=e337] [cursor=pointer]:
+          - /url: https://www.instagram.com/ravi.exclusif/
+          - img "Ravi Exclusive look" [ref=e338]
+        - link [ref=e340] [cursor=pointer]:
+          - /url: https://www.instagram.com/ravi.exclusif/
+          - img "Ravi Exclusive look" [ref=e341]
+        - link [ref=e343] [cursor=pointer]:
+          - /url: https://www.instagram.com/ravi.exclusif/
+          - img "Ravi Exclusive look" [ref=e344]
+        - link [ref=e346] [cursor=pointer]:
+          - /url: https://www.instagram.com/ravi.exclusif/
+          - img "Ravi Exclusive look" [ref=e347]
+      - link "Follow @ravi.exclusif" [ref=e348] [cursor=pointer]:
+        - /url: https://www.instagram.com/ravi.exclusif/
+    - generic [ref=e351]:
+      - generic [ref=e352]:
+        - generic [ref=e353]: Visit Us · ਆਓ ਜੀ
+        - heading "Aao ji! See the collection in person" [level=2] [ref=e354]
+        - paragraph [ref=e355]: Come to our store in the heart of Amritsar's famous Katra Jaimal Singh market for personal styling, trials and fittings for the whole family.
+      - generic [ref=e357]:
+        - heading "M/s Ravi Exclusive" [level=3] [ref=e358]
+        - paragraph [ref=e359]: 22, Katra Jaimal Singh
+        - paragraph [ref=e360]: Amritsar, Punjab, India – 143001
+        - paragraph [ref=e361]:
+          - text: "Ph:"
+          - link "+91-814-814-62-62" [ref=e362] [cursor=pointer]:
+            - /url: tel:+918148146262
+        - link "Get Directions" [ref=e363] [cursor=pointer]:
+          - /url: https://www.google.com/maps/search/?api=1&query=22+Katra+Jaimal+Singh+Amritsar+143001
+  - contentinfo [ref=e365]:
+    - generic [ref=e366]:
+      - generic [ref=e368]:
+        - generic [ref=e369]:
+          - img "Ravi Exclusive" [ref=e371]
+          - paragraph [ref=e372]: Designer ethnic and occasion wear for the whole family, from the heart of Amritsar.
+        - generic [ref=e373]:
+          - heading "Shop" [level=4] [ref=e374]
+          - list [ref=e375]:
+            - listitem [ref=e376]:
+              - link "Boys" [ref=e377] [cursor=pointer]:
+                - /url: http://ravi_exclusiv.test/boys
+            - listitem [ref=e378]:
+              - link "Girls" [ref=e379] [cursor=pointer]:
+                - /url: http://ravi_exclusiv.test/girls
+            - listitem [ref=e380]:
+              - link "Women" [ref=e381] [cursor=pointer]:
+                - /url: http://ravi_exclusiv.test/women
+            - listitem [ref=e382]:
+              - link "Men" [ref=e383] [cursor=pointer]:
+                - /url: http://ravi_exclusiv.test/men
+        - generic [ref=e384]:
+          - heading "Help" [level=4] [ref=e385]
+          - list [ref=e386]:
+            - listitem [ref=e387]:
+              - link "Visit the store" [ref=e388] [cursor=pointer]:
+                - /url: http://ravi_exclusiv.test#store
+            - listitem [ref=e389]:
+              - link "Order on WhatsApp" [ref=e390] [cursor=pointer]:
+                - /url: https://wa.me/918148146262
+            - listitem [ref=e391]:
+              - link "Instagram" [ref=e392] [cursor=pointer]:
+                - /url: https://www.instagram.com/ravi.exclusive/
+        - generic [ref=e393]:
+          - heading "Contact" [level=4] [ref=e394]
+          - generic [ref=e395]:
+            - text: M/s Ravi Exclusive22, Katra Jaimal SinghAmritsar, Punjab, India – 143001
+            - 'link "Ph: +91-814-814-62-62" [ref=e396] [cursor=pointer]':
+              - /url: tel:+918148146262
+      - generic [ref=e397]:
+        - generic [ref=e398]: © 2026 Ravi Exclusive. All rights reserved.
+        - generic [ref=e399]:
+          - text: Website designed by
+          - link "Peer Infotech" [ref=e400] [cursor=pointer]:
+            - /url: https://peerinfotech.com/
+  - link "Chat on WhatsApp" [ref=e401] [cursor=pointer]:
+    - /url: https://wa.me/918148146262
+  - status [ref=e404]
