@@ -103,9 +103,9 @@ class StorefrontPagesTest extends TestCase
         $response = $this->get(route('shop.boys'));
 
         $response->assertOk();
-        $this->assertSame(13, $boysProductCount);
+        $this->assertSame(22, $boysProductCount);
         $this->assertSame($boysProductCount, substr_count($response->getContent(), '<article class="pcard"'));
-        $response->assertSee('<span class="count" id="count">13 items</span>', false);
+        $response->assertSee('<span class="count" id="count">22 items</span>', false);
         $response->assertSee('Ivory Embroidered Kurta Set');
         $response->assertDontSee('Festive Sherwani');
         $response->assertSee('<div class="empty" id="emptyMsg"  hidden >', false);

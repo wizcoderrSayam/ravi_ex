@@ -32,16 +32,10 @@
         data-aos-delay="150"
       >
         <div class="hero-duo">
-          <figure class="hd-main">
+          <figure class="hd-main hd-full">
             <img
-              src="{{ asset('assets') }}/images/hero-a.jpg"
-              alt="Embroidered bridal and festive Punjabi outfits from Ravi Exclusive"
-            />
-          </figure>
-          <figure class="hd-side">
-            <img
-              src="{{ asset('assets') }}/images/product5.jpg"
-              alt="Festive Punjabi fashion at the Ravi Exclusive store"
+              src="{{ asset('assets') }}/images/hero-home.webp"
+              alt="A boy in a cream embroidered sherwani and a girl in a blush embroidered gown, from Ravi Exclusive"
             />
           </figure>
         </div>

@@ -665,6 +665,15 @@ section[id] {
   outline-offset: 10px;
 }
 
+/* a single wide photo fills the frame, cropped around the two children */
+.hd-full {
+  width: calc(100% - 10px);
+}
+
+.hd-full img {
+  object-position: 55% center;
+}
+
 .hd-side {
   left: 0;
   bottom: 36px;

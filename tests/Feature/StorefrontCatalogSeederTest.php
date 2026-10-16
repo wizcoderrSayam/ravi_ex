@@ -36,8 +36,8 @@ class StorefrontCatalogSeederTest extends TestCase
 
         $products = Product::with(['category', 'images'])->get();
 
-        $this->assertCount(58, $products);
-        $this->assertSame(58, $products->pluck('slug')->unique()->count());
+        $this->assertCount(67, $products);
+        $this->assertSame(67, $products->pluck('slug')->unique()->count());
         $this->assertSame(4, $products->where('is_featured', true)->count());
 
         foreach ($products as $product) {
@@ -123,14 +123,29 @@ class StorefrontCatalogSeederTest extends TestCase
         $this->assertSame(['/assets/images/categories/men-kurta-pajamas.webp'], $kurtaPajamas->map->primaryImageUrl()->unique()->values()->all());
     }
 
+    public function test_every_subcategory_has_products_showing_its_photo(): void
+    {
+        $this->seed(StorefrontCatalogSeeder::class);
+
+        foreach (Category::query()->whereNotNull('parent_id')->with('products.images')->get() as $subcategory) {
+            $this->assertNotEmpty($subcategory->products, "{$subcategory->slug} has no products");
+        }
+
+        foreach (['boys-indo-westerns', 'boys-coat-suits-tuxedos', 'boys-jodhpuri'] as $slug) {
+            $products = Product::with('images')->whereRelation('category', 'slug', $slug)->get();
+            $this->assertCount(3, $products, "{$slug} has three products");
+            $this->assertSame(["/assets/images/categories/{$slug}.webp"], $products->map->primaryImageUrl()->unique()->values()->all());
+        }
+    }
+
     public function test_it_can_run_again_without_duplicating_anything(): void
     {
         $this->seed(StorefrontCatalogSeeder::class);
         $this->seed(StorefrontCatalogSeeder::class);
 
         $this->assertSame(18, Category::count());
-        $this->assertSame(58, Product::count());
-        $this->assertSame(58 + 4 + 14, Image::count(), 'one per product, top-level category and subcategory');
+        $this->assertSame(67, Product::count());
+        $this->assertSame(67 + 4 + 14, Image::count(), 'one per product, top-level category and subcategory');
         $this->assertSame(Product::count(), ProductVariant::query()->distinct()->count('product_id'));
     }
 }

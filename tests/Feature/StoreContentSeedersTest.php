@@ -168,7 +168,7 @@ class StoreContentSeedersTest extends TestCase
         $this->seed(DatabaseSeeder::class);
 
         $this->assertTrue(Role::where('slug', 'super-admin')->exists());
-        $this->assertSame(58, Product::count());
+        $this->assertSame(67, Product::count());
         $this->assertSame(4, HomepageSection::count());
         $this->assertSame(6, CmsPage::count());
         $this->assertSame(17, Order::count());

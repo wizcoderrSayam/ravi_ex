@@ -316,7 +316,7 @@ class StorefrontCatalogSeeder extends Seeder
     /**
      * Codes match the storefront's "RE-0035" product codes. The home page's own
      * cards reused codes 3, 13, 14, 22 and 27 for different products, so those
-     * five are seeded as 95–99. Codes 100–129 fill the kids' subcategories the
+     * five are seeded as 95–99. Codes 100–135 fill the kids' subcategories the
      * template left empty. Gaps are products whose subcategory was retired.
      * A row's image is only used while its subcategory has no slug image.
      *
@@ -373,6 +373,15 @@ class StorefrontCatalogSeeder extends Seeder
             ['code' => 109, 'name' => 'Ivory Waistcoat with Brooch', 'category' => 'boys/waistcoat-sets', 'price' => 1999, 'mrp' => 2499, 'fabric' => 'Jacquard', 'sizes' => self::KIDS_SIZES, 'image' => 'product8.jpg', 'new' => true, 'bestseller' => false],
             ['code' => 110, 'name' => 'Embroidered Nehru Jacket Set', 'category' => 'boys/waistcoat-sets', 'price' => 2899, 'mrp' => null, 'fabric' => 'Cotton Silk', 'sizes' => self::KIDS_SIZES, 'image' => 'categories/boys.jpg', 'new' => false, 'bestseller' => false],
             ['code' => 111, 'name' => 'Velvet Bandhgala Jacket', 'category' => 'boys/waistcoat-sets', 'price' => 3299, 'mrp' => null, 'fabric' => 'Velvet', 'sizes' => self::KIDS_SIZES, 'image' => 'product8.jpg', 'new' => false, 'bestseller' => false],
+            ['code' => 127, 'name' => 'Bottle Green Embroidered Indo-Western', 'category' => 'boys/indo-westerns', 'price' => 4299, 'mrp' => 4999, 'fabric' => 'Jacquard', 'sizes' => self::KIDS_SIZES, 'image' => 'categories/boys.jpg', 'new' => true, 'bestseller' => false],
+            ['code' => 128, 'name' => 'Ivory Asymmetric Indo-Western Set', 'category' => 'boys/indo-westerns', 'price' => 3799, 'mrp' => null, 'fabric' => 'Silk Blend', 'sizes' => self::KIDS_SIZES, 'image' => 'categories/boys.jpg', 'new' => false, 'bestseller' => false],
+            ['code' => 129, 'name' => 'Maroon Velvet Indo-Western', 'category' => 'boys/indo-westerns', 'price' => 4599, 'mrp' => null, 'fabric' => 'Velvet', 'sizes' => self::KIDS_SIZES, 'image' => 'categories/boys.jpg', 'new' => false, 'bestseller' => false],
+            ['code' => 130, 'name' => 'Black Jacquard Tuxedo with Bow Tie', 'category' => 'boys/coat-suits-tuxedos', 'price' => 4999, 'mrp' => 5999, 'fabric' => 'Jacquard', 'sizes' => self::KIDS_SIZES, 'image' => 'categories/boys.jpg', 'new' => true, 'bestseller' => false],
+            ['code' => 131, 'name' => 'Navy Three-piece Coat Suit', 'category' => 'boys/coat-suits-tuxedos', 'price' => 4499, 'mrp' => null, 'fabric' => 'Poly Viscose', 'sizes' => self::KIDS_SIZES, 'image' => 'categories/boys.jpg', 'new' => false, 'bestseller' => false],
+            ['code' => 132, 'name' => 'Ivory Party Tuxedo Set', 'category' => 'boys/coat-suits-tuxedos', 'price' => 5299, 'mrp' => null, 'fabric' => 'Terry Rayon', 'sizes' => self::KIDS_SIZES, 'image' => 'categories/boys.jpg', 'new' => false, 'bestseller' => false],
+            ['code' => 133, 'name' => 'Navy Embroidered Jodhpuri Suit', 'category' => 'boys/jodhpuri', 'price' => 4799, 'mrp' => 5599, 'fabric' => 'Jacquard', 'sizes' => self::KIDS_SIZES, 'image' => 'categories/boys.jpg', 'new' => true, 'bestseller' => false],
+            ['code' => 134, 'name' => 'Black Bandhgala Jodhpuri Set', 'category' => 'boys/jodhpuri', 'price' => 4399, 'mrp' => null, 'fabric' => 'Terry Rayon', 'sizes' => self::KIDS_SIZES, 'image' => 'categories/boys.jpg', 'new' => false, 'bestseller' => false],
+            ['code' => 135, 'name' => 'Wine Velvet Jodhpuri Suit', 'category' => 'boys/jodhpuri', 'price' => 5199, 'mrp' => null, 'fabric' => 'Velvet', 'sizes' => self::KIDS_SIZES, 'image' => 'categories/boys.jpg', 'new' => false, 'bestseller' => false],
             ['code' => 115, 'name' => 'Rosette Ball Gown', 'category' => 'girls/frocks-gowns', 'price' => 3499, 'mrp' => 4499, 'fabric' => 'Satin & Net', 'sizes' => self::KIDS_SIZES, 'image' => 'product7.jpg', 'new' => true, 'bestseller' => false],
             ['code' => 116, 'name' => 'Plum Anarkali Gown with Dupatta', 'category' => 'girls/frocks-gowns', 'price' => 3999, 'mrp' => null, 'fabric' => 'Georgette', 'sizes' => self::KIDS_SIZES, 'image' => 'categories/girls.jpg', 'new' => false, 'bestseller' => false],
             ['code' => 117, 'name' => 'Blush Ruffle Party Gown', 'category' => 'girls/frocks-gowns', 'price' => 2999, 'mrp' => null, 'fabric' => 'Net', 'sizes' => self::KIDS_SIZES, 'image' => 'product7.jpg', 'new' => false, 'bestseller' => false],
