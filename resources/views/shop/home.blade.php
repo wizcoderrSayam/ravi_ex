@@ -56,8 +56,8 @@
         <div class="trust-item">
           <i>✦</i>
           <p>
-            <b>Punjabi Style From The Holy City of Amritsar</b
-            ><span>Handpicked from Katra Jaimal Singh</span>
+            <b>Punjabi Style </b
+            ><span>Handpicked From The Holy City of Amritsar </span>
           </p>
         </div>
       </div>
