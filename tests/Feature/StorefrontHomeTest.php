@@ -95,6 +95,7 @@ class StorefrontHomeTest extends TestCase
             $this->assertFileExists(public_path(parse_url($video[1], PHP_URL_PATH)));
         }
 
+        $this->assertStringContainsString('<a class="btn btn-red" href="https://www.instagram.com/ravi.exclusif/" target="_blank" rel="noopener" data-aos="fade-up">Follow @ravi.exclusif</a>', $html);
         $this->assertStringNotContainsString('instagram.com/ravi.exclusive', $html, 'the footer links to the right handle');
         $this->assertStringContainsString('<a href="https://www.instagram.com/ravi.exclusif/" target="_blank" rel="noopener">Instagram</a>', $html);
     }

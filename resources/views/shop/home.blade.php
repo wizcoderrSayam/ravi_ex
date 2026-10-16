@@ -355,6 +355,9 @@
         @endforeach
       @endforeach
     </div>
+    <div class="text-center mt-4">
+      <a class="btn btn-red" href="{{ $instagramUrl }}" target="_blank" rel="noopener" data-aos="fade-up">Follow @@ravi.exclusif</a>
+    </div>
   </div>
 </section>
 
