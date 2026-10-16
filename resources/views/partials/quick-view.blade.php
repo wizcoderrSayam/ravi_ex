@@ -28,7 +28,7 @@
               </div>
               <div class="mdetails">
                 <div><b>Colour:</b> As shown (more shades in store)</div>
-                <div><b>Fabric:</b> <span id="pmFabric"></span></div>
+                <div class="mdesc" id="pmDesc"></div>
                 <div><b>Product code:</b> <span id="pmCode"></span></div>
                 <div>Need help with size or customisation? Call <a href="tel:+918148146262" class="text-red">+91-814-814-62-62</a></div>
               </div>

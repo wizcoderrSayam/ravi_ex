@@ -1873,6 +1873,11 @@ select {
   display: none;
 }
 
+.mdesc {
+  white-space: pre-line;
+  line-height: 1.6;
+}
+
 .mmore {
   justify-self: center;
   margin-top: 4px;

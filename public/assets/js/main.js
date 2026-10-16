@@ -68,7 +68,7 @@
     const d = card.dataset, img = card.querySelector("img.ph"), art = card.querySelector(".art-fb");
     return {
       id: +d.id, code: d.code || code(+d.id), name: d.name, cat: d.catName, sub: d.sub, price: +d.price, mrp: +d.mrp,
-      fabric: d.fabric, hex: d.hex, sizes: d.sizes.split("|"), url: d.url || "",
+      fabric: d.fabric, description: d.description || "", hex: d.hex, sizes: d.sizes.split("|"), url: d.url || "",
       img: img ? img.getAttribute("src") : "", art: art ? art.innerHTML : ""
     };
   }
@@ -133,7 +133,8 @@
     $("pmEyebrow").textContent = [p.cat, p.sub].filter(Boolean).join(" · ");
     $("pmName").textContent = p.name;
     $("pmPrice").innerHTML = priceHTML(p);
-    $("pmFabric").textContent = p.fabric;
+    $("pmDesc").textContent = p.description;
+    $("pmDesc").hidden = !p.description;
     $("pmCode").textContent = p.code;
     $("pmMore").href = p.url;
     $("pmMore").hidden = !p.url;

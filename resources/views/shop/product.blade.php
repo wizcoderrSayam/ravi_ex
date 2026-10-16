@@ -88,9 +88,6 @@
 
         <div class="mdetails">
           <div><b>Colour:</b> As shown (more shades in store)</div>
-          @if ($card->fabric)
-            <div><b>Fabric:</b> {{ $card->fabric }}</div>
-          @endif
           <div><b>Product code:</b> {{ $card->code }}</div>
           <div>Need help with size or customisation? Call <a href="tel:+918148146262" class="text-red">+91-814-814-62-62</a></div>
         </div>

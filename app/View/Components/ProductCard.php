@@ -43,6 +43,8 @@ class ProductCard extends Component
 
     public string $fabric;
 
+    public string $description;
+
     public string $sizes;
 
     public string $searchText;
@@ -78,6 +80,8 @@ class ProductCard extends Component
 
         // The short description reads "Fabric: Silk".
         $this->fabric = Str::contains((string) $product->short_description, ': ') ? Str::after($product->short_description, ': ') : '';
+        $this->description = trim((string) $product->description);
+
         // Without an active variant there is nothing to pick, so the product is sold as one size.
         $this->sizes = $product->variants
             ->where('is_active', true)
