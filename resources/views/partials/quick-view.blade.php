@@ -24,6 +24,7 @@
               <div class="mactions">
                 <button type="button" class="btn btn-red btn-block" id="pmAdd">Add to Bag</button>
                 <button type="button" class="btn btn-wa btn-block" id="pmBuy">Buy now on WhatsApp</button>
+                <a class="mmore" id="pmMore" href="#">View full details →</a>
               </div>
               <div class="mdetails">
                 <div><b>Colour:</b> As shown (more shades in store)</div>

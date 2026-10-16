@@ -103,11 +103,8 @@ class StorefrontCatalogSeederTest extends TestCase
         }
 
         $this->assertSame('/assets/images/categories/men-indo-westerns.webp', Category::firstWhere('slug', 'men-indo-westerns')->imageUrl());
-        $this->assertSame(
-            '/assets/images/products/men-kurta-pyjama-1.jpg',
-            Category::firstWhere('slug', 'men-kurta-pajamas')->imageUrl(),
-            "without a slug image, a subcategory shows its first product's photo",
-        );
+        $this->assertSame('/assets/images/categories/men-kurta-pajamas.webp', Category::firstWhere('slug', 'men-kurta-pajamas')->imageUrl());
+        $this->assertSame('/assets/images/categories/men-waistcoat-sets.webp', Category::firstWhere('slug', 'men-waistcoat-sets')->imageUrl());
         $this->assertSame(3, Category::firstWhere('slug', 'girls-lehenga')->products()->count());
     }
 
@@ -122,7 +119,8 @@ class StorefrontCatalogSeederTest extends TestCase
         $this->assertSame(['/assets/images/categories/men-indo-westerns.webp'], $indoWesterns->map->primaryImageUrl()->unique()->values()->all());
 
         $kurtaPajamas = Product::with('images')->whereRelation('category', 'slug', 'men-kurta-pajamas')->get();
-        $this->assertContains('/assets/images/products/men-pathani-suits-1.jpg', $kurtaPajamas->map->primaryImageUrl()->all(), 'products keep their own photo until the subcategory has a slug image');
+        $this->assertCount(9, $kurtaPajamas);
+        $this->assertSame(['/assets/images/categories/men-kurta-pajamas.webp'], $kurtaPajamas->map->primaryImageUrl()->unique()->values()->all());
     }
 
     public function test_it_can_run_again_without_duplicating_anything(): void

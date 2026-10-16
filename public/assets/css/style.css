@@ -1873,6 +1873,127 @@ select {
   display: none;
 }
 
+.mmore {
+  justify-self: center;
+  margin-top: 4px;
+  font-size: 0.86rem;
+  color: var(--muted);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.mmore:hover {
+  color: var(--red);
+}
+
+.pbody h4 a:hover {
+  color: var(--red);
+}
+
+/* ---------- product page ---------- */
+.pd {
+  padding: 14px 0 64px;
+}
+
+.pd-photo {
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  min-height: 440px;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.pd-photo .ph {
+  display: block;
+  width: 100%;
+  height: auto;
+  max-height: 88vh;
+  object-fit: contain;
+}
+
+.pd-photo .art-fb {
+  min-height: 440px;
+}
+
+.pd-thumbs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 12px;
+}
+
+.pd-thumbs button {
+  width: 72px;
+  aspect-ratio: 3 / 4;
+  padding: 0;
+  border: 1px solid var(--line);
+  overflow: hidden;
+}
+
+.pd-thumbs button.on {
+  border-color: var(--red);
+}
+
+.pd-thumbs img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.pd-info h1 {
+  font-size: clamp(1.9rem, 3.4vw, 2.6rem);
+  margin: 6px 0 10px;
+}
+
+.pd-info .price b {
+  font-size: 1.5rem;
+}
+
+.pd-soldout {
+  margin-top: 10px;
+  color: var(--red);
+  font-size: 0.9rem;
+}
+
+.pd-desc {
+  margin-top: 26px;
+}
+
+.pd-desc h2 {
+  font-family: inherit;
+  font-size: 0.74rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  font-weight: 600;
+  margin-bottom: 10px;
+}
+
+.pd-desc p {
+  color: var(--muted);
+  font-size: 0.95rem;
+  line-height: 1.7;
+}
+
+.pd-desc p + p {
+  margin-top: 12px;
+}
+
+.pd-related {
+  padding-bottom: 70px;
+}
+
+@media (max-width: 767.98px) {
+  .pd-photo,
+  .pd-photo .art-fb {
+    min-height: 300px;
+  }
+
+  .pd {
+    padding-bottom: 44px;
+  }
+}
+
 /* ---------- cart drawer (Bootstrap offcanvas) ---------- */
 .drawer {
   --bs-offcanvas-width: min(420px, 100vw);

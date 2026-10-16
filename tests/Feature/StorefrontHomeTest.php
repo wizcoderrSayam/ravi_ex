@@ -44,6 +44,8 @@ class StorefrontHomeTest extends TestCase
         $this->assertSame('Co-ord Sets', $tiles[route('shop.women').'#co-ord-sets']['name']);
         $this->assertSame('/assets/images/categories/men-indo-westerns.webp', $tiles[route('shop.men').'#indo-westerns']['image']);
         $this->assertSame('/assets/images/categories/boys-jodhpuri.webp', $tiles[route('shop.boys').'#jodhpuri']['image']);
+        $this->assertSame('/assets/images/categories/men-kurta-pajamas.webp', $tiles[route('shop.men').'#kurta-pajamas']['image']);
+        $this->assertSame('/assets/images/categories/men-waistcoat-sets.webp', $tiles[route('shop.men').'#waistcoat-sets']['image']);
     }
 
     public function test_inactive_subcategories_are_left_off_the_home_page(): void

@@ -51,6 +51,9 @@ class ProductCard extends Component
 
     public ?string $imageUrl;
 
+    /** The product page, also sent in WhatsApp orders so the store sees exactly what was picked. */
+    public string $url;
+
     public function __construct(public Product $product)
     {
         $category = $product->category;
@@ -75,13 +78,15 @@ class ProductCard extends Component
 
         // The short description reads "Fabric: Silk".
         $this->fabric = Str::contains((string) $product->short_description, ': ') ? Str::after($product->short_description, ': ') : '';
+        // Without an active variant there is nothing to pick, so the product is sold as one size.
         $this->sizes = $product->variants
             ->where('is_active', true)
             ->map(fn (ProductVariant $variant): string => $variant->option_label ?: 'Free Size')
-            ->implode('|');
+            ->implode('|') ?: 'Free Size';
         $this->searchText = Str::lower(implode(' ', array_filter([$product->name, $this->subcategoryName, $this->categoryName, $this->fabric])));
         $this->tint = self::TINTS[$product->id % count(self::TINTS)];
         $this->imageUrl = $product->primaryImageUrl();
+        $this->url = route('shop.product', $product->slug);
     }
 
     public function money(float $amount): string

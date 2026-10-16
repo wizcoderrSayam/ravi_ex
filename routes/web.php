@@ -12,4 +12,5 @@ Route::controller(StorefrontController::class)->name('shop.')->group(function ()
     Route::get('/new-arrivals', 'newArrivals')->name('new-arrivals');
     Route::get('/search', 'search')->name('search');
     Route::get('/wishlist', 'wishlist')->name('wishlist');
+    Route::get('/product/{slug}', 'product')->name('product');
 });

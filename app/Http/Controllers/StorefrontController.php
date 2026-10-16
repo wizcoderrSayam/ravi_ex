@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\View\Components\ProductCard;
 use Carepeerinfotech\Ecommerce\Models\Category;
 use Carepeerinfotech\Ecommerce\Models\Product;
 use Illuminate\Database\Eloquent\Builder;
@@ -18,6 +19,12 @@ class StorefrontController extends Controller
     public const NEW_ARRIVAL_DAYS = 30;
 
     private const HOME_SECTION_SIZE = 4;
+
+    /** Top-level categories with their own listing page, each routed as "shop.{slug}". */
+    private const CATEGORY_PAGES = ['girls', 'boys', 'men', 'women'];
+
+    /** How many products from the same subcategory a product page suggests. */
+    private const RELATED_PRODUCTS = 4;
 
     /** The home page's "Shop for …" rows, in display order, keyed by top-level category slug. */
     private const HOME_SHOP_SECTIONS = [
@@ -73,6 +80,26 @@ class StorefrontController extends Controller
     public function wishlist(): View
     {
         return view('shop.wishlist', ['products' => $this->productQuery()->get()]);
+    }
+
+    /** A product's own page; inactive products, or ones in an inactive category, are not found. */
+    public function product(string $slug): View
+    {
+        $product = $this->productQuery()->where('slug', $slug)->firstOrFail();
+
+        $card = new ProductCard($product);
+
+        return view('shop.product', [
+            'product' => $product,
+            'card' => $card,
+            'categoryUrl' => in_array($card->categorySlug, self::CATEGORY_PAGES, true) ? route('shop.'.$card->categorySlug) : null,
+            'gallery' => $product->galleryFor(),
+            'related' => $this->productQuery()
+                ->where('category_id', $product->category_id)
+                ->whereKeyNot($product->id)
+                ->take(self::RELATED_PRODUCTS)
+                ->get(),
+        ]);
     }
 
     private function category(string $slug): View

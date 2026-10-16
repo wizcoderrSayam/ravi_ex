@@ -1,6 +1,6 @@
 <article class="pcard" data-id="{{ $product->id }}" data-code="{{ $code }}" data-name="{{ $product->name }}" data-cat="{{ $categorySlug }}" data-cat-name="{{ $categoryName }}"
   data-sub="{{ $subcategoryName }}" data-sub-slug="{{ $subcategorySlug }}" data-price="{{ (int) round($price) }}" data-mrp="{{ (int) round($comparePrice ?? 0) }}" data-new="{{ $isNew ? 1 : 0 }}"
-  data-stock="{{ $inStock ? 1 : 0 }}" data-fabric="{{ $fabric }}" data-hex="{{ $tint }}" data-sizes="{{ $sizes }}" data-search="{{ $searchText }}">
+  data-stock="{{ $inStock ? 1 : 0 }}" data-fabric="{{ $fabric }}" data-hex="{{ $tint }}" data-sizes="{{ $sizes }}" data-search="{{ $searchText }}" data-url="{{ $url }}">
   <div class="pimg" style="background:linear-gradient(160deg,{{ $tint }}22,{{ $tint }}44)" data-action="quick-view" role="button" tabindex="0" aria-label="Quick view: {{ $product->name }}">
     @if ($imageUrl)
       <img class="ph" src="{{ $imageUrl }}" alt="{{ $product->name }}" loading="lazy" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
@@ -18,7 +18,7 @@
   </div>
   <div class="pbody">
     <small>{{ $categoryName }}@if ($subcategoryName) · {{ $subcategoryName }}@endif</small>
-    <h4 data-action="quick-view">{{ $product->name }}</h4>
+    <h4><a href="{{ $url }}">{{ $product->name }}</a></h4>
     <div class="price"><b>{{ $money($price) }}</b>@if ($comparePrice)<s>{{ $money($comparePrice) }}</s><em>{{ $discountPercent }}% off</em>@endif</div>
   </div>
 </article>

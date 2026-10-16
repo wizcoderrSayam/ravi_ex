@@ -62,16 +62,13 @@
   }
   document.querySelectorAll(".pcard .wish").forEach(syncWish);
 
-  /* ---------- product quick view ---------- */
-  const modalEl = $("productModal");
-  const modal = bootstrap.Modal.getOrCreateInstance(modalEl);
-  let cur = null, sel = { size: null, qty: 1 };
-
+  /* ---------- ordering: shared by the quick view and the product page ---------- */
+  // a product card and the product page carry the same data-* attributes
   function readCard(card) {
     const d = card.dataset, img = card.querySelector("img.ph"), art = card.querySelector(".art-fb");
     return {
       id: +d.id, code: d.code || code(+d.id), name: d.name, cat: d.catName, sub: d.sub, price: +d.price, mrp: +d.mrp,
-      fabric: d.fabric, hex: d.hex, sizes: d.sizes.split("|"),
+      fabric: d.fabric, hex: d.hex, sizes: d.sizes.split("|"), url: d.url || "",
       img: img ? img.getAttribute("src") : "", art: art ? art.innerHTML : ""
     };
   }
@@ -79,47 +76,79 @@
     const off = p.mrp ? Math.round((1 - p.price / p.mrp) * 100) : 0;
     return `<b>${inr(p.price)}</b>` + (p.mrp ? `<s>${inr(p.mrp)}</s><em>${off}% off</em>` : "");
   }
+
+  // a size + quantity picker; the chosen values live in picker.sel
+  function picker({ sizes, err, qtyButtons, qtyOut }) {
+    const on = sizes.querySelector("button.on");
+    const sel = { size: on ? on.dataset.size : null, qty: 1 };
+    sizes.addEventListener("click", e => {
+      const b = e.target.closest("button[data-size]"); if (!b) return;
+      sel.size = b.dataset.size;
+      sizes.querySelectorAll("button").forEach(x => x.classList.toggle("on", x === b));
+      err.style.display = "none";
+    });
+    qtyButtons.forEach(b => b.addEventListener("click", () => {
+      sel.qty = Math.max(1, Math.min(10, sel.qty + +b.dataset.qty)); qtyOut.textContent = sel.qty;
+    }));
+    return {
+      sel,
+      // show a new product's sizes; a single size is picked for the shopper
+      reset(list) {
+        sel.size = list.length === 1 ? list[0] : null; sel.qty = 1;
+        sizes.innerHTML = list.map(s => `<button type="button" class="${sel.size === s ? "on" : ""}" data-size="${esc(s)}">${esc(s)}</button>`).join("");
+        err.style.display = "none"; qtyOut.textContent = 1;
+      },
+      ready() { if (!sel.size) { err.style.display = "block"; return false } return true }
+    };
+  }
+
+  function addToBag(p, sel) {
+    const ex = cart.find(i => i.id === p.id && i.size === sel.size);
+    if (ex) { ex.qty += sel.qty; ex.url = p.url }
+    else cart.push({ id: p.id, code: p.code, size: sel.size, qty: sel.qty, name: p.name, price: p.price, img: p.img, hex: p.hex, url: p.url });
+    save(); toast("Added to your bag");
+  }
+  function sendWhatsApp(msg) {
+    window.open(`https://wa.me/${STORE.whatsapp}?text=${encodeURIComponent(msg)}`, "_blank");
+  }
+  // the product link lets the store open exactly what was picked
+  function orderMessage(p, sel) {
+    return `Hello ${STORE.name}, I'd like to order:\n\n${p.name} (${p.code})\nSize: ${sel.size} · Qty: ${sel.qty}\nPrice: ${inr(p.price * sel.qty)}`
+      + (p.url ? `\n${p.url}` : "")
+      + `\n\nPlease confirm availability.`;
+  }
+
+  /* ---------- product quick view ---------- */
+  const modalEl = $("productModal");
+  const modal = bootstrap.Modal.getOrCreateInstance(modalEl);
+  const quick = picker({ sizes: $("sizes"), err: $("sizeErr"), qtyButtons: modalEl.querySelectorAll("[data-qty]"), qtyOut: $("mq") });
+  let cur = null;
+
   function openProduct(card) {
     const p = cur = readCard(card);
-    sel = { size: p.sizes.length === 1 ? p.sizes[0] : null, qty: 1 };
     $("pmImg").style.background = tint(p.hex);
     $("pmImg").innerHTML = p.img
       ? `<img class="ph" src="${esc(p.img)}" alt="${esc(p.name)}">`
       : `<span class="art-fb" style="color:${p.hex}">${p.art}</span>`;
-    $("pmEyebrow").textContent = `${p.cat} · ${p.sub}`;
+    $("pmEyebrow").textContent = [p.cat, p.sub].filter(Boolean).join(" · ");
     $("pmName").textContent = p.name;
     $("pmPrice").innerHTML = priceHTML(p);
     $("pmFabric").textContent = p.fabric;
     $("pmCode").textContent = p.code;
-    $("sizes").innerHTML = p.sizes.map(s => `<button type="button" class="${sel.size === s ? "on" : ""}" data-size="${esc(s)}">${esc(s)}</button>`).join("");
-    $("sizeErr").style.display = "none";
-    $("mq").textContent = 1;
+    $("pmMore").href = p.url;
+    $("pmMore").hidden = !p.url;
+    quick.reset(p.sizes);
     modal.show();
   }
-  function needSize() { if (!sel.size) { $("sizeErr").style.display = "block"; return true } return false }
 
-  $("sizes").addEventListener("click", e => {
-    const b = e.target.closest("button[data-size]"); if (!b) return;
-    sel.size = b.dataset.size;
-    $("sizes").querySelectorAll("button").forEach(x => x.classList.toggle("on", x === b));
-    $("sizeErr").style.display = "none";
-  });
-  modalEl.querySelectorAll("[data-qty]").forEach(b => b.addEventListener("click", () => {
-    sel.qty = Math.max(1, Math.min(10, sel.qty + +b.dataset.qty)); $("mq").textContent = sel.qty;
-  }));
   $("pmAdd").addEventListener("click", () => {
-    if (needSize()) return;
-    const ex = cart.find(i => i.id === cur.id && i.size === sel.size);
-    if (ex) ex.qty += sel.qty;
-    else cart.push({ id: cur.id, code: cur.code, size: sel.size, qty: sel.qty, name: cur.name, price: cur.price, img: cur.img, hex: cur.hex });
-    save(); toast("Added to your bag");
+    if (!quick.ready()) return;
+    addToBag(cur, quick.sel);
     modalEl.addEventListener("hidden.bs.modal", () => drawer.show(), { once: true });
     modal.hide();
   });
   $("pmBuy").addEventListener("click", () => {
-    if (needSize()) return;
-    const msg = `Hello ${STORE.name}, I'd like to order:\n\n${cur.name} (${cur.code})\nSize: ${sel.size} · Qty: ${sel.qty}\nPrice: ${inr(cur.price * sel.qty)}\n\nPlease confirm availability.`;
-    window.open(`https://wa.me/${STORE.whatsapp}?text=${encodeURIComponent(msg)}`, "_blank");
+    if (quick.ready()) sendWhatsApp(orderMessage(cur, quick.sel));
   });
 
   /* card clicks (event delegation) */
@@ -172,11 +201,37 @@
     if (!n || !ph || !ad) { toast("Please fill in name, mobile and address"); return }
     store.set("cname", n); store.set("cphone", ph); store.set("caddr", ad);
     let total = 0;
-    const lines = cart.map((it, k) => { total += it.price * it.qty; return `${k + 1}. ${it.name} (${it.code || code(it.id)})\n   Size ${it.size} × ${it.qty} = ${inr(it.price * it.qty)}` }).join("\n");
+    // items added before product pages existed have no url, so their link is left out
+    const lines = cart.map((it, k) => {
+      total += it.price * it.qty;
+      return `${k + 1}. ${it.name} (${it.code || code(it.id)})\n   Size ${it.size} × ${it.qty} = ${inr(it.price * it.qty)}` + (it.url ? `\n   ${it.url}` : "");
+    }).join("\n");
     const msg = `Hello ${STORE.name}, I'd like to place an order:\n\n${lines}\n\nSubtotal: ${inr(total)}\n\nName: ${n}\nMobile: ${ph}\nAddress: ${ad}`;
-    window.open(`https://wa.me/${STORE.whatsapp}?text=${encodeURIComponent(msg)}`, "_blank");
+    sendWhatsApp(msg);
   });
   $("cartEmpty").querySelector("a").addEventListener("click", () => drawer.hide());
+
+  /* ---------- product page ---------- */
+  const pd = $("pd");
+  if (pd) {
+    const product = readCard(pd);
+    const choice = picker({ sizes: $("pdSizes"), err: $("pdSizeErr"), qtyButtons: pd.querySelectorAll("[data-qty]"), qtyOut: $("pdQty") });
+    $("pdAdd").addEventListener("click", () => {
+      if (!choice.ready()) return;
+      addToBag(product, choice.sel);
+      drawer.show();
+    });
+    $("pdBuy").addEventListener("click", () => {
+      if (choice.ready()) sendWhatsApp(orderMessage(product, choice.sel));
+    });
+    // thumbnails swap the main photo
+    const thumbs = $("pdThumbs");
+    if (thumbs) thumbs.addEventListener("click", e => {
+      const b = e.target.closest("button[data-photo]"); if (!b) return;
+      $("pdImg").src = b.dataset.photo;
+      thumbs.querySelectorAll("button").forEach(x => x.classList.toggle("on", x === b));
+    });
+  }
 
   /* ---------- search panel + mobile menu ---------- */
   const searchPanel = $("searchPanel");

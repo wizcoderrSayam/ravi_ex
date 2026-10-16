@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>@yield('title', 'Ravi Exclusive — Shop Ethnic & Designer Wear Online | Amritsar')</title>
   <meta name="description" content="@yield('description')">
+  @stack('meta')
   <link rel="icon" href="{{ asset('assets/images/logo.webp') }}">
   <link rel="stylesheet" href="{{ asset('assets/vendor/bootstrap/css/bootstrap.min.css') }}">
   <link rel="stylesheet" href="{{ asset('assets/vendor/aos/aos.css') }}">
