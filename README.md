@@ -7,6 +7,72 @@
 <a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
 </p>
 
+## Installation & Deployment
+
+The ecommerce admin panel lives in a separate repository, [`carepeerinfotech/ecommerce`](https://github.com/carepeerinfotech/ecommerce). It is included here as a **git submodule** at `packages/ecommerce` and loaded by Composer as a `path` repository.
+
+A plain `git clone` or `git pull` does **not** download submodule code. If `packages/ecommerce` is empty, `composer install` fails with:
+
+```
+Class "Carepeerinfotech\Ecommerce\EcommerceServiceProvider" not found
+Script @php artisan package:discover --ansi handling the post-autoload-dump event returned with error code 1
+```
+
+### Fresh clone
+
+```bash
+git clone --recurse-submodules https://github.com/wizcoderrSayam/ravi_exclusive.git
+cd ravi_exclusive
+composer run setup
+```
+
+### Existing clone or server
+
+```bash
+git submodule sync
+git submodule update --init --recursive
+composer install --no-dev --optimize-autoloader
+php artisan optimize:clear
+```
+
+Check that the package is present with `ls packages/ecommerce/src`. It should list `EcommerceServiceProvider.php`.
+
+### Deploy script
+
+Always update the submodule **before** running Composer:
+
+```bash
+git pull origin main
+git submodule update --init --recursive
+composer install --no-dev --optimize-autoloader
+php artisan migrate --force
+php artisan optimize
+```
+
+### Server access to the submodule
+
+The submodule URL uses SSH (`git@github.com:carepeerinfotech/ecommerce.git`), and the repository is private. If `git submodule update` fails with `Permission denied (publickey)`, the server needs read access to that repository. Use one of these:
+
+- **Deploy key**: generate a key on the server (`ssh-keygen -t ed25519`) and add the public key under *carepeerinfotech/ecommerce → Settings → Deploy keys*. GitHub does not allow the same deploy key on two repositories, so if the server already uses one for this repository, create a second key and give it a host alias in `~/.ssh/config`.
+- **HTTPS with a personal access token**, set locally on the server only:
+
+  ```bash
+  git config submodule.packages/ecommerce.url https://<TOKEN>@github.com/carepeerinfotech/ecommerce.git
+  git submodule update --init --recursive
+  ```
+
+  The token is stored in plain text in `.git/config`. Use a fine-grained token with read-only access to this one repository.
+
+### Updating the package
+
+To pull the latest package changes into this project:
+
+```bash
+git submodule update --remote packages/ecommerce
+git add packages/ecommerce
+git commit -m "Update ecommerce package"
+```
+
 ## About Laravel
 
 Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
