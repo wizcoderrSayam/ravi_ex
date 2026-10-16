@@ -310,88 +310,51 @@
 </section>
 
 <!-- instagram -->
-<section class="insta">
-  <div class="container text-center">
-    <div data-aos="fade-up">
-      <span class="eyebrow">@@ravi.exclusif</span>
-      <h2 class="section-title">Follow us on Instagram</h2>
+@php
+  $instagramUrl = 'https://www.instagram.com/ravi.exclusif/';
+  // Preview clips cut from @ravi.exclusif reels; each links to the profile until its post link is added.
+  $reels = collect([
+    'Embroidered kurta sets in store',
+    "Kids' festive outfits in store",
+    'Princess-style party frocks',
+    'Pretty suits for girls',
+    'Party wear for kids',
+    'Party frock collection',
+    'Embroidered kurta and palazzo sets for girls',
+    "Festive kids' collection in store",
+    'Embellished party gowns for girls',
+    'Tiered party frocks',
+  ])->map(fn (string $alt, int $index): array => [
+    'name' => sprintf('reel-%02d', $index + 1),
+    'alt' => $alt,
+    'url' => $instagramUrl,
+  ]);
+@endphp
+<section class="insta" aria-labelledby="insta-title">
+  <div class="container">
+    <div class="head" data-aos="fade-up">
+      <div>
+        <span class="eyebrow">@@ravi.exclusif</span>
+        <h2 id="insta-title">Follow us on Instagram</h2>
+      </div>
+      <div class="cat-rail-actions">
+        <a href="{{ $instagramUrl }}" target="_blank" rel="noopener">Follow @@ravi.exclusif →</a>
+      </div>
     </div>
-    <div class="row row-cols-3 row-cols-md-5 g-2 igrid">
-      <div class="col" data-aos="zoom-in" data-aos-delay="0">
-        <a
-          href="https://www.instagram.com/ravi.exclusif/"
-          target="_blank"
-          rel="noopener"
-          ><img
-            src="{{ asset('assets') }}/images/instagram/insta-1.jpg"
-            alt="Ravi Exclusive look"
-            loading="lazy"
-        /></a>
-      </div>
-      <div class="col" data-aos="zoom-in" data-aos-delay="80">
-        <a
-          href="https://www.instagram.com/ravi.exclusif/"
-          target="_blank"
-          rel="noopener"
-          ><img
-            src="{{ asset('assets') }}/images/instagram/insta-2.jpg"
-            alt="Ravi Exclusive look"
-            loading="lazy"
-        /></a>
-      </div>
-      <div class="col" data-aos="zoom-in" data-aos-delay="160">
-        <a
-          href="https://www.instagram.com/ravi.exclusif/"
-          target="_blank"
-          rel="noopener"
-          ><img
-            src="{{ asset('assets') }}/images/instagram/insta-3.jpg"
-            alt="Ravi Exclusive look"
-            loading="lazy"
-        /></a>
-      </div>
-      <div class="col" data-aos="zoom-in" data-aos-delay="240">
-        <a
-          href="https://www.instagram.com/ravi.exclusif/"
-          target="_blank"
-          rel="noopener"
-          ><img
-            src="{{ asset('assets') }}/images/instagram/insta-4.jpg"
-            alt="Ravi Exclusive look"
-            loading="lazy"
-        /></a>
-      </div>
-      <div class="col" data-aos="zoom-in" data-aos-delay="320">
-        <a
-          href="https://www.instagram.com/ravi.exclusif/"
-          target="_blank"
-          rel="noopener"
-          ><img
-            src="{{ asset('assets') }}/images/instagram/insta-5.jpg"
-            alt="Ravi Exclusive look"
-            loading="lazy"
-        /></a>
-      </div>
-      <!-- <div class="col" data-aos="zoom-in" data-aos-delay="400">
-        <a
-          href="https://www.instagram.com/ravi.exclusif/"
-          target="_blank"
-          rel="noopener"
-          ><img
-            src="{{ asset('assets') }}/images/instagram/insta-6.jpg"
-            alt="Ravi Exclusive look"
-            loading="lazy"
-        /></a>
-      </div> -->
+    {{-- The reels are listed twice so main.js can glide the row endlessly; the copy is hidden from screen readers and the keyboard. --}}
+    <div class="cat-rail reel-rail" style="--cards: 5" data-glide data-aos="fade-up" data-aos-delay="100">
+      @foreach ([false, true] as $isCopy)
+        @foreach ($reels as $reel)
+        <a class="reel" href="{{ $reel['url'] }}" target="_blank" rel="noopener" @if ($isCopy) aria-hidden="true" tabindex="-1" data-glide-copy @else aria-label="{{ $reel['alt'] }}: see @@ravi.exclusif on Instagram (opens in a new tab)" @endif>
+          {{-- Muted, inline and looping so browsers allow autoplay; main.js plays it only while it is on screen. --}}
+          <video muted loop playsinline preload="none" poster="{{ asset('assets/videos/instagram/'.$reel['name'].'.webp') }}" data-reel aria-hidden="true">
+            <source src="{{ asset('assets/videos/instagram/'.$reel['name'].'.mp4') }}" type="video/mp4">
+          </video>
+          <span class="reel-badge" aria-hidden="true"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></span>
+        </a>
+        @endforeach
+      @endforeach
     </div>
-    <a
-      class="btn btn-red"
-      href="https://www.instagram.com/ravi.exclusif/"
-      target="_blank"
-      rel="noopener"
-      data-aos="fade-up"
-      >Follow @@ravi.exclusif</a
-    >
   </div>
 </section>
 

@@ -21,7 +21,7 @@
             <ul>
               <li><a href="{{ route('shop.home') }}#store">Visit the store</a></li>
               <li><a href="https://wa.me/918148146262" target="_blank" rel="noopener">Order on WhatsApp</a></li>
-              <li><a href="https://www.instagram.com/ravi.exclusive/" target="_blank" rel="noopener">Instagram</a></li>
+              <li><a href="https://www.instagram.com/ravi.exclusif/" target="_blank" rel="noopener">Instagram</a></li>
             </ul>
           </div>
           <div class="col-12 col-md-6 col-lg-3" data-aos="fade-up" data-aos-delay="300">

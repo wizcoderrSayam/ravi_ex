@@ -497,6 +497,63 @@
     drawDots();
   });
 
+  /* ---------- instagram reels: muted previews play only while on screen ---------- */
+  // with reduced motion or data saver on, the poster frame stays instead; keyboard focus
+  // inside the section pauses every reel, so looping video can always be stopped
+  const reels = [...document.querySelectorAll("video[data-reel]")];
+  const saveData = navigator.connection && navigator.connection.saveData;
+  if (reels.length && !saveData) {
+    const reelSection = reels[0].closest(".insta");
+    const onScreen = new Set();
+    let reelsFocused = false;
+    const syncReels = () => reels.forEach(video => {
+      if (onScreen.has(video) && !reelsFocused && !reduceMotion()) video.play().catch(() => { }); else video.pause();
+    });
+    const watcher = new IntersectionObserver(entries => {
+      entries.forEach(({ target, isIntersecting }) => isIntersecting ? onScreen.add(target) : onScreen.delete(target));
+      syncReels();
+    }, { threshold: 0.5 });
+    reels.forEach(video => watcher.observe(video));
+    reelSection.addEventListener("focusin", e => { reelsFocused = e.target.matches(":focus-visible"); syncReels() });
+    reelSection.addEventListener("focusout", e => { if (!reelSection.contains(e.relatedTarget)) { reelsFocused = false; syncReels() } });
+    matchMedia("(prefers-reduced-motion: reduce)").addEventListener("change", syncReels);
+  }
+
+  /* ---------- instagram reels row: glides continuously and loops ---------- */
+  // the row holds the reels twice; passing the end of the first set jumps back by exactly one set, so the loop is seamless.
+  // it rests while a mouse is over it, a finger is on it (and briefly after), keyboard focus is inside, it is off-screen or the tab is hidden
+  const GLIDE_SPEED = 30; // pixels per second
+  document.querySelectorAll("[data-glide]").forEach(rail => {
+    const copy = rail.querySelector("[data-glide-copy]");
+    if (!copy) return;
+    const setWidth = () => copy.offsetLeft - rail.firstElementChild.offsetLeft;
+    let pos = rail.scrollLeft, hovering = false, focused = false, onScreen = false, touchedUntil = 0, last = 0;
+
+    function step(now) {
+      const dt = last ? Math.min(now - last, 100) / 1000 : 0;
+      last = now;
+      // a swipe moves the row; carry on from wherever it was left
+      if (Math.abs(rail.scrollLeft - pos) > 2) pos = rail.scrollLeft;
+      const resting = hovering || focused || !onScreen || document.hidden || reduceMotion() || now < touchedUntil;
+      if (!resting) pos += GLIDE_SPEED * dt;
+      const width = setWidth();
+      if (width > 0 && pos >= width) pos -= width;
+      if (!resting || pos !== rail.scrollLeft) rail.scrollLeft = pos;
+      requestAnimationFrame(step);
+    }
+
+    rail.addEventListener("pointerenter", e => { if (e.pointerType === "mouse") hovering = true });
+    rail.addEventListener("pointerleave", e => { if (e.pointerType === "mouse") hovering = false });
+    rail.addEventListener("pointerdown", () => { touchedUntil = Infinity });
+    addEventListener("pointerup", () => { if (touchedUntil === Infinity) touchedUntil = performance.now() + 2500 });
+    addEventListener("pointercancel", () => { if (touchedUntil === Infinity) touchedUntil = performance.now() + 2500 });
+    rail.addEventListener("scroll", () => { if (touchedUntil !== Infinity && Math.abs(rail.scrollLeft - pos) > 2) touchedUntil = performance.now() + 2500 }, { passive: true });
+    rail.addEventListener("focusin", e => { focused = e.target.matches(":focus-visible") });
+    rail.addEventListener("focusout", e => { if (!rail.contains(e.relatedTarget)) focused = false });
+    new IntersectionObserver(([entry]) => { onScreen = entry.isIntersecting }).observe(rail);
+    requestAnimationFrame(step);
+  });
+
   /* ---------- init ---------- */
   $("yr").textContent = new Date().getFullYear();
   badges();

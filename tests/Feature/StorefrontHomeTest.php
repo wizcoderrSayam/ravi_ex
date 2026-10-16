@@ -73,6 +73,32 @@ class StorefrontHomeTest extends TestCase
         ], false);
     }
 
+    public function test_instagram_section_plays_the_store_reels_and_links_to_the_profile(): void
+    {
+        $html = $this->get(route('shop.home'))->assertOk()->getContent();
+
+        preg_match_all('/<a class="reel" href="([^"]+)".*?<\/a>/s', $html, $reels, PREG_SET_ORDER);
+
+        // Ten reels, listed twice so the row can glide endlessly; only the first set is announced or focusable.
+        $this->assertCount(20, $reels);
+        $this->assertSame(20, substr_count($html, 'data-reel'));
+        $this->assertSame(10, substr_count($html, 'data-glide-copy'));
+        $this->assertSame(10, substr_count($html, 'aria-hidden="true" tabindex="-1" data-glide-copy'));
+        $this->assertStringContainsString('data-glide', $html);
+
+        // Each tile is read on its own, so a tile missing its poster or video cannot borrow the next one's.
+        foreach ($reels as [$tile, $url]) {
+            $this->assertSame('https://www.instagram.com/ravi.exclusif/', $url);
+            $this->assertSame(1, preg_match('/poster="([^"]+)"/', $tile, $poster), 'every reel has a poster');
+            $this->assertSame(1, preg_match('/<source src="([^"]+)" type="video\/mp4">/', $tile, $video), 'every reel has a clip');
+            $this->assertFileExists(public_path(parse_url($poster[1], PHP_URL_PATH)));
+            $this->assertFileExists(public_path(parse_url($video[1], PHP_URL_PATH)));
+        }
+
+        $this->assertStringNotContainsString('instagram.com/ravi.exclusive', $html, 'the footer links to the right handle');
+        $this->assertStringContainsString('<a href="https://www.instagram.com/ravi.exclusif/" target="_blank" rel="noopener">Instagram</a>', $html);
+    }
+
     public function test_occasions_are_plain_text_and_old_copy_is_gone(): void
     {
         $response = $this->get(route('shop.home'));
