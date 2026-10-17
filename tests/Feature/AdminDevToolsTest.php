@@ -59,6 +59,17 @@ class AdminDevToolsTest extends TestCase
             ->assertSee('Exclude runtime tables');
     }
 
+    public function test_super_admin_layout_renders_dev_tools_link_and_sidebar_menu_toggle(): void
+    {
+        $this->actingAs($this->adminWithRole('super-admin'))
+            ->get(route('admin.dashboard'))
+            ->assertOk()
+            ->assertSee(route('admin.dev-tools.index'))
+            ->assertSee('id="admin-sidebar"', false)
+            ->assertSee('aria-controls="admin-sidebar"', false)
+            ->assertSee('data-admin-menu-toggle', false);
+    }
+
     public function test_dev_tools_link_is_hidden_from_other_admins(): void
     {
         $this->actingAs($this->adminWithRole('admin'))
