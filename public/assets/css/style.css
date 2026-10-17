@@ -1257,8 +1257,15 @@ section[id] {
   width: 46%;
 }
 
+/* covers the whole photo so it opens the product page; keyboard users reach it through the title link */
+.pimg-link {
+  position: absolute;
+  inset: 0;
+}
+
 .ptag {
   position: absolute;
+  pointer-events: none;
   top: 12px;
   left: 12px;
   background: #fff;
@@ -1277,6 +1284,7 @@ section[id] {
 
 .wish {
   position: absolute;
+  z-index: 1;
   top: 10px;
   right: 10px;
   width: 34px;
@@ -1292,26 +1300,6 @@ section[id] {
 
 .wish.on {
   color: var(--red);
-}
-
-.quick {
-  position: absolute;
-  left: 10px;
-  right: 10px;
-  bottom: 10px;
-  background: rgba(255, 255, 255, 0.92);
-  padding: 7px;
-  text-align: center;
-  font-size: 0.76rem;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  font-weight: 500;
-  transform: translateY(130%);
-  transition: 0.25s;
-}
-
-.pcard:hover .quick {
-  transform: none;
 }
 
 .pbody {
@@ -1736,55 +1724,6 @@ select {
   color: var(--muted);
 }
 
-/* ---------- product modal (Bootstrap modal) ---------- */
-.product-modal .modal-dialog {
-  --bs-modal-width: 960px;
-}
-
-.mbox {
-  border: 0;
-  border-radius: 4px;
-  overflow: hidden;
-}
-
-.mimg {
-  display: flex;
-  align-items: flex-start;
-  justify-content: center;
-  min-height: 440px;
-  height: 100%;
-  overflow: hidden;
-}
-
-.mimg .ph {
-  width: 100%;
-  height: auto;
-  max-height: 92vh;
-  object-fit: contain;
-  display: block;
-}
-
-.mimg .art-fb {
-  min-height: 440px;
-}
-
-.mimg svg {
-  width: 50%;
-}
-
-.minfo {
-  padding: 34px;
-}
-
-.minfo h2 {
-  font-size: 2rem;
-  margin: 6px 0 10px;
-}
-
-.minfo .price b {
-  font-size: 1.5rem;
-}
-
 .tax-note {
   font-size: 0.8rem;
   color: var(--muted);
@@ -1861,43 +1800,11 @@ select {
   font-weight: 500;
 }
 
-.x {
-  position: absolute;
-  top: 12px;
-  right: 12px;
-  width: 38px;
-  height: 38px;
-  border-radius: 50%;
-  background: #fff;
-  font-size: 1.4rem;
-  line-height: 1;
-  z-index: 2;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-}
-
 .err {
   color: var(--red);
   font-size: 0.84rem;
   margin-top: 8px;
   display: none;
-}
-
-.mdesc {
-  white-space: pre-line;
-  line-height: 1.6;
-}
-
-.mmore {
-  justify-self: center;
-  margin-top: 4px;
-  font-size: 0.86rem;
-  color: var(--muted);
-  text-decoration: underline;
-  text-underline-offset: 3px;
-}
-
-.mmore:hover {
-  color: var(--red);
 }
 
 .pbody h4 a:hover {
@@ -2591,10 +2498,6 @@ footer {
     padding-top: 10px;
   }
 
-  .quick {
-    display: none;
-  }
-
   section {
     padding: 54px 0;
   }
@@ -2605,19 +2508,6 @@ footer {
 }
 
 @media (max-width: 767.98px) {
-  .mimg,
-  .mimg .art-fb {
-    min-height: 300px;
-  }
-
-  .minfo {
-    padding: 24px;
-  }
-
-  .minfo h2 {
-    font-size: 1.7rem;
-  }
-
   .store-card {
     padding: 32px 24px;
   }

@@ -46,6 +46,7 @@ class StorefrontPagesTest extends TestCase
         $response->assertSee("<title>{$title}</title>", false);
         $response->assertSee(asset('assets/css/style.css'), false);
         $response->assertSee('id="cartDrawer"', false);
+        $response->assertDontSee('id="productModal"', false);
         $response->assertSee('id="toTop"', false);
         $response->assertDontSee('.html"', false);
 

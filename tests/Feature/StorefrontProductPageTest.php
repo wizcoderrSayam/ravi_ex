@@ -113,6 +113,9 @@ class StorefrontProductPageTest extends TestCase
 
         $response->assertSee('data-url="'.$url.'"', false);
         $response->assertSee('<h4><a href="'.$url.'">Festive Co-ord Set</a></h4>', false);
+        $response->assertSee('<a class="pimg-link" href="'.$url.'" tabindex="-1" aria-hidden="true"></a>', false);
+        $response->assertDontSee('data-action="quick-view"', false);
+        $response->assertDontSee('Quick view');
     }
 
     private function product(string $name): Product

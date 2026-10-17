@@ -24,9 +24,6 @@
     @yield('content')
   </main>
 
-  <!-- product quick view -->
-  @include('partials.quick-view')
-
   <!-- cart drawer -->
   @include('partials.cart-drawer')
 

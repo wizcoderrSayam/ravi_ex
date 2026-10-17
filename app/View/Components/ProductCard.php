@@ -12,7 +12,7 @@ use Illuminate\View\Component;
 
 /**
  * A storefront product card. The data-* attributes it renders are what
- * public/assets/js/main.js reads for filtering, quick view, cart and wishlist.
+ * public/assets/js/main.js reads for filtering, cart and wishlist.
  *
  * Expects the product's category.parent, images and variants to be eager loaded.
  */

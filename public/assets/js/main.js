@@ -1,6 +1,6 @@
 /* =========================================================
    Ravi Exclusive — site interactions
-   (cart, wishlist, quick view, listing filters, AOS)
+   (cart, wishlist, listing filters, AOS)
    All page content lives in the HTML; this file only adds behaviour.
    ========================================================= */
 (function () {
@@ -62,7 +62,7 @@
   }
   document.querySelectorAll(".pcard .wish").forEach(syncWish);
 
-  /* ---------- ordering: shared by the quick view and the product page ---------- */
+  /* ---------- ordering: used by the product page ---------- */
   // a product card and the product page carry the same data-* attributes
   function readCard(card) {
     const d = card.dataset, img = card.querySelector("img.ph"), art = card.querySelector(".art-fb");
@@ -71,10 +71,6 @@
       fabric: d.fabric, description: d.description || "", hex: d.hex, sizes: d.sizes.split("|"), url: d.url || "",
       img: img ? img.getAttribute("src") : "", art: art ? art.innerHTML : ""
     };
-  }
-  function priceHTML(p) {
-    const off = p.mrp ? Math.round((1 - p.price / p.mrp) * 100) : 0;
-    return `<b>${inr(p.price)}</b>` + (p.mrp ? `<s>${inr(p.mrp)}</s><em>${off}% off</em>` : "");
   }
 
   // a size + quantity picker; the chosen values live in picker.sel
@@ -92,12 +88,6 @@
     }));
     return {
       sel,
-      // show a new product's sizes; a single size is picked for the shopper
-      reset(list) {
-        sel.size = list.length === 1 ? list[0] : null; sel.qty = 1;
-        sizes.innerHTML = list.map(s => `<button type="button" class="${sel.size === s ? "on" : ""}" data-size="${esc(s)}">${esc(s)}</button>`).join("");
-        err.style.display = "none"; qtyOut.textContent = 1;
-      },
       ready() { if (!sel.size) { err.style.display = "block"; return false } return true }
     };
   }
@@ -118,51 +108,10 @@
       + `\n\nPlease confirm availability.`;
   }
 
-  /* ---------- product quick view ---------- */
-  const modalEl = $("productModal");
-  const modal = bootstrap.Modal.getOrCreateInstance(modalEl);
-  const quick = picker({ sizes: $("sizes"), err: $("sizeErr"), qtyButtons: modalEl.querySelectorAll("[data-qty]"), qtyOut: $("mq") });
-  let cur = null;
-
-  function openProduct(card) {
-    const p = cur = readCard(card);
-    $("pmImg").style.background = tint(p.hex);
-    $("pmImg").innerHTML = p.img
-      ? `<img class="ph" src="${esc(p.img)}" alt="${esc(p.name)}">`
-      : `<span class="art-fb" style="color:${p.hex}">${p.art}</span>`;
-    $("pmEyebrow").textContent = [p.cat, p.sub].filter(Boolean).join(" · ");
-    $("pmName").textContent = p.name;
-    $("pmPrice").innerHTML = priceHTML(p);
-    $("pmDesc").textContent = p.description;
-    $("pmDesc").hidden = !p.description;
-    $("pmCode").textContent = p.code;
-    $("pmMore").href = p.url;
-    $("pmMore").hidden = !p.url;
-    quick.reset(p.sizes);
-    modal.show();
-  }
-
-  $("pmAdd").addEventListener("click", () => {
-    if (!quick.ready()) return;
-    addToBag(cur, quick.sel);
-    modalEl.addEventListener("hidden.bs.modal", () => drawer.show(), { once: true });
-    modal.hide();
-  });
-  $("pmBuy").addEventListener("click", () => {
-    if (quick.ready()) sendWhatsApp(orderMessage(cur, quick.sel));
-  });
-
   /* card clicks (event delegation) */
   document.addEventListener("click", e => {
     const wishBtn = e.target.closest('[data-action="wish"]');
-    if (wishBtn) { e.stopPropagation(); toggleWish(wishBtn); return }
-    const qv = e.target.closest('[data-action="quick-view"]');
-    if (qv) openProduct(qv.closest(".pcard"));
-  });
-  document.addEventListener("keydown", e => {
-    if ((e.key === "Enter" || e.key === " ") && e.target.matches('.pimg[data-action="quick-view"]')) {
-      e.preventDefault(); openProduct(e.target.closest(".pcard"));
-    }
+    if (wishBtn) { e.stopPropagation(); toggleWish(wishBtn) }
   });
 
   /* ---------- cart drawer ---------- */
