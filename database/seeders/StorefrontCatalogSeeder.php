@@ -104,8 +104,7 @@ class StorefrontCatalogSeeder extends Seeder
     {
         $category = Category::firstOrNew(['slug' => $slug]);
 
-        // parent_id is added by this app, so it is not in the package model's fillable list.
-        $category->forceFill([
+        $category->fill([
             ...$attributes,
             'parent_id' => $parentId,
             'sort_order' => $sortOrder,
