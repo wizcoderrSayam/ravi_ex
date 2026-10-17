@@ -44,6 +44,23 @@ class AdminCategoryTreeTest extends TestCase
         $response->assertSee(route('admin.categories.create', ['parent' => $boys->id]), false);
     }
 
+    public function test_subcategories_start_collapsed_behind_an_open_close_toggle(): void
+    {
+        $men = Category::create(['name' => 'Men']);
+        Category::create(['name' => 'Accessories']);
+        $sherwani = $this->createSubcategory($men, 'Sherwani', 'men-sherwani', 0);
+
+        $response = $this->actingAs($this->admin)->get(route('admin.categories.index'));
+
+        $response->assertOk();
+        $response->assertSee('data-category-toggle-all="open"', false);
+        $response->assertSee('data-category-toggle-all="close"', false);
+        $response->assertSee('aria-controls="category-row-'.$sherwani->id.'"', false);
+        $response->assertSee('aria-label="Subcategories of Men"', false);
+        $response->assertSee('id="category-row-'.$sherwani->id.'" class="border-t border-slate-100" data-category-child hidden', false);
+        $response->assertDontSee('aria-label="Subcategories of Accessories"', false);
+    }
+
     public function test_add_subcategory_link_preselects_the_parent(): void
     {
         $men = Category::create(['name' => 'Men']);
