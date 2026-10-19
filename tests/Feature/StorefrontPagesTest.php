@@ -132,7 +132,7 @@ class StorefrontPagesTest extends TestCase
         $response->assertSee('data-sizes="S|M|L|XL|XXL|3XL" data-search="festive sherwani indo-westerns men silk blend"', false);
         $response->assertSee('<img class="ph" src="/assets/images/categories/men-indo-westerns.webp" alt="Festive Sherwani"', false);
         $response->assertSee('<span class="ptag off">25% off</span>', false);
-        $response->assertSee('<div class="price"><b>₹5,399</b><s>₹7,199</s><em>25% off</em></div>', false);
+        $response->assertSee('<div class="price"><b>₹5,399</b><span class="price-from">onwards</span><s>₹7,199</s><em>25% off</em></div>', false);
     }
 
     public function test_sold_out_and_inactive_products(): void
