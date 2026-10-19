@@ -62,7 +62,7 @@
       <div class="pd-info">
         <small class="eyebrow">{{ $card->categoryName }}@if ($card->subcategoryName) · {{ $card->subcategoryName }}@endif</small>
         <h1>{{ $product->name }}</h1>
-        <div class="price"><b>{{ $card->money($card->price) }}</b>@if ($card->comparePrice)<s>{{ $card->money($card->comparePrice) }}</s><em>{{ $card->discountPercent }}% off</em>@endif</div>
+        <div class="price"><b>{{ $card->money($card->price) }}</b><span class="price-from">onwards</span>@if ($card->comparePrice)<s>{{ $card->money($card->comparePrice) }}</s><em>{{ $card->discountPercent }}% off</em>@endif</div>
         <p class="tax-note">Inclusive of all taxes</p>
         @if (! $card->inStock)
           <p class="pd-soldout">Sold out right now. Message us on WhatsApp and we'll tell you when it's back.</p>
