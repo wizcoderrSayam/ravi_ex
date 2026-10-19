@@ -68,7 +68,8 @@
           <p class="pd-soldout">Sold out right now. Message us on WhatsApp and we'll tell you when it's back.</p>
         @endif
 
-        <div class="opt">
+        {{-- With a single option there is nothing to choose; it stays pre-selected for Add to Bag. --}}
+        <div class="opt"{{ count($sizes) === 1 ? ' hidden' : '' }}>
           <h5>Size</h5>
           <div class="sizes" id="pdSizes">
             @foreach ($sizes as $size)

@@ -94,8 +94,9 @@
 
   function addToBag(p, sel) {
     const ex = cart.find(i => i.id === p.id && i.size === sel.size);
-    if (ex) { ex.qty += sel.qty; ex.url = p.url }
-    else cart.push({ id: p.id, code: p.code, size: sel.size, qty: sel.qty, name: p.name, price: p.price, img: p.img, hex: p.hex, url: p.url });
+    if (ex) { ex.qty += sel.qty; ex.url = p.url; ex.oneSize = p.sizes.length === 1 }
+    // a product with one option has no size to pick, so the cart and order messages leave it out
+    else cart.push({ id: p.id, code: p.code, size: sel.size, oneSize: p.sizes.length === 1, qty: sel.qty, name: p.name, price: p.price, img: p.img, hex: p.hex, url: p.url });
     save(); toast("Added to your bag");
   }
   function sendWhatsApp(msg) {
@@ -103,7 +104,8 @@
   }
   // the product link lets the store open exactly what was picked
   function orderMessage(p, sel) {
-    return `Hello ${STORE.name}, I'd like to order:\n\n${p.name} (${p.code})\nSize: ${sel.size} · Qty: ${sel.qty}\nPrice: ${inr(p.price * sel.qty)}`
+    const size = p.sizes.length === 1 ? "" : `Size: ${sel.size} · `;
+    return `Hello ${STORE.name}, I'd like to order:\n\n${p.name} (${p.code})\n${size}Qty: ${sel.qty}\nPrice: ${inr(p.price * sel.qty)}`
       + (p.url ? `\n${p.url}` : "")
       + `\n\nPlease confirm availability.`;
   }
@@ -128,7 +130,7 @@
       total += it.price * it.qty;
       return `<div class="citem">
         <div class="cthumb" style="background:${tint(it.hex)}">${it.img ? `<img class="ph" src="${esc(it.img)}" alt="">` : ""}</div>
-        <div><h4>${esc(it.name)}</h4><small>Size: ${esc(it.size)} · ${inr(it.price)}</small>
+        <div><h4>${esc(it.name)}</h4><small>${it.oneSize ? "" : `Size: ${esc(it.size)} · `}${inr(it.price)}</small>
           <div class="qty"><button type="button" data-cart="${i}" data-d="-1" aria-label="Decrease">−</button><span>${it.qty}</span><button type="button" data-cart="${i}" data-d="1" aria-label="Increase">+</button></div></div>
         <button type="button" class="rm" data-cart="${i}" data-d="-${it.qty}">Remove</button></div>`;
     }).join("");
@@ -154,7 +156,7 @@
     // items added before product pages existed have no url, so their link is left out
     const lines = cart.map((it, k) => {
       total += it.price * it.qty;
-      return `${k + 1}. ${it.name} (${it.code || code(it.id)})\n   Size ${it.size} × ${it.qty} = ${inr(it.price * it.qty)}` + (it.url ? `\n   ${it.url}` : "");
+      return `${k + 1}. ${it.name} (${it.code || code(it.id)})\n   ${it.oneSize ? "Qty" : `Size ${it.size} ×`} ${it.qty} = ${inr(it.price * it.qty)}` + (it.url ? `\n   ${it.url}` : "");
     }).join("\n");
     const msg = `Hello ${STORE.name}, I'd like to place an order:\n\n${lines}\n\nSubtotal: ${inr(total)}\n\nName: ${n}\nMobile: ${ph}\nAddress: ${ad}`;
     sendWhatsApp(msg);

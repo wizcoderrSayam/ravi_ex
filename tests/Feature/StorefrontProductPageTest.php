@@ -98,10 +98,33 @@ class StorefrontProductPageTest extends TestCase
         $product->variants()->update(['is_active' => false]);
 
         $this->get(route('shop.product', $product->slug))
+            ->assertSee('<div class="opt" hidden>', false)
             ->assertSee('<button type="button" class="on" data-size="Free Size">Free Size</button>', false);
         $this->get(route('shop.women'))
             ->assertSee('data-id="'.$product->id.'" data-code="RE-0031"', false)
             ->assertSee('data-sizes="Free Size"', false);
+    }
+
+    public function test_a_product_with_several_active_sizes_shows_the_size_picker(): void
+    {
+        $product = $this->product('Festive Co-ord Set');
+
+        $this->get(route('shop.product', $product->slug))
+            ->assertSee('<div class="opt">', false)
+            ->assertDontSee('<div class="opt" hidden>', false);
+    }
+
+    public function test_a_product_with_one_active_size_hides_the_size_picker_and_preselects_it(): void
+    {
+        $product = $this->product('Festive Co-ord Set');
+        $product->variants()->where('option_label', '!=', 'M')->update(['is_active' => false]);
+
+        $this->get(route('shop.product', $product->slug))
+            ->assertSee('<div class="opt" hidden>', false)
+            ->assertSee('<button type="button" class="on" data-size="M">M</button>', false)
+            ->assertDontSee('data-size="XS"', false);
+        $this->get(route('shop.women'))
+            ->assertSee('data-sizes="M"', false);
     }
 
     public function test_product_cards_link_to_their_product_page(): void
