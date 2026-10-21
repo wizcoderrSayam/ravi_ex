@@ -31,7 +31,7 @@ class AdminProductBulkDeleteTest extends TestCase
     {
         $this->actingAs($this->admin)->get(route('admin.products.index'))
             ->assertOk()
-            ->assertSee('id="bulk-delete" hidden data-url="'.route('admin.products.bulk-destroy').'"', false);
+            ->assertSee('id="bulk-delete" disabled data-url="'.route('admin.products.bulk-destroy').'"', false);
     }
 
     public function test_the_selected_products_and_their_variants_are_deleted(): void
