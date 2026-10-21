@@ -61,6 +61,23 @@ class AdminProductVariantRemovalTest extends TestCase
         $this->assertSame(1, $this->product->variants()->where('is_default', true)->count());
     }
 
+    public function test_the_shared_price_box_is_ticked_when_every_variant_has_the_same_prices(): void
+    {
+        $this->actingAs($this->admin)->get(route('admin.products.edit', $this->product))
+            ->assertOk()
+            ->assertSee('<input type="checkbox" id="shared-price" checked>', false);
+    }
+
+    public function test_the_shared_price_box_is_unticked_when_variant_prices_differ(): void
+    {
+        $this->product->variants()->where('option_label', 'XXL')->update(['price' => 21999]);
+
+        $response = $this->actingAs($this->admin)->get(route('admin.products.edit', $this->product));
+
+        $response->assertOk();
+        $response->assertSee('<input type="checkbox" id="shared-price" >', false);
+    }
+
     public function test_the_edit_form_has_a_remove_button_and_an_unticked_value_for_each_variant(): void
     {
         $variantCount = $this->product->variants()->count();
