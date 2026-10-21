@@ -146,7 +146,7 @@
             "source": {
                 "type": "git",
                 "url": "git@github.com:carepeerinfotech/ecommerce.git",
-                "reference": "93a1bdfbe72dca6ce28f0103e232fc423985db58"
+                "reference": "571057d27bfc41a9f28df9795849b7efce71a9db"
             },
             "require": {
                 "laravel/framework": "^13.8",
@@ -173,7 +173,7 @@
                 "proprietary"
             ],
             "description": "Ecommerce admin panel for Laravel: catalog, orders, shipping, payments, CMS, users and roles.",
-            "time": "2026-10-21T11:55:00+00:00"
+            "time": "2026-10-21T11:58:30+00:00"
         },
         {
             "name": "composer/pcre",

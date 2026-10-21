@@ -61,6 +61,14 @@ class AdminProductVariantRemovalTest extends TestCase
         $this->assertSame(1, $this->product->variants()->where('is_default', true)->count());
     }
 
+    public function test_the_edit_form_links_to_the_product_page_on_the_storefront(): void
+    {
+        $this->actingAs($this->admin)->get(route('admin.products.edit', $this->product))
+            ->assertOk()
+            ->assertSee('<a href="'.route('shop.product', $this->product->slug).'" target="_blank" rel="noopener"', false)
+            ->assertSee('Preview product');
+    }
+
     public function test_the_shared_price_box_is_ticked_when_every_variant_has_the_same_prices(): void
     {
         $this->actingAs($this->admin)->get(route('admin.products.edit', $this->product))
