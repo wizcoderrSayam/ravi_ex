@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "55ff72c6a79d18b5e69ba8a24aef81a8",
+    "content-hash": "7796d6ce2bea54cf652b0a5d1b661ffe",
     "packages": [
         {
             "name": "brick/math",
@@ -142,11 +142,11 @@
         },
         {
             "name": "carepeerinfotech/ecommerce",
-            "version": "0.x-dev",
+            "version": "dev-main",
             "source": {
                 "type": "git",
                 "url": "git@github.com:carepeerinfotech/ecommerce.git",
-                "reference": "d64de2b7d15a076123f5bca346afb0afaae2e94d"
+                "reference": "cc335383ca7219576a48dccd0bce5531f2da977d"
             },
             "require": {
                 "laravel/framework": "^13.8",
@@ -154,6 +154,7 @@
                 "php": "^8.3",
                 "phpoffice/phpspreadsheet": "^5.10"
             },
+            "default-branch": true,
             "type": "library",
             "extra": {
                 "laravel": {
@@ -172,7 +173,7 @@
                 "proprietary"
             ],
             "description": "Ecommerce admin panel for Laravel: catalog, orders, shipping, payments, CMS, users and roles.",
-            "time": "2026-10-21T06:24:59+00:00"
+            "time": "2026-10-21T09:14:16+00:00"
         },
         {
             "name": "composer/pcre",
