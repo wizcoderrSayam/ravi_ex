@@ -20,5 +20,9 @@
     <small>{{ $categoryName }}@if ($subcategoryName) · {{ $subcategoryName }}@endif</small>
     <h4><a href="{{ $url }}">{{ $product->name }}</a></h4>
     <div class="price"><b>{{ $money($price) }}</b><span class="price-from">onwards</span>@if ($comparePrice)<s>{{ $money($comparePrice) }}</s><em>{{ $discountPercent }}% off</em>@endif</div>
+    {{-- The active sizes; a product without any is sold as Free Size, so there's nothing to list. --}}
+    @if ($sizes !== 'Free Size')
+      <div class="psizes">{{ str_contains($sizes, '|') ? 'Sizes' : 'Size' }}: {{ str_replace('|', ' · ', $sizes) }}</div>
+    @endif
   </div>
 </article>

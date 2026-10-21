@@ -47,6 +47,9 @@ class ProductCard extends Component
 
     public string $sizes;
 
+    /** The size picked for the shopper until they choose one: the default variant's, if it's active. */
+    public string $defaultSize;
+
     public string $searchText;
 
     public string $tint;
@@ -83,10 +86,12 @@ class ProductCard extends Component
         $this->description = trim((string) $product->description);
 
         // Without an active variant there is nothing to pick, so the product is sold as one size.
-        $this->sizes = $product->variants
-            ->where('is_active', true)
+        $activeVariants = $product->variants->where('is_active', true);
+        $this->sizes = $activeVariants
             ->map(fn (ProductVariant $variant): string => $variant->option_label ?: 'Free Size')
             ->implode('|') ?: 'Free Size';
+        $defaultVariant = $activeVariants->firstWhere('is_default', true) ?? $activeVariants->first();
+        $this->defaultSize = $defaultVariant ? ($defaultVariant->option_label ?: 'Free Size') : 'Free Size';
         $this->searchText = Str::lower(implode(' ', array_filter([$product->name, $this->subcategoryName, $this->categoryName, $this->fabric])));
         $this->tint = self::TINTS[$product->id % count(self::TINTS)];
         $this->imageUrl = $product->primaryImageUrl();

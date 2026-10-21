@@ -73,7 +73,7 @@
           <h5>Size</h5>
           <div class="sizes" id="pdSizes">
             @foreach ($sizes as $size)
-              <button type="button" @class(['on' => count($sizes) === 1]) data-size="{{ $size }}">{{ $size }}</button>
+              <button type="button" @class(['on' => $size === $card->defaultSize]) data-size="{{ $size }}">{{ $size }}</button>
             @endforeach
           </div>
           <div class="err" id="pdSizeErr">Please select a size.</div>

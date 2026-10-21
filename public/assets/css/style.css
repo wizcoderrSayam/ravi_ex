@@ -1338,6 +1338,12 @@ section[id] {
   font-size: 1.05rem;
 }
 
+.psizes {
+  margin-top: 4px;
+  color: var(--muted);
+  font-size: 0.76rem;
+}
+
 .price .price-from {
   color: var(--muted);
   font-size: 0.8rem;

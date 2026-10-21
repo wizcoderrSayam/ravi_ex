@@ -124,7 +124,38 @@ class StorefrontProductPageTest extends TestCase
             ->assertSee('<button type="button" class="on" data-size="M">M</button>', false)
             ->assertDontSee('data-size="XS"', false);
         $this->get(route('shop.women'))
-            ->assertSee('data-sizes="M"', false);
+            ->assertSee('data-sizes="M"', false)
+            ->assertSee('<div class="psizes">Size: M</div>', false);
+    }
+
+    public function test_the_default_variants_size_is_picked_until_the_shopper_chooses(): void
+    {
+        $product = $this->product('Festive Co-ord Set');
+        $product->variants()->update(['is_default' => false]);
+        $product->variants()->where('option_label', 'L')->update(['is_default' => true]);
+
+        $html = $this->get(route('shop.product', $product->slug))->getContent();
+
+        $this->assertStringContainsString('<button type="button" class="on" data-size="L">L</button>', $html);
+        $this->assertSame(1, substr_count($html, 'class="on" data-size='));
+    }
+
+    public function test_the_first_active_size_is_picked_when_the_default_variant_is_inactive(): void
+    {
+        $product = $this->product('Festive Co-ord Set');
+        $product->variants()->where('option_label', 'XS')->update(['is_active' => false]);
+
+        $this->get(route('shop.product', $product->slug))
+            ->assertSee('<button type="button" class="on" data-size="S">S</button>', false);
+    }
+
+    public function test_product_cards_list_only_the_active_sizes(): void
+    {
+        $product = $this->product('Festive Co-ord Set');
+        $product->variants()->whereIn('option_label', ['XS', 'XXL'])->update(['is_active' => false]);
+
+        $this->get(route('shop.women'))
+            ->assertSee('<div class="psizes">Sizes: S · M · L · XL</div>', false);
     }
 
     public function test_product_cards_link_to_their_product_page(): void
