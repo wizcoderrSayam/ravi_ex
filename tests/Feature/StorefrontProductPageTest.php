@@ -128,6 +128,16 @@ class StorefrontProductPageTest extends TestCase
             ->assertSee('<div class="psizes">Size: M</div>', false);
     }
 
+    public function test_a_second_buy_now_button_follows_the_product_details(): void
+    {
+        $product = $this->product('Festive Co-ord Set');
+
+        $html = $this->get(route('shop.product', $product->slug))->getContent();
+
+        $this->assertSame(2, substr_count($html, 'data-buy-now>Buy now on WhatsApp</button>'));
+        $this->assertGreaterThan(strpos($html, 'Product details'), strrpos($html, 'data-buy-now>'));
+    }
+
     public function test_the_default_variants_size_is_picked_until_the_shopper_chooses(): void
     {
         $product = $this->product('Festive Co-ord Set');

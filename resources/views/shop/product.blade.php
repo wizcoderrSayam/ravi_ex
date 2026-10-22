@@ -84,7 +84,7 @@
         </div>
         <div class="mactions">
           <button type="button" class="btn btn-red btn-block" id="pdAdd">Add to Bag</button>
-          <button type="button" class="btn btn-wa btn-block" id="pdBuy">Buy now on WhatsApp</button>
+          <button type="button" class="btn btn-wa btn-block" id="pdBuy" data-buy-now>Buy now on WhatsApp</button>
         </div>
 
         <div class="mdetails">
@@ -101,6 +101,11 @@
             @endforeach
           </div>
         @endif
+
+        {{-- A second Buy now for shoppers who read down to here; it orders the size and quantity picked above. --}}
+        <div class="mactions">
+          <button type="button" class="btn btn-wa btn-block" data-buy-now>Buy now on WhatsApp</button>
+        </div>
       </div>
     </div>
   </div>

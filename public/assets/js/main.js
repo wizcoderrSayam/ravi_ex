@@ -173,9 +173,10 @@
       addToBag(product, choice.sel);
       drawer.show();
     });
-    $("pdBuy").addEventListener("click", () => {
+    // the Buy now under the price and the one under the description send the same order
+    pd.querySelectorAll("[data-buy-now]").forEach(b => b.addEventListener("click", () => {
       if (choice.ready()) sendWhatsApp(orderMessage(product, choice.sel));
-    });
+    }));
     // thumbnails swap the main photo
     const thumbs = $("pdThumbs");
     if (thumbs) thumbs.addEventListener("click", e => {

@@ -1322,6 +1322,12 @@ section[id] {
   font-size: 0.98rem;
   line-height: 1.3;
   cursor: pointer;
+  /* long names stop after two lines with "…" */
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  overflow: hidden;
 }
 
 .price {
@@ -1434,6 +1440,16 @@ section[id] {
   gap: 12px;
   margin-bottom: 18px;
   flex-wrap: wrap;
+}
+
+/* the category page's tab bar, first thing under the header */
+.shop-tabs {
+  padding-top: 22px;
+  margin-bottom: 0;
+}
+
+.shop-tabs + .crumb {
+  padding-top: 14px;
 }
 
 .toolbar .chips {
