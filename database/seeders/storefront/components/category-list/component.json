@@ -1,0 +1,12 @@
+{
+  "name": "Category List",
+  "selectable": true,
+  "props": [
+    {
+      "name": "title",
+      "label": "Title",
+      "type": "text",
+      "default": "Shop by category"
+    }
+  ]
+}

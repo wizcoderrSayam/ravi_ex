@@ -1,0 +1,19 @@
+<section class="mx-auto max-w-6xl px-4 py-8">
+  <div class="mb-6 hidden flex-wrap items-center gap-3" data-role="toolbar">
+    <input type="search" data-role="search" placeholder="Search products" class="min-w-0 flex-1 rounded-md border border-slate-300 px-3 py-2 text-sm focus:border-teal-600 focus:outline-none">
+    <select data-role="category" class="rounded-md border border-slate-300 px-3 py-2 text-sm"></select>
+    <select data-role="sort" class="rounded-md border border-slate-300 px-3 py-2 text-sm">
+      <option value="latest">Newest</option>
+      <option value="price_asc">Price: low to high</option>
+      <option value="price_desc">Price: high to low</option>
+      <option value="name">Name</option>
+    </select>
+  </div>
+  <div class="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4" data-role="grid"></div>
+  <p class="hidden py-12 text-center text-slate-500" data-role="empty">No products found.</p>
+  <nav class="mt-8 hidden items-center justify-center gap-3 text-sm" data-role="pager">
+    <button type="button" data-role="prev" class="rounded-md border border-slate-300 px-3 py-1.5 hover:bg-slate-100 disabled:opacity-40">&larr; Previous</button>
+    <span data-role="page"></span>
+    <button type="button" data-role="next" class="rounded-md border border-slate-300 px-3 py-1.5 hover:bg-slate-100 disabled:opacity-40">Next &rarr;</button>
+  </nav>
+</section>
