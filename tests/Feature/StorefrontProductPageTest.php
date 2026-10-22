@@ -12,6 +12,11 @@ class StorefrontProductPageTest extends TestCase
 {
     use RefreshDatabase;
 
+    /** The Size block on the product page, shown or hidden; the Quantity block is hidden on its own. */
+    private const SIZE_PICKER_SHOWN = '/<div class="opt">\s*<h5>Size<\/h5>/';
+
+    private const SIZE_PICKER_HIDDEN = '/<div class="opt" hidden>\s*<h5>Size<\/h5>/';
+
     protected function setUp(): void
     {
         parent::setUp();
@@ -97,8 +102,8 @@ class StorefrontProductPageTest extends TestCase
         $product = $this->product('Festive Co-ord Set');
         $product->variants()->update(['is_active' => false]);
 
+        $this->assertMatchesRegularExpression(self::SIZE_PICKER_HIDDEN, $this->get(route('shop.product', $product->slug))->getContent());
         $this->get(route('shop.product', $product->slug))
-            ->assertSee('<div class="opt" hidden>', false)
             ->assertSee('<button type="button" class="on" data-size="Free Size">Free Size</button>', false);
         $this->get(route('shop.women'))
             ->assertSee('data-id="'.$product->id.'" data-code="RE-0031"', false)
@@ -109,9 +114,10 @@ class StorefrontProductPageTest extends TestCase
     {
         $product = $this->product('Festive Co-ord Set');
 
-        $this->get(route('shop.product', $product->slug))
-            ->assertSee('<div class="opt">', false)
-            ->assertDontSee('<div class="opt" hidden>', false);
+        $html = $this->get(route('shop.product', $product->slug))->getContent();
+
+        $this->assertMatchesRegularExpression(self::SIZE_PICKER_SHOWN, $html);
+        $this->assertDoesNotMatchRegularExpression(self::SIZE_PICKER_HIDDEN, $html);
     }
 
     public function test_a_product_with_one_active_size_hides_the_size_picker_and_preselects_it(): void
@@ -119,8 +125,8 @@ class StorefrontProductPageTest extends TestCase
         $product = $this->product('Festive Co-ord Set');
         $product->variants()->where('option_label', '!=', 'M')->update(['is_active' => false]);
 
+        $this->assertMatchesRegularExpression(self::SIZE_PICKER_HIDDEN, $this->get(route('shop.product', $product->slug))->getContent());
         $this->get(route('shop.product', $product->slug))
-            ->assertSee('<div class="opt" hidden>', false)
             ->assertSee('<button type="button" class="on" data-size="M">M</button>', false)
             ->assertDontSee('data-size="XS"', false);
         $this->get(route('shop.women'))

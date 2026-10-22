@@ -78,7 +78,8 @@
           </div>
           <div class="err" id="pdSizeErr">Please select a size.</div>
         </div>
-        <div class="opt">
+        {{-- Hidden for now; orders go out with a quantity of 1. Remove `hidden` to bring it back. --}}
+        <div class="opt" hidden>
           <h5>Quantity</h5>
           <div class="qty"><button type="button" data-qty="-1" aria-label="Decrease">−</button><span id="pdQty">1</span><button type="button" data-qty="1" aria-label="Increase">+</button></div>
         </div>
