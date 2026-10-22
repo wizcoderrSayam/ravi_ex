@@ -1,0 +1,765 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{{title}}</title>
+  <meta name="theme-color" content="#ce252b">
+  <meta name="store-settings" content="store">
+  <link rel="icon" href="/media/ravi-exclusive/assets/images/logo.webp">
+  <link rel="stylesheet" href="/media/ravi-exclusive/assets/vendor/bootstrap/css/bootstrap.min.css">
+  <link rel="stylesheet" href="/media/ravi-exclusive/assets/css/fonts.css">
+  <link rel="preload" href="/media/ravi-exclusive/assets/fonts/jost-normal-latin.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="/media/ravi-exclusive/assets/fonts/cormorant-garamond-normal-latin.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="/media/ravi-exclusive/assets/fonts/baloo-paaji-2-normal-gurmukhi.woff2" as="font" type="font/woff2" crossorigin>
+  {{global_fonts}}
+  <noscript><style>html.is-booting body > *, html.is-booting .rc-site-header > * { opacity: 1 !important; } .boot-screen { display: none !important; }</style></noscript>
+  <script>
+  /*
+   * window.Store: the storefront's client, shared by the layout and every component.
+   *
+   * The boot: the requests every page needs (feature flags, the store's details, the menus and,
+   * when this browser has one, the cart) start here at once, together with whatever a component
+   * asks for with Store.need(path) while the page is read. The page stays laid out but hidden
+   * (html.is-booting) until all of them are in; then every Store.ready(fn) runs, the store's
+   * details are bound into the markup ([data-setting], [data-setting-href]), elements a flag
+   * turns off are dropped ([data-requires]), and only then does the page fade in. So nothing a
+   * visitor sees changes because data arrived. A boot that fails, or takes over 10 s, shows a
+   * Retry message instead of loading for ever.
+   *
+   * Nothing is cached: every request asks the server again, and the answers live for this page
+   * only. The browser keeps two things: the cart's X-Cart-Token (the cart's identity) and the
+   * visitor's wishlist, a list of product ids that this store has no backend for.
+   *
+   * In the GrapesJS editor the content shows at once: no gate, no loader, no reveal.
+   */
+  (function () {
+    if (window.Store) return;
+
+    var doc = document;
+    var root = doc.documentElement;
+    var inEditor = false;
+    try { inEditor = window.parent !== window && !!window.parent.document.querySelector('.gjs-editor'); } catch (e) {}
+    root.classList.add(inEditor ? 'in-editor' : 'is-booting');
+
+    var BOOT_TIMEOUT = 10000;
+    var FONT_WAIT = 2500;
+    var EMPTY_CART = { count: 0, items: [] };
+    var WISHLIST_KEY = 're_wishlist';
+    var TINTS = ['#BFAE8E', '#A91E23', '#1F5C55', '#24483A', '#CE252B', '#8C5A3C', '#E0457B', '#5B4A7A'];
+    var settingsGroup = (doc.querySelector('meta[name="store-settings"]') || {}).content || 'store';
+    var settingsPath = '/cms/settings/' + settingsGroup;
+
+    var listeners = {};
+    var inflight = {};
+    var data = {};
+    var entries = [];
+    var readyQueue = [];
+    var late = [];
+    var booted = false;
+    var run = null;
+    var categoryIndex = null;
+
+    var domReady = new Promise(function (resolve) {
+      if (doc.readyState !== 'loading') resolve(); else doc.addEventListener('DOMContentLoaded', resolve);
+    });
+
+    function reducedMotion() {
+      return !!(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
+    }
+
+    function storage() {
+      try {
+        var store = window.localStorage;
+        store.setItem('re_probe', '1');
+        store.removeItem('re_probe');
+        return store;
+      } catch (e) {
+        return null;
+      }
+    }
+    var local = storage();
+
+    /* ---------- requests ---------- */
+
+    function cartToken(create) {
+      var token = (local && local.getItem('cart_token')) || window.__cartToken || null;
+      if (token || !create) return token;
+      token = window.crypto && crypto.randomUUID ? crypto.randomUUID() : 'c' + Date.now().toString(36) + Math.random().toString(36).slice(2) + 'aaaaaaaa';
+      if (local) local.setItem('cart_token', token); else window.__cartToken = token;
+      return token;
+    }
+
+    function firstError(json) {
+      if (json.errors) {
+        var key = Object.keys(json.errors)[0];
+        if (key) return [].concat(json.errors[key])[0];
+      }
+      return json.message || 'Something went wrong. Please try again.';
+    }
+
+    function request(method, path, body, signal) {
+      var headers = { Accept: 'application/json' };
+      var token = cartToken(false);
+      if (token) headers['X-Cart-Token'] = token;
+      if (body) headers['Content-Type'] = 'application/json';
+
+      return fetch('/api' + path, {
+        method: method,
+        headers: headers,
+        body: body ? JSON.stringify(body) : undefined,
+        cache: 'no-store',
+        credentials: 'same-origin',
+        signal: signal
+      }).then(function (res) {
+        return res.json().catch(function () { return {}; }).then(function (json) {
+          if (!res.ok) {
+            var error = new Error(firstError(json));
+            error.status = res.status;
+            error.errors = json.errors || {};
+            throw error;
+          }
+          return json;
+        });
+      }, function (cause) {
+        var error = new Error(cause && cause.name === 'AbortError' ? 'This is taking too long.' : 'Network error. Please try again.');
+        error.status = 0;
+        throw error;
+      });
+    }
+
+    /** A GET that components on this page share while it is in flight; nothing is kept once it is answered. */
+    function get(path) {
+      if (Object.prototype.hasOwnProperty.call(data, path)) return Promise.resolve(data[path]);
+      if (!inflight[path]) {
+        inflight[path] = request('GET', path).then(function (json) {
+          delete inflight[path];
+          return json;
+        }, function (error) {
+          delete inflight[path];
+          throw error;
+        });
+      }
+      return inflight[path];
+    }
+
+    /* ---------- events ---------- */
+
+    function on(name, fn) {
+      (listeners[name] = listeners[name] || []).push(fn);
+    }
+
+    function emit(name, detail) {
+      (listeners[name] || []).slice().forEach(function (fn) {
+        try { fn(detail); } catch (e) { console.error(e); }
+      });
+    }
+
+    /* ---------- the boot ---------- */
+
+    function bootEntry(path, optional404) {
+      for (var i = 0; i < entries.length; i++) {
+        if (entries[i].path === path) return;
+      }
+      var entry = { path: path, optional404: !!optional404 };
+      entries.push(entry);
+
+      if (booted) {
+        late.push(get(path).then(function (json) { data[path] = json; }));
+      } else if (run) {
+        load(entry, run);
+      }
+    }
+
+    function load(entry, current) {
+      current.promises[entry.path] = request('GET', entry.path, null, current.controller ? current.controller.signal : undefined)
+        .then(function (json) {
+          data[entry.path] = json;
+        }, function (error) {
+          if (entry.optional404 && error.status === 404) {
+            data[entry.path] = null;
+            return;
+          }
+          throw error;
+        });
+    }
+
+    function startBoot() {
+      var current = run = { promises: {}, controller: window.AbortController ? new AbortController() : null };
+      data = {};
+      categoryIndex = null;
+      entries.forEach(function (entry) { load(entry, current); });
+
+      var timer = setTimeout(function () {
+        if (current.controller) current.controller.abort();
+        if (current === run) fail();
+      }, BOOT_TIMEOUT);
+
+      domReady.then(function () {
+        return settle(current);
+      }).then(function () {
+        clearTimeout(timer);
+        if (current === run) finish();
+      }, function (error) {
+        clearTimeout(timer);
+        if (current === run) fail(error);
+      });
+    }
+
+    /** Every boot request, including those asked for while the others were loading (the editor runs component scripts late). */
+    function settle(current) {
+      var asked = entries.length;
+      return Promise.all(entries.map(function (entry) { return current.promises[entry.path]; })).then(function () {
+        return entries.length > asked ? settle(current) : undefined;
+      });
+    }
+
+    function finish() {
+      Store.flags = data['/store'].data;
+      Store.settings = (data[settingsPath] && data[settingsPath].data) || {};
+      Store.menus = {};
+      ((data['/cms/menus'] || {}).data || []).forEach(function (menu) { Store.menus[menu.slug] = menu.items || []; });
+      Store.cart = (data['/cart'] && data['/cart'].data) || EMPTY_CART;
+      booted = true;
+
+      readyQueue.splice(0).forEach(call);
+      // In the editor the page's markup is left as it is: GrapesJS owns that DOM, and an edit
+      // there must not save a filled-in value. Its details show through CSS instead, and
+      // components bind their own markup.
+      if (inEditor) previewSettings(); else bind(doc);
+      emit('cart', Store.cart);
+      emit('wishlist', wishlistIds());
+      fontsReady().then(reveal);
+    }
+
+    /** Waits, at most FONT_WAIT ms, for the web fonts the page now uses, so no text changes font after the reveal. */
+    function fontsReady() {
+      if (inEditor || !doc.fonts || !doc.fonts.ready) return Promise.resolve();
+      doc.body.getBoundingClientRect();
+      return Promise.race([doc.fonts.ready, new Promise(function (resolve) { setTimeout(resolve, FONT_WAIT); })]);
+    }
+
+    function fail() {
+      if (inEditor || booted) return;
+      run = null;
+      root.classList.add('boot-failed');
+      var retry = doc.querySelector('[data-boot-retry]');
+      if (retry) retry.focus({ preventScroll: true });
+    }
+
+    function call(fn) {
+      try { fn(); } catch (e) { console.error(e); }
+    }
+
+    function reveal() {
+      if (inEditor) return;
+      var calm = reducedMotion();
+      if (!calm) prepareScrollReveal();
+      root.classList.add('is-revealing');
+      root.classList.remove('is-booting', 'boot-failed');
+      setTimeout(function () {
+        root.classList.remove('is-revealing');
+        var screen = doc.querySelector('.boot-screen');
+        if (screen) screen.remove();
+      }, calm ? 0 : 420);
+    }
+
+    /* Sections rise a few pixels as they fade in; those already on screen simply appear with the page. */
+    var revealObserver = null;
+    function prepareScrollReveal() {
+      if (!('IntersectionObserver' in window)) return;
+      revealObserver = new IntersectionObserver(function (seen) {
+        seen.forEach(function (item) {
+          if (!item.isIntersecting) return;
+          item.target.classList.add('aos-animate');
+          revealObserver.unobserve(item.target);
+        });
+      }, { rootMargin: '0px 0px -6% 0px' });
+      observeReveal(doc);
+      root.classList.add('motion-ready');
+    }
+
+    function observeReveal(scope) {
+      var fold = window.innerHeight;
+      scope.querySelectorAll('[data-aos]:not(.aos-animate)').forEach(function (el) {
+        if (!revealObserver || el.getBoundingClientRect().top < fold) el.classList.add('aos-animate');
+        else revealObserver.observe(el);
+      });
+    }
+
+    doc.addEventListener('click', function (event) {
+      if (!event.target.closest('[data-boot-retry]')) return;
+      root.classList.remove('boot-failed');
+      startBoot();
+    });
+
+    /* ---------- the store's details and flags in markup ---------- */
+
+    /** "tel:{phone}" with the store's details filled in ({key:url} URL-encodes); null when one is empty. */
+    function fill(template) {
+      var missing = false;
+      var value = String(template).replace(/\{([a-z0-9_]+)(:url)?\}/g, function (all, key, encode) {
+        var setting = Store.settings[key];
+        if (setting == null || String(setting).trim() === '') {
+          missing = true;
+          return '';
+        }
+        return encode ? encodeURIComponent(setting) : setting;
+      });
+      return missing ? null : value;
+    }
+
+    /**
+     * The editor's view of the store's details: each [data-setting] element in the page's markup
+     * stays empty, and shows its value as ::before content, which is never part of the page, so
+     * editing the text around it can't save the value into the markup. A setting with no value
+     * keeps the grey {key} from layout.css.
+     */
+    function previewSettings() {
+      var rules = Object.keys(Store.settings).filter(function (key) {
+        var value = Store.settings[key];
+        return /^[a-z0-9_]+$/.test(key) && value != null && String(value).trim() !== '';
+      }).map(function (key) {
+        var text = String(Store.settings[key]).replace(/\\/g, '\\\\').replace(/"/g, '\\"').replace(/\r?\n/g, '\\A ');
+        return 'html.in-editor [data-setting="' + key + '"]:empty::before { content: "' + text + '"; color: inherit; font-style: inherit; }';
+      });
+      var style = doc.createElement('style');
+      style.setAttribute('data-store-preview', '');
+      style.textContent = rules.join('\n');
+      doc.head.appendChild(style);
+    }
+
+    /** "cart", "!cart" or "pricing stock": whether the store's flags allow it. */
+    function allows(expression) {
+      return String(expression).split(/\s+/).filter(Boolean).every(function (name) {
+        return name.charAt(0) === '!' ? !Store.flags[name.slice(1)] : !!Store.flags[name];
+      });
+    }
+
+    function bind(scope) {
+      scope.querySelectorAll('[data-requires]').forEach(function (el) {
+        if (!allows(el.getAttribute('data-requires'))) el.remove();
+      });
+      scope.querySelectorAll('[data-requires-setting]').forEach(function (el) {
+        var keys = el.getAttribute('data-requires-setting').split(/\s+/).filter(Boolean);
+        if (keys.some(function (key) { return !Store.settings[key]; })) el.remove();
+      });
+      scope.querySelectorAll('[data-setting]').forEach(function (el) {
+        var value = Store.settings[el.getAttribute('data-setting')];
+        if (value == null || String(value).trim() === '') el.hidden = true;
+        else el.textContent = value;
+      });
+      scope.querySelectorAll('[data-setting-href]').forEach(function (el) {
+        var href = fill(el.getAttribute('data-setting-href'));
+        if (href === null) el.removeAttribute('href'); else el.setAttribute('href', href);
+      });
+    }
+
+    /* ---------- formatting ---------- */
+
+    function esc(value) {
+      return String(value == null ? '' : value).replace(/[&<>"']/g, function (c) {
+        return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
+      });
+    }
+
+    function money(amount) {
+      var symbol = (Store.flags && Store.flags.currency_symbol) || '';
+      return symbol + Number(amount || 0).toLocaleString('en-IN', { maximumFractionDigits: 2 });
+    }
+
+    /** The API's money labels without the ".00" the old site never showed. */
+    function moneyLabel(label) {
+      return label ? String(label).replace(/\.00$/, '') : '';
+    }
+
+    function amountOf(label) {
+      var digits = String(label || '').replace(/[^0-9.]/g, '');
+      return digits ? parseFloat(digits) : 0;
+    }
+
+    /* ---------- categories ---------- */
+
+    function categories() {
+      if (categoryIndex) return categoryIndex;
+      var json = data['/categories'];
+      if (!json) return null;
+      var byId = {};
+      var bySlug = {};
+      var parentOf = {};
+      (function walk(list, parent) {
+        list.forEach(function (category) {
+          byId[category.id] = category;
+          bySlug[category.slug] = category;
+          parentOf[category.id] = parent;
+          walk(category.children || [], category);
+        });
+      })(json.data || [], null);
+
+      categoryIndex = {
+        tree: json.data || [],
+        byId: byId,
+        bySlug: bySlug,
+        parent: function (category) { return parentOf[category.id] || null; },
+        top: function (category) {
+          while (parentOf[category.id]) category = parentOf[category.id];
+          return category;
+        },
+        depth: function (category) {
+          var depth = 0;
+          while (parentOf[category.id]) { category = parentOf[category.id]; depth++; }
+          return depth;
+        }
+      };
+      return categoryIndex;
+    }
+
+    /** The #hash a subcategory is linked with: its slug without the "-2" that keeps slugs unique (/men#waistcoat-sets). */
+    function hashOf(category) {
+      return String(category.slug).replace(/-\d+$/, '');
+    }
+
+    /** The child of `parent` a #hash names: by slug, by its hash, or by every word of the hash (#patiala-farshi-salwar). */
+    function findChild(parent, hash) {
+      if (!parent || !hash) return null;
+      var children = parent.children || [];
+      var words = hash.split('-').filter(Boolean);
+      return children.filter(function (c) { return c.slug === hash; })[0]
+        || children.filter(function (c) { return hashOf(c) === hash; })[0]
+        || children.filter(function (c) {
+          var slugWords = c.slug.split('-');
+          return words.length > 0 && words.every(function (word) { return slugWords.indexOf(word) !== -1; });
+        })[0]
+        || null;
+    }
+
+    function categoryUrl(top, sub) {
+      return '/' + top.slug + (sub ? '#' + hashOf(sub) : '');
+    }
+
+    /** Where a product sits: its top-level category and, when it is filed deeper, the subcategory. */
+    function placement(product) {
+      var index = categories();
+      if (!index) return { top: null, sub: null };
+      var deepest = null;
+      (product.categories || []).forEach(function (assigned) {
+        var category = index.byId[assigned.id];
+        if (category && (!deepest || index.depth(category) > index.depth(deepest))) deepest = category;
+      });
+      if (!deepest) return { top: null, sub: null };
+      var top = index.top(deepest);
+      return { top: top, sub: deepest === top ? null : deepest };
+    }
+
+    /* ---------- products ---------- */
+
+    function productUrl(product) {
+      return '/product/' + encodeURIComponent(product.slug || product.id);
+    }
+
+    /** The size labels a visitor picks from; a single "Default" option is no choice at all. */
+    function sizes(product) {
+      return (product.variants || []).map(function (variant) { return variant.label; }).filter(function (label) {
+        return label && label !== 'Default';
+      });
+    }
+
+    function discount(product) {
+      if (!product.compare_price_label || !product.price) return 0;
+      var before = amountOf(product.compare_price_label);
+      return before > product.price ? Math.round((1 - product.price / before) * 100) : 0;
+    }
+
+    function tint(product) {
+      return TINTS[(product.id || 0) % TINTS.length];
+    }
+
+    var FALLBACK_ART = '<span class="art-fb"><svg viewBox="0 0 100 120" aria-hidden="true"><path fill="currentColor" d="M36 8h28l22 14-9 16-9-6v80H32V32l-9 6-9-16z"/><path fill="none" stroke="#fff" stroke-opacity=".55" stroke-width="1.4" d="M50 10v34M46 18h8M46 26h8M46 34h8"/></svg></span>';
+
+    function photo(src, alt, extraClass) {
+      return '<img class="ph' + (extraClass ? ' ' + extraClass : '') + '" src="' + esc(src) + '" alt="' + esc(alt) + '" loading="lazy" decoding="async"' +
+        ' onload="this.classList.add(\'is-loaded\')" onerror="this.parentNode.classList.add(\'no-photo\');this.remove()">';
+    }
+
+    /** The old store's product card (resources/views/components/product-card.blade.php), following the flags. */
+    function card(product) {
+      var f = Store.flags;
+      var place = placement(product);
+      var url = productUrl(product);
+      var color = tint(product);
+      var off = f.pricing ? discount(product) : 0;
+      var tag = '';
+      if (f.stock && product.in_stock === false) tag = '<span class="ptag off">Sold out</span>';
+      else if (off > 0) tag = '<span class="ptag off">' + off + '% off</span>';
+
+      var price = '';
+      if (f.pricing && product.price != null) {
+        price = '<div class="price"><b>' + esc(money(product.price)) + '</b><span class="price-from">onwards</span>' +
+          (off > 0 ? '<s>' + esc(moneyLabel(product.compare_price_label)) + '</s><em>' + off + '% off</em>' : '') + '</div>';
+      }
+
+      var labels = sizes(product);
+      var sizeLine = labels.length ? '<div class="psizes">' + (labels.length > 1 ? 'Sizes' : 'Size') + ': ' + esc(labels.join(' · ')) + '</div>' : '';
+      var wished = wishlistHas(product.id);
+
+      return '<div class="col">' +
+        '<article class="pcard" data-id="' + product.id + '">' +
+        '<div class="pimg' + (product.image ? '' : ' no-photo') + '" style="background:linear-gradient(160deg,' + color + '22,' + color + '44);color:' + color + '">' +
+        (product.image ? photo(product.image, product.name) : '') + FALLBACK_ART +
+        '<a class="pimg-link" href="' + esc(url) + '" tabindex="-1" aria-hidden="true"></a>' + tag +
+        '<button class="wish' + (wished ? ' on' : '') + '" type="button" data-action="wish" aria-pressed="' + wished + '" aria-label="' + (wished ? 'Remove from wishlist' : 'Add to wishlist') + '">' + (wished ? '♥' : '♡') + '</button>' +
+        '</div>' +
+        '<div class="pbody">' +
+        '<small>' + esc(place.top ? place.top.name + (place.sub ? ' · ' + place.sub.name : '') : '') + '</small>' +
+        '<h4><a href="' + esc(url) + '">' + esc(product.name) + '</a></h4>' +
+        price + sizeLine +
+        '</div></article></div>';
+    }
+
+    /** A card's skeleton: the card's own elements with bars for text, so every line box is the real one's. */
+    function cardSkeleton() {
+      var f = Store.flags || {};
+      return '<div class="col" aria-hidden="true"><div class="pcard is-skeleton">' +
+        '<div class="pimg"><span class="sk sk-fill"></span></div>' +
+        '<div class="pbody"><small><span class="sk sk-text" style="width:46%"></span></small>' +
+        '<h4><span class="sk sk-text" style="width:88%"></span><br><span class="sk sk-text" style="width:54%"></span></h4>' +
+        (f.pricing === false ? '' : '<div class="price"><b><span class="sk sk-text" style="width:4.5em"></span></b></div>') +
+        '</div></div></div>';
+    }
+
+    function skeletons(count) {
+      var html = '';
+      for (var i = 0; i < count; i++) html += cardSkeleton();
+      return html;
+    }
+
+    /* ---------- wishlist (this browser only) ---------- */
+
+    function wishlistIds() {
+      try {
+        var ids = JSON.parse((local && local.getItem(WISHLIST_KEY)) || '[]');
+        return Array.isArray(ids) ? ids.filter(function (id) { return typeof id === 'number'; }) : [];
+      } catch (e) {
+        return [];
+      }
+    }
+
+    function wishlistHas(id) {
+      return wishlistIds().indexOf(id) !== -1;
+    }
+
+    function toggleWishlist(id) {
+      var ids = wishlistIds();
+      var saved = ids.indexOf(id) === -1;
+      ids = saved ? ids.concat([id]) : ids.filter(function (other) { return other !== id; });
+      try { if (local) local.setItem(WISHLIST_KEY, JSON.stringify(ids)); } catch (e) {}
+      doc.querySelectorAll('.pcard[data-id="' + id + '"] .wish').forEach(function (button) {
+        button.classList.toggle('on', saved);
+        button.textContent = saved ? '♥' : '♡';
+        button.setAttribute('aria-pressed', saved);
+        button.setAttribute('aria-label', saved ? 'Remove from wishlist' : 'Add to wishlist');
+      });
+      toast(saved ? 'Saved to wishlist' : 'Removed from wishlist');
+      emit('wishlist', ids);
+      return saved;
+    }
+
+    doc.addEventListener('click', function (event) {
+      var button = event.target.closest('[data-action="wish"]');
+      if (!button || inEditor) return;
+      var cardEl = button.closest('[data-id]');
+      if (cardEl) toggleWishlist(parseInt(cardEl.getAttribute('data-id'), 10));
+    });
+
+    /* ---------- feedback ---------- */
+
+    var toastTimer = null;
+    function toast(message) {
+      var el = doc.getElementById('toast');
+      if (!el) return;
+      el.textContent = message;
+      el.classList.add('show');
+      clearTimeout(toastTimer);
+      toastTimer = setTimeout(function () { el.classList.remove('show'); }, 2400);
+    }
+
+    /**
+     * Replaces a skeleton with its content: a short fade out and in, the space it takes unchanged.
+     * `done` runs once the new content is in place.
+     */
+    function swap(el, html, done) {
+      function put() {
+        el.innerHTML = html;
+        if (done) done(el);
+      }
+      if (inEditor || root.classList.contains('is-booting') || reducedMotion()) {
+        put();
+        return;
+      }
+      el.classList.add('swap', 'is-out');
+      setTimeout(function () {
+        put();
+        el.getBoundingClientRect();
+        el.classList.remove('is-out');
+      }, 130);
+    }
+
+    /** An inline "couldn't load" message with Retry, in place of a section's content. */
+    function failure(el, message, retry, inGrid) {
+      var html = '<div class="load-error" role="alert"><p><b>' + esc(message || 'This section could not be loaded.') + '</b></p>' +
+        '<p>Check your connection and try again.</p><button type="button" class="btn btn-line" data-retry>Retry</button></div>';
+      swap(el, inGrid ? '<div class="col-12">' + html + '</div>' : html, function () {
+        el.querySelector('[data-retry]').addEventListener('click', retry);
+      });
+    }
+
+    /* ---------- cart ---------- */
+
+    function setCart(cart) {
+      Store.cart = cart || EMPTY_CART;
+      emit('cart', Store.cart);
+      return Store.cart;
+    }
+
+    var Store = window.Store = {
+      inEditor: inEditor,
+      flags: null,
+      settings: {},
+      menus: {},
+      cart: EMPTY_CART,
+
+      request: request,
+      get: get,
+      on: on,
+      emit: emit,
+
+      /** Waits for a request the page can't be shown without (the category tree); call it while the script runs. */
+      need: function (path) { bootEntry(path, false); },
+      /** The answer to a boot request, once the boot is done. */
+      data: function (path) { return data[path]; },
+      /** Runs `fn` once the boot is in, before the page is shown. */
+      ready: function (fn) {
+        if (!booted) {
+          readyQueue.push(fn);
+          return;
+        }
+        Promise.all(late).then(function () { call(fn); }, function () {});
+      },
+
+      bind: bind,
+      fill: fill,
+      allows: allows,
+      observeReveal: function (scope) { if (revealObserver) observeReveal(scope); },
+
+      esc: esc,
+      money: money,
+      moneyLabel: moneyLabel,
+      toast: toast,
+      swap: swap,
+      failure: failure,
+
+      categories: categories,
+      hashOf: hashOf,
+      findChild: findChild,
+      categoryUrl: categoryUrl,
+      placement: placement,
+
+      productUrl: productUrl,
+      sizes: sizes,
+      discount: discount,
+      tint: tint,
+      photo: photo,
+      fallbackArt: FALLBACK_ART,
+      card: card,
+      skeletons: skeletons,
+
+      wishlist: { ids: wishlistIds, has: wishlistHas, toggle: toggleWishlist },
+
+      /** Every product a /products query matches, page after page (48 at a time). */
+      allProducts: function (query) {
+        var base = '/products?per_page=48' + (query ? '&' + query : '');
+        return get(base + '&page=1').then(function (first) {
+          var last = (first.meta && first.meta.last_page) || 1;
+          var rest = [];
+          for (var page = 2; page <= last; page++) rest.push(get(base + '&page=' + page));
+          return Promise.all(rest).then(function (pages) {
+            return pages.reduce(function (all, json) { return all.concat(json.data || []); }, first.data || []);
+          });
+        });
+      },
+
+      /** A menu's items, with {setting} placeholders in their URLs filled in; items whose setting is empty are left out. */
+      menu: function (slug) {
+        return (function walk(items) {
+          return (items || []).map(function (item) {
+            var url = item.url ? fill(item.url) : '';
+            return url === null ? null : { label: item.label, url: url, target: item.target, children: walk(item.children) };
+          }).filter(Boolean);
+        })(Store.menus[slug]);
+      },
+
+      whatsappUrl: function (text) {
+        var number = String(Store.settings.whatsapp || '').replace(/\D/g, '');
+        return number ? 'https://wa.me/' + number + (text ? '?text=' + encodeURIComponent(text) : '') : null;
+      },
+
+      cartToken: cartToken,
+      refreshCart: function () {
+        if (!Store.flags || !Store.flags.cart || !cartToken(false)) return Promise.resolve(setCart(EMPTY_CART));
+        return request('GET', '/cart').then(function (json) { return setCart(json.data); });
+      },
+      add: function (productId, variantId, quantity) {
+        cartToken(true);
+        return request('POST', '/cart/items', { product_id: productId, variant_id: variantId || null, quantity: quantity || 1 })
+          .then(function (json) {
+            setCart(json.data);
+            toast('Added to your ' + String(Store.flags.cart_noun || 'cart').toLowerCase());
+            emit('cart:open');
+            return json.data;
+          });
+      },
+      setQuantity: function (itemId, quantity) {
+        return request('PATCH', '/cart/items/' + itemId, { quantity: quantity }).then(function (json) { return setCart(json.data); });
+      },
+      remove: function (itemId) {
+        return request('DELETE', '/cart/items/' + itemId).then(function (json) { return setCart(json.data); });
+      },
+      openCart: function () { emit('cart:open'); }
+    };
+
+    bootEntry('/store', false);
+    bootEntry(settingsPath, true);
+    bootEntry('/cms/menus', false);
+    if (cartToken(false)) bootEntry('/cart', true);
+    startBoot();
+  })();
+  </script>
+  <script src="/media/ravi-exclusive/assets/vendor/bootstrap/js/bootstrap.bundle.min.js" defer></script>
+</head>
+
+<body>
+  <div class="boot-screen" role="status" aria-live="polite">
+    <div class="boot-mark">
+      <img src="/media/ravi-exclusive/assets/images/logo.webp" alt="" width="92" height="92">
+      <span class="boot-line" aria-hidden="true"></span>
+      <span class="visually-hidden">Loading the store</span>
+    </div>
+    <div class="boot-fail">
+      <img src="/media/ravi-exclusive/assets/images/logo.webp" alt="" width="72" height="72">
+      <h2>We couldn't open the store just now</h2>
+      <p>Check your connection and try again.</p>
+      <button type="button" class="btn btn-red" data-boot-retry>Retry</button>
+    </div>
+  </div>
+
+  <x-site-header menu="header" />
+
+  <main id="app">
+    {{content}}
+  </main>
+
+  <x-cart-drawer />
+
+  <x-site-footer shop-menu="footer-shop" help-menu="footer-help" policies-menu="footer-policies" />
+</body>
+</html>

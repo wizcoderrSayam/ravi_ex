@@ -1,0 +1,42 @@
+{
+  "name": "Product Listing",
+  "selectable": true,
+  "props": [
+    {
+      "name": "mode",
+      "label": "What it lists",
+      "type": "select",
+      "options": [
+        "category",
+        "new",
+        "search",
+        "wishlist"
+      ],
+      "default": "category"
+    },
+    {
+      "name": "category",
+      "label": "Category slug (mode: category)",
+      "type": "text",
+      "default": ""
+    },
+    {
+      "name": "title",
+      "label": "Heading (empty: the category's name)",
+      "type": "text",
+      "default": ""
+    },
+    {
+      "name": "limit",
+      "label": "How many (mode: new)",
+      "type": "number",
+      "default": 48
+    },
+    {
+      "name": "titleSuffix",
+      "label": "Browser title after a subcategory",
+      "type": "text",
+      "default": "Ravi Exclusive | Amritsar"
+    }
+  ]
+}

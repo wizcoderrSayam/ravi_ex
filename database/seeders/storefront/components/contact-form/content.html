@@ -1,0 +1,28 @@
+<form class="cform" data-role="form" novalidate>
+  <h2 data-role="heading">Send us a message</h2>
+  <p class="cform-lead">Questions about sizes, alterations or an order? Write to us and we will get back to you.</p>
+  <div class="cform-error" data-role="error" role="alert" hidden></div>
+  <div class="field">
+    <label for="contact_name">Your name</label>
+    <input id="contact_name" name="contact_name" autocomplete="name" required>
+  </div>
+  <div class="row g-3">
+    <div class="col-sm-6 field">
+      <label for="contact_phone">Mobile number</label>
+      <input id="contact_phone" name="contact_phone" type="tel" autocomplete="tel" required>
+    </div>
+    <div class="col-sm-6 field">
+      <label for="contact_email">Email (optional)</label>
+      <input id="contact_email" name="contact_email" type="email" autocomplete="email">
+    </div>
+  </div>
+  <div class="field">
+    <label for="contact_location">City (optional)</label>
+    <input id="contact_location" name="contact_location" autocomplete="address-level2">
+  </div>
+  <div class="field">
+    <label for="contact_message">Message</label>
+    <textarea id="contact_message" name="contact_message" required></textarea>
+  </div>
+  <button type="submit" class="btn btn-red" data-role="submit">Send message</button>
+</form>

@@ -1,0 +1,78 @@
+{
+  "home": {
+    "name": "Home",
+    "title": "Ravi Exclusive — Shop Ethnic & Designer Wear Online | Amritsar",
+    "is_home": true,
+    "seo_head": "<meta name=\"description\" content=\"Shop designer ethnic wear for Kids, Men and Women from Ravi Exclusive, Katra Jaimal Singh, Amritsar.\">"
+  },
+  "girls": {
+    "name": "Girls",
+    "title": "Girls Ethnic & Designer Wear | Ravi Exclusive Amritsar",
+    "seo_head": "<meta name=\"description\" content=\"Lehengas, sharara and palazzo suits, Patiala salwar suits, frocks and gowns for girls aged 1 to 14, from their first festive outfit to the big family wedding.\">"
+  },
+  "boys": {
+    "name": "Boys",
+    "title": "Boys Ethnic & Designer Wear | Ravi Exclusive Amritsar",
+    "seo_head": "<meta name=\"description\" content=\"Sherwanis, indo-westerns, coat suits, jodhpuris, kurta pajamas and waistcoat sets for boys aged 1 to 14, so the little ones match the baraat.\">"
+  },
+  "men": {
+    "name": "Men",
+    "title": "Men Ethnic & Designer Wear | Ravi Exclusive Amritsar",
+    "seo_head": "<meta name=\"description\" content=\"Kurta pajamas, waistcoat sets and indo-westerns for the groom, the baraat and every festive occasion in between.\">"
+  },
+  "women": {
+    "name": "Women",
+    "title": "Women Ethnic & Designer Wear | Ravi Exclusive Amritsar",
+    "seo_head": "<meta name=\"description\" content=\"Ethnic co-ord sets for women: hand-picked occasion wear from the heart of Amritsar.\">"
+  },
+  "new-arrivals": {
+    "name": "New Arrivals",
+    "title": "New Arrivals — Ravi Exclusive | Amritsar",
+    "seo_head": "<meta name=\"description\" content=\"The latest ethnic and designer wear just in at Ravi Exclusive, Katra Jaimal Singh, Amritsar.\">"
+  },
+  "search": {
+    "name": "Search",
+    "title": "Search — Ravi Exclusive",
+    "seo_head": "<meta name=\"description\" content=\"Search the Ravi Exclusive collection.\">"
+  },
+  "wishlist": {
+    "name": "Wishlist",
+    "title": "Your Wishlist — Ravi Exclusive",
+    "seo_head": "<meta name=\"description\" content=\"Products you&#x27;ve saved at Ravi Exclusive.\">"
+  },
+  "product": {
+    "name": "Product",
+    "title": "Shop Ethnic & Designer Wear — Ravi Exclusive | Amritsar",
+    "route_pattern": "product/{slug}"
+  },
+  "about-us": {
+    "name": "About Us",
+    "title": "About Ravi Exclusive | Ethnic Wear Store in Katra Jaimal Singh, Amritsar",
+    "seo_head": "<meta name=\"description\" content=\"Ravi Exclusive brings designer ethnic and occasion wear for the whole family from Katra Jaimal Singh, one of Amritsar&#x27;s busiest clothing bazaars.\">"
+  },
+  "contact-us": {
+    "name": "Contact Us",
+    "title": "Contact Ravi Exclusive | Katra Jaimal Singh, Amritsar",
+    "seo_head": "<meta name=\"description\" content=\"Visit Ravi Exclusive at 22, Katra Jaimal Singh, Amritsar, or call and WhatsApp us.\">"
+  },
+  "shipping-policy": {
+    "name": "Shipping Policy",
+    "title": "Shipping Policy | Ravi Exclusive",
+    "seo_head": "<meta name=\"description\" content=\"Shipping charges, dispatch times and delivery across India for orders from Ravi Exclusive, Amritsar. Free shipping on orders above ₹999.\">"
+  },
+  "returns-and-exchanges": {
+    "name": "Returns & Exchanges",
+    "title": "Returns & Exchanges | Ravi Exclusive",
+    "seo_head": "<meta name=\"description\" content=\"How to request a return or size exchange for an order from Ravi Exclusive, Amritsar.\">"
+  },
+  "privacy-policy": {
+    "name": "Privacy Policy",
+    "title": "Privacy Policy | Ravi Exclusive",
+    "seo_head": "<meta name=\"description\" content=\"How Ravi Exclusive collects, uses and protects your personal information.\">"
+  },
+  "terms-and-conditions": {
+    "name": "Terms & Conditions",
+    "title": "Terms & Conditions | Ravi Exclusive",
+    "seo_head": "<meta name=\"description\" content=\"Terms for shopping with Ravi Exclusive online and in store.\">"
+  }
+}

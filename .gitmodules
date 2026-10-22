@@ -1,0 +1,8 @@
+[submodule "packages/cms"]
+	path = packages/cms
+	url = git@github.com:carepeerinfotech/cms.git
+	branch = main
+[submodule "packages/ecommerce"]
+	path = packages/ecommerce
+	url = git@github.com:carepeerinfotech/ecommerce.git
+	branch = cms-integration

@@ -1,0 +1,12 @@
+{
+  "name": "Cart Drawer",
+  "selectable": false,
+  "props": [
+    {
+      "name": "shopUrl",
+      "label": "“Start shopping” link",
+      "type": "text",
+      "default": "/women"
+    }
+  ]
+}

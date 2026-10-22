@@ -1,0 +1,40 @@
+{
+  "name": "Category Showcase",
+  "selectable": true,
+  "props": [
+    {
+      "name": "category",
+      "label": "Category slug",
+      "type": "text",
+      "default": "girls"
+    },
+    {
+      "name": "layout",
+      "label": "Layout",
+      "type": "select",
+      "options": [
+        "carousel",
+        "band"
+      ],
+      "default": "carousel"
+    },
+    {
+      "name": "title",
+      "label": "Heading (empty: “Shop for …”)",
+      "type": "text",
+      "default": ""
+    },
+    {
+      "name": "description",
+      "label": "Band: line of copy",
+      "type": "text",
+      "default": ""
+    },
+    {
+      "name": "reversed",
+      "label": "Band: intro on the right",
+      "type": "checkbox",
+      "default": false
+    }
+  ]
+}

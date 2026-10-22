@@ -1,0 +1,24 @@
+{
+  "name": "Site Footer",
+  "selectable": true,
+  "props": [
+    {
+      "name": "shopMenu",
+      "label": "Shop column: menu slug",
+      "type": "text",
+      "default": "footer-shop"
+    },
+    {
+      "name": "helpMenu",
+      "label": "Help column: menu slug",
+      "type": "text",
+      "default": "footer-help"
+    },
+    {
+      "name": "policiesMenu",
+      "label": "Policy links: menu slug",
+      "type": "text",
+      "default": "footer-policies"
+    }
+  ]
+}

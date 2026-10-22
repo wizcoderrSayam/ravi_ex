@@ -1,0 +1,23 @@
+<div class="container page-wrap">
+  <nav class="crumb" aria-label="Breadcrumb" data-aos="fade-up"><a href="/">Home</a> / Contact Us</nav>
+  <h1 class="shop-title" data-aos="fade-up" data-aos-delay="100">Contact Us</h1>
+  <div class="row g-4 g-lg-5 pt-3">
+    <div class="col-lg-7 col-xl-8">
+      <div class="prose-page" data-aos="fade-up">
+          <h2>Visit the store</h2>
+          <p><span data-setting="business_name"></span>, <span data-setting="address_line1"></span>, <span data-setting="address_line2"></span></p>
+          <p data-requires-setting="maps_url"><a data-setting-href="{maps_url}" target="_blank" rel="noopener">Get directions on Google Maps</a></p>
+          <h2>Call or WhatsApp</h2>
+          <p data-requires-setting="phone">Phone: <a data-setting-href="tel:{phone}" data-setting="phone_display"></a></p>
+          <p data-requires-setting="whatsapp"><a data-setting-href="https://wa.me/{whatsapp}" target="_blank" rel="noopener">Chat with us on WhatsApp</a> for orders, sizing and alteration questions.</p>
+          <h2 data-requires-setting="instagram_url">Instagram</h2>
+          <p data-requires-setting="instagram_url">See the newest arrivals first: <a data-setting-href="{instagram_url}" target="_blank" rel="noopener">@<span data-setting="instagram_handle"></span></a></p>
+      </div>
+    </div>
+    <aside class="col-lg-5 col-xl-4">
+      <div class="page-aside" data-aos="fade-up" data-aos-delay="100">
+        <x-contact-form />
+      </div>
+    </aside>
+  </div>
+</div>

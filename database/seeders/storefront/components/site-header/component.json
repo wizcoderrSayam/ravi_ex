@@ -1,0 +1,12 @@
+{
+  "name": "Site Header",
+  "selectable": true,
+  "props": [
+    {
+      "name": "menu",
+      "label": "Menu slug (CMS → Menus)",
+      "type": "text",
+      "default": "header"
+    }
+  ]
+}

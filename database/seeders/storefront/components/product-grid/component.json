@@ -1,0 +1,43 @@
+{
+  "name": "Product Grid",
+  "selectable": true,
+  "props": [
+    {
+      "name": "limit",
+      "label": "How many products",
+      "type": "number",
+      "default": 4
+    },
+    {
+      "name": "sort",
+      "label": "Order",
+      "type": "select",
+      "options": [
+        "latest",
+        "oldest",
+        "price_asc",
+        "price_desc",
+        "name"
+      ],
+      "default": "latest"
+    },
+    {
+      "name": "featured",
+      "label": "Featured products only",
+      "type": "checkbox",
+      "default": false
+    },
+    {
+      "name": "category",
+      "label": "Category slug (empty: every category)",
+      "type": "text",
+      "default": ""
+    },
+    {
+      "name": "hideWhenEmpty",
+      "label": "Hide the section when there are none",
+      "type": "checkbox",
+      "default": false
+    }
+  ]
+}

@@ -1,0 +1,65 @@
+<div class="container">
+  <nav class="crumb" aria-label="Breadcrumb" data-aos="fade-up"><a href="/">Home</a> / <span data-role="crumb"></span><span id="crumbSub" data-role="crumb-sub"></span></nav>
+  <h1 class="shop-title" id="shopTitle" data-role="title" data-aos="fade-up" data-aos-delay="100"></h1>
+  <div class="row g-4 shop-layout">
+    <div class="col-lg-3" data-aos="fade-up" data-role="side-column">
+      <aside class="side" id="side">
+        <form class="fpanel" id="filters" role="search" aria-labelledby="filtersTitle">
+          <h5 class="fpanel-title" id="filtersTitle">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M3 6h11M18 6h3M3 12h3M10 12h11M3 18h13M20 18h1"/><circle cx="16" cy="6" r="2"/><circle cx="8" cy="12" r="2"/><circle cx="18" cy="18" r="2"/></svg>
+            Filters
+          </h5>
+
+          <label class="fpanel-label" for="fq">Search</label>
+          <div class="fpanel-search">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/></svg>
+            <input id="fq" name="q" type="search" placeholder="Search products">
+          </div>
+
+          <div data-requires="pricing">
+            <span class="fpanel-label" id="fpriceLabel">Price (<span data-role="currency"></span>)</span>
+            <div class="fpanel-range" role="group" aria-labelledby="fpriceLabel">
+              <input name="min" type="number" min="0" step="1" inputmode="numeric" aria-label="Minimum price">
+              <span aria-hidden="true">–</span>
+              <input name="max" type="number" min="0" step="1" inputmode="numeric" aria-label="Maximum price">
+            </div>
+          </div>
+
+          <label class="fpanel-check" data-requires="stock">
+            <input name="in_stock" type="checkbox" value="1">
+            In stock only
+          </label>
+
+          <label class="fpanel-label" for="fsort">Sort by</label>
+          <select id="fsort" name="sort">
+            <option value="pop">Featured</option>
+            <option value="new">Newest</option>
+            <option value="low" data-requires="pricing">Price: Low to High</option>
+            <option value="high" data-requires="pricing">Price: High to Low</option>
+          </select>
+
+          <label class="fpanel-label" for="fper">Show</label>
+          <select id="fper" name="per_page">
+            <option value="12">12 per page</option>
+            <option value="24">24 per page</option>
+            <option value="48">48 per page</option>
+          </select>
+
+          <button type="submit" class="fpanel-apply">Apply</button>
+        </form>
+      </aside>
+    </div>
+    <div class="col-lg-9" data-role="main-column">
+      <div class="toolbar" data-aos="fade-up" data-aos-delay="100" data-role="toolbar">
+        <nav class="chips" aria-label="Subcategories" data-role="chips"></nav>
+        <div class="toolbar-actions">
+          <button class="btn btn-line filter-btn d-lg-none" type="button" aria-expanded="false" aria-controls="side" data-role="filter-toggle">Filters</button>
+          <span class="count" id="count" data-role="count"></span>
+        </div>
+      </div>
+      <div class="row row-cols-2 row-cols-md-3 row-cols-xl-4 g-3 g-md-4 product-grid" id="plist" data-role="grid"></div>
+      <div class="empty-state" id="emptyMsg" data-role="empty" hidden></div>
+      <nav class="pager" id="pager" aria-label="Product pages" data-role="pager" hidden></nav>
+    </div>
+  </div>
+</div>

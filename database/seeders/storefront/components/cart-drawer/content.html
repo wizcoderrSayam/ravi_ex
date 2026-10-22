@@ -1,0 +1,17 @@
+<div class="offcanvas offcanvas-end drawer" tabindex="-1" id="cartDrawer" aria-labelledby="cartTitle">
+  <div class="dhead">
+    <h3 id="cartTitle" data-role="title"></h3><button type="button" class="close-x" data-bs-dismiss="offcanvas" aria-label="Close">×</button>
+  </div>
+  <div class="dbody">
+    <div class="empty" id="cartEmpty" data-role="empty" hidden><span data-role="empty-text"></span><br><br><a class="btn btn-red" data-role="shop-link" href="/women">Start shopping</a></div>
+    <div id="cartItems" data-role="items"></div>
+  </div>
+  <form class="dfoot" id="cartFoot" data-role="form" hidden novalidate>
+    <div class="sum" data-requires="pricing"><span>Subtotal</span><b id="cartTotal" data-role="total"></b></div>
+    <input id="cName" name="name" placeholder="Your name" autocomplete="name" aria-label="Your name" required>
+    <input id="cPhone" name="phone" type="tel" placeholder="Mobile number" autocomplete="tel" aria-label="Mobile number" required>
+    <textarea id="cAddr" name="address" data-role="address" aria-label="Delivery address"></textarea>
+    <button type="submit" class="btn btn-wa btn-block" data-role="submit"></button>
+    <p>We'll confirm availability, shipping and payment on WhatsApp.</p>
+  </form>
+</div>

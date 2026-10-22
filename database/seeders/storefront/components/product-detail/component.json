@@ -1,0 +1,18 @@
+{
+  "name": "Product Detail",
+  "selectable": true,
+  "props": [
+    {
+      "name": "titleSuffix",
+      "label": "Browser title after the product name",
+      "type": "text",
+      "default": "Ravi Exclusive | Amritsar"
+    },
+    {
+      "name": "related",
+      "label": "How many “You may also like” products",
+      "type": "number",
+      "default": 4
+    }
+  ]
+}
