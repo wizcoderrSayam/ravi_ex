@@ -1,0 +1,42 @@
+{
+  "name": "Hero Banner",
+  "selectable": true,
+  "props": [
+    {
+      "name": "title",
+      "label": "Title",
+      "type": "text",
+      "default": ""
+    },
+    {
+      "name": "subtitle",
+      "label": "Subtitle",
+      "type": "text",
+      "default": ""
+    },
+    {
+      "name": "buttonLabel",
+      "label": "Button label (empty: follows the store mode)",
+      "type": "text",
+      "default": ""
+    },
+    {
+      "name": "buttonUrl",
+      "label": "Button link",
+      "type": "text",
+      "default": "/shop"
+    },
+    {
+      "name": "secondaryLabel",
+      "label": "Second button label",
+      "type": "text",
+      "default": ""
+    },
+    {
+      "name": "secondaryUrl",
+      "label": "Second button link",
+      "type": "text",
+      "default": ""
+    }
+  ]
+}

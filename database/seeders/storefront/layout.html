@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{{title}} &middot; {{site_name}}</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    {{global_fonts}}
+</head>
+<body class="flex min-h-screen flex-col bg-slate-50 text-slate-800 antialiased">
+    <x-site-header menu="primary" />
+    <main class="flex-1">
+        {{content}}
+    </main>
+    <x-cart-drawer />
+    <x-site-footer menu="footer" />
+</body>
+</html>

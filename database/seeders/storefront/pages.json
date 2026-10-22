@@ -1,0 +1,22 @@
+{
+  "home": {
+    "name": "Home",
+    "is_home": true
+  },
+  "shop": {
+    "name": "Shop"
+  },
+  "about": {
+    "name": "About"
+  },
+  "contact-us": {
+    "name": "Contact Us"
+  },
+  "checkout": {
+    "name": "Checkout"
+  },
+  "product": {
+    "name": "Product",
+    "route_pattern": "product/{id}"
+  }
+}

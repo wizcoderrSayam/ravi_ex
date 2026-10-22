@@ -1,0 +1,16 @@
+<form class="space-y-4 rounded-lg border border-slate-200 bg-white p-6" data-role="form" novalidate>
+  <div class="hidden rounded-md px-4 py-3 text-sm" data-role="status"></div>
+  <label class="block text-sm font-medium">Name
+    <input name="contact_name" required autocomplete="name" class="mt-1 w-full rounded-md border border-slate-300 px-3 py-2 font-normal">
+  </label>
+  <label class="block text-sm font-medium">Email
+    <input name="contact_email" type="email" required autocomplete="email" class="mt-1 w-full rounded-md border border-slate-300 px-3 py-2 font-normal">
+  </label>
+  <label class="block text-sm font-medium">Phone (optional)
+    <input name="contact_phone" type="tel" autocomplete="tel" class="mt-1 w-full rounded-md border border-slate-300 px-3 py-2 font-normal">
+  </label>
+  <label class="block text-sm font-medium">Message
+    <textarea name="contact_message" rows="5" required class="mt-1 w-full rounded-md border border-slate-300 px-3 py-2 font-normal"></textarea>
+  </label>
+  <button type="submit" data-role="submit" class="rounded-md bg-teal-600 px-5 py-2.5 font-semibold text-white hover:bg-teal-700 disabled:opacity-60">Send message</button>
+</form>

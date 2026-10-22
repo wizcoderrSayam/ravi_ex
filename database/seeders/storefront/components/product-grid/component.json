@@ -1,0 +1,54 @@
+{
+  "name": "Product Grid",
+  "selectable": true,
+  "props": [
+    {
+      "name": "ids",
+      "label": "Product ids (comma separated)",
+      "type": "text",
+      "default": ""
+    },
+    {
+      "name": "search",
+      "label": "Search text",
+      "type": "text",
+      "default": ""
+    },
+    {
+      "name": "category",
+      "label": "Category slug",
+      "type": "text",
+      "default": ""
+    },
+    {
+      "name": "featured",
+      "label": "Featured only",
+      "type": "checkbox",
+      "default": false
+    },
+    {
+      "name": "limit",
+      "label": "Products per page",
+      "type": "number",
+      "default": 8
+    },
+    {
+      "name": "sort",
+      "label": "Sort",
+      "type": "select",
+      "options": [
+        "latest",
+        "price_asc",
+        "price_desc",
+        "name"
+      ],
+      "default": "latest"
+    },
+    {
+      "name": "filters",
+      "label": "Show search, category filter and paging",
+      "type": "checkbox",
+      "default": false
+    }
+  ]
+}

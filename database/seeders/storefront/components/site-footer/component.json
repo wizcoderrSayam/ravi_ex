@@ -1,0 +1,12 @@
+{
+  "name": "Site Footer",
+  "selectable": false,
+  "props": [
+    {
+      "name": "menu",
+      "label": "Menu slug (CMS → Menus)",
+      "type": "text",
+      "default": "footer"
+    }
+  ]
+}
