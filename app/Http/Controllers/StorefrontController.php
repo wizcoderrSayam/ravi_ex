@@ -6,6 +6,8 @@ use App\View\Components\ProductCard;
 use Carepeerinfotech\Ecommerce\Models\Category;
 use Carepeerinfotech\Ecommerce\Models\Product;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Illuminate\View\View;
 
@@ -25,6 +27,9 @@ class StorefrontController extends Controller
 
     /** How many products from the same subcategory a product page suggests. */
     private const RELATED_PRODUCTS = 4;
+
+    /** Link-preview images are scaled down to this width. */
+    private const PREVIEW_WIDTH = 1200;
 
     /** The home page's "Shop for …" rows, in display order, keyed by top-level category slug. */
     private const HOME_SHOP_SECTIONS = [
@@ -100,6 +105,54 @@ class StorefrontController extends Controller
                 ->take(self::RELATED_PRODUCTS)
                 ->get(),
         ]);
+    }
+
+    /**
+     * The product's photo as a JPEG at most 1200px wide, for link previews: WhatsApp skips
+     * WebP and large images and falls back to the site logo, so the page's og:image points here.
+     */
+    public function productPreview(string $slug): Response
+    {
+        $product = $this->productQuery()->where('slug', $slug)->firstOrFail();
+        $gallery = $product->galleryFor();
+        $file = $this->localImagePath($gallery['images'][$gallery['active']] ?? null);
+        $image = $file ? @imagecreatefromstring((string) file_get_contents($file)) : false;
+        abort_if($image === false, 404);
+
+        $width = imagesx($image);
+        if ($width > self::PREVIEW_WIDTH) {
+            $image = imagescale($image, self::PREVIEW_WIDTH);
+        }
+
+        // JPEG has no transparency, so a transparent photo gets a white background.
+        $canvas = imagecreatetruecolor(imagesx($image), imagesy($image));
+        imagefill($canvas, 0, 0, imagecolorallocate($canvas, 255, 255, 255));
+        imagecopy($canvas, $image, 0, 0, 0, 0, imagesx($image), imagesy($image));
+
+        ob_start();
+        imagejpeg($canvas, null, 82);
+        $jpeg = (string) ob_get_clean();
+
+        return response($jpeg, 200, [
+            'Content-Type' => 'image/jpeg',
+            'Cache-Control' => 'public, max-age=604800',
+        ]);
+    }
+
+    /** The file behind a photo URL on this site, e.g. /storage/products/x.webp or /assets/images/x.jpg. */
+    private function localImagePath(?string $url): ?string
+    {
+        $path = ltrim((string) parse_url((string) $url, PHP_URL_PATH), '/');
+        if ($path === '' || str_contains($path, '..')) {
+            return null;
+        }
+
+        $candidates = [public_path($path)];
+        if (str_starts_with($path, 'storage/')) {
+            $candidates[] = Storage::disk('public')->path(substr($path, strlen('storage/')));
+        }
+
+        return collect($candidates)->first(fn (string $file): bool => is_file($file));
     }
 
     private function category(string $slug): View

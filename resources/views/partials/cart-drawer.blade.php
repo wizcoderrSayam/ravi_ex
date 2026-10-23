@@ -8,6 +8,7 @@
     </div>
     <form class="dfoot" id="cartFoot" hidden>
       <div class="sum"><span>Subtotal</span><b id="cartTotal">₹0</b></div>
+      <input id="cSize" placeholder="Size (e.g. M, 32, 6Y)" aria-label="Size">
       <input id="cName" placeholder="Your name" autocomplete="name" aria-label="Your name">
       <input id="cPhone" type="tel" placeholder="Mobile number" autocomplete="tel" aria-label="Mobile number">
       <textarea id="cAddr" placeholder="Delivery address with PIN code (or write 'Store pickup')" aria-label="Delivery address"></textarea>

@@ -158,7 +158,11 @@
       total += it.price * it.qty;
       return `${k + 1}. ${it.name} (${it.code || code(it.id)})\n   ${it.oneSize ? "Qty" : `Size ${it.size} ×`} ${it.qty} = ${inr(it.price * it.qty)}` + (it.url ? `\n   ${it.url}` : "");
     }).join("\n");
-    const msg = `Hello ${STORE.name}, I'd like to place an order:\n\n${lines}\n\nSubtotal: ${inr(total)}\n\nName: ${n}\nMobile: ${ph}\nAddress: ${ad}`;
+    // the size the shopper typed in the bag, sent along when filled in
+    const size = $("cSize").value.trim();
+    const msg = `Hello ${STORE.name}, I'd like to place an order:\n\n${lines}\n\nSubtotal: ${inr(total)}\n\n`
+      + (size ? `Size: ${size}\n` : "")
+      + `Name: ${n}\nMobile: ${ph}\nAddress: ${ad}`;
     sendWhatsApp(msg);
   });
   $("cartEmpty").querySelector("a").addEventListener("click", () => drawer.hide());

@@ -19,7 +19,10 @@
   <meta property="og:description" content="{{ $summary }}">
   <meta property="og:url" content="{{ $card->url }}">
   @if ($photo)
-    <meta property="og:image" content="{{ url($photo) }}">
+    {{-- A JPEG copy of the photo: WhatsApp shows the site logo instead of WebP or large images. --}}
+    <meta property="og:image" content="{{ route('shop.product.preview', $product->slug) }}">
+    <meta property="og:image:type" content="image/jpeg">
+    <meta property="og:image:alt" content="{{ $product->name }}">
   @endif
 @endpush
 

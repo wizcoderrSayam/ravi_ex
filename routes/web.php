@@ -13,4 +13,5 @@ Route::controller(StorefrontController::class)->name('shop.')->group(function ()
     Route::get('/search', 'search')->name('search');
     Route::get('/wishlist', 'wishlist')->name('wishlist');
     Route::get('/product/{slug}', 'product')->name('product');
+    Route::get('/product/{slug}/preview.jpg', 'productPreview')->name('product.preview');
 });

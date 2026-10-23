@@ -51,8 +51,30 @@ class StorefrontProductPageTest extends TestCase
 
         $response->assertSee('<link rel="canonical" href="'.$url.'">', false);
         $response->assertSee('<meta property="og:url" content="'.$url.'">', false);
-        $response->assertSee('<meta property="og:image" content="'.url('/assets/images/categories/women-co-ord-sets.webp').'">', false);
+        $response->assertSee('<meta property="og:image" content="'.route('shop.product.preview', $product->slug).'">', false);
+        $response->assertSee('<meta property="og:image:type" content="image/jpeg">', false);
         $response->assertSee('<meta property="og:title" content="Festive Co-ord Set', false);
+    }
+
+    public function test_the_link_preview_image_is_the_product_photo_as_a_small_jpeg(): void
+    {
+        $product = $this->product('Festive Co-ord Set');
+
+        $response = $this->get(route('shop.product.preview', $product->slug));
+
+        $response->assertOk();
+        $response->assertHeader('Content-Type', 'image/jpeg');
+        $size = getimagesizefromstring($response->getContent());
+        $this->assertSame(IMAGETYPE_JPEG, $size[2]);
+        $this->assertLessThanOrEqual(1200, $size[0]);
+    }
+
+    public function test_an_inactive_products_preview_image_is_not_found(): void
+    {
+        $product = $this->product('Festive Co-ord Set');
+        $product->update(['is_active' => false]);
+
+        $this->get(route('shop.product.preview', $product->slug))->assertNotFound();
     }
 
     public function test_it_suggests_other_products_from_the_same_subcategory(): void
