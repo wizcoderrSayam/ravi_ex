@@ -1350,6 +1350,11 @@ section[id] {
   font-weight: 700;
 }
 
+.pd-info .pshort {
+  margin: 14px 0;
+  font-size: 0.95rem;
+}
+
 .psizes {
   margin-top: 4px;
   color: var(--muted);

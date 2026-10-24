@@ -86,6 +86,9 @@
           <h5>Quantity</h5>
           <div class="qty"><button type="button" data-qty="-1" aria-label="Decrease">−</button><span id="pdQty">1</span><button type="button" data-qty="1" aria-label="Increase">+</button></div>
         </div>
+        @if (filled($product->short_description))
+          <p class="pshort">{{ $product->short_description }}</p>
+        @endif
         <div class="mactions">
           <button type="button" class="btn btn-red btn-block" id="pdAdd">Add to Bag</button>
           <button type="button" class="btn btn-wa btn-block" id="pdBuy" data-buy-now>Buy now on WhatsApp</button>
