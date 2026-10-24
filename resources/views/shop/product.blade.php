@@ -71,12 +71,12 @@
           <p class="pd-soldout">Sold out right now. Message us on WhatsApp and we'll tell you when it's back.</p>
         @endif
 
-        {{-- With a single option there is nothing to choose; it stays pre-selected for Add to Bag. --}}
+        {{-- With a single option there is nothing to choose; it stays pre-selected for Add to Bag. With several, the shopper must pick one. --}}
         <div class="opt"{{ count($sizes) === 1 ? ' hidden' : '' }}>
           <h5>Size</h5>
           <div class="sizes" id="pdSizes">
             @foreach ($sizes as $size)
-              <button type="button" @class(['on' => $size === $card->defaultSize]) data-size="{{ $size }}">{{ $size }}</button>
+              <button type="button" @class(['on' => count($sizes) === 1]) data-size="{{ $size }}">{{ $size }}</button>
             @endforeach
           </div>
           <div class="err" id="pdSizeErr">Please select a size.</div>

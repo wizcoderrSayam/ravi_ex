@@ -166,25 +166,14 @@ class StorefrontProductPageTest extends TestCase
         $this->assertGreaterThan(strpos($html, 'Product details'), strrpos($html, 'data-buy-now>'));
     }
 
-    public function test_the_default_variants_size_is_picked_until_the_shopper_chooses(): void
+    public function test_no_size_is_picked_until_the_shopper_chooses_when_there_are_several(): void
     {
         $product = $this->product('Festive Co-ord Set');
-        $product->variants()->update(['is_default' => false]);
-        $product->variants()->where('option_label', 'L')->update(['is_default' => true]);
 
         $html = $this->get(route('shop.product', $product->slug))->getContent();
 
-        $this->assertStringContainsString('<button type="button" class="on" data-size="L">L</button>', $html);
-        $this->assertSame(1, substr_count($html, 'class="on" data-size='));
-    }
-
-    public function test_the_first_active_size_is_picked_when_the_default_variant_is_inactive(): void
-    {
-        $product = $this->product('Festive Co-ord Set');
-        $product->variants()->where('option_label', 'XS')->update(['is_active' => false]);
-
-        $this->get(route('shop.product', $product->slug))
-            ->assertSee('<button type="button" class="on" data-size="S">S</button>', false);
+        $this->assertStringNotContainsString('class="on" data-size=', $html);
+        $this->assertStringContainsString('id="pdSizeErr">Please select a size.</div>', $html);
     }
 
     public function test_product_cards_list_only_the_active_sizes(): void
