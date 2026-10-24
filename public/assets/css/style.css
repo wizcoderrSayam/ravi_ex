@@ -1344,6 +1344,12 @@ section[id] {
   font-size: 1.05rem;
 }
 
+.pshort {
+  margin: 4px 0 0;
+  font-size: 0.8rem;
+  font-weight: 700;
+}
+
 .psizes {
   margin-top: 4px;
   color: var(--muted);
