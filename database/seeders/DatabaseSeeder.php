@@ -30,6 +30,7 @@ class DatabaseSeeder extends Seeder
         }
 
         $this->call([
+            StorefrontCategorySeeder::class,
             RaviProductListSeeder::class,
             HomepageContentSeeder::class,
             CmsPageSeeder::class,
