@@ -218,7 +218,7 @@ class StorefrontCatalogSeeder extends Seeder
         return implode("\n\n", [
             $intro,
             implode("\n", $details),
-            'Need help with sizing or alterations? WhatsApp us on +91-814-814-62-62 or visit our store at 22, Katra Jaimal Singh, Amritsar.',
+            'Need help with sizing or alterations? WhatsApp us on +91-814-814-62-62 or visit our store at  22, Katra Jaimal Singh, Amritsar, Amritsar.',
         ]);
     }
 

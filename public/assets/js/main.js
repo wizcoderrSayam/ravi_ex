@@ -46,21 +46,23 @@
   }
 
   /* ---------- wishlist ---------- */
+  // a wishlist button sits inside a product card or the product page, both of which carry data-id
+  const wishId = btn => +btn.closest("[data-id]").dataset.id;
   function syncWish(btn) {
-    const id = +btn.closest(".pcard").dataset.id, on = wish.includes(id);
+    const id = wishId(btn), on = wish.includes(id);
     btn.classList.toggle("on", on); btn.textContent = on ? "♥" : "♡";
     btn.setAttribute("aria-pressed", on);
     btn.setAttribute("aria-label", on ? "Remove from wishlist" : "Add to wishlist");
   }
   function toggleWish(btn) {
-    const id = +btn.closest(".pcard").dataset.id;
+    const id = wishId(btn);
     wish = wish.includes(id) ? wish.filter(x => x !== id) : [...wish, id]; save();
     // the same product can appear twice on a page (e.g. new arrivals + bestsellers)
-    document.querySelectorAll(`.pcard[data-id="${id}"] .wish`).forEach(syncWish);
+    document.querySelectorAll(`[data-id="${id}"] [data-action="wish"]`).forEach(syncWish);
     toast(wish.includes(id) ? "Saved to wishlist" : "Removed from wishlist");
     if (page === "wishlist") updateListing();
   }
-  document.querySelectorAll(".pcard .wish").forEach(syncWish);
+  document.querySelectorAll('[data-action="wish"]').forEach(syncWish);
 
   /* ---------- ordering: used by the product page ---------- */
   // a product card and the product page carry the same data-* attributes

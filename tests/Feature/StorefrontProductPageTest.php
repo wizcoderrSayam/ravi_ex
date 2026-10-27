@@ -152,8 +152,7 @@ class StorefrontProductPageTest extends TestCase
             ->assertSee('<button type="button" class="on" data-size="M">M</button>', false)
             ->assertDontSee('data-size="XS"', false);
         $this->get(route('shop.women'))
-            ->assertSee('data-sizes="M"', false)
-            ->assertSee('<div class="psizes">Size: M</div>', false);
+            ->assertSee('data-sizes="M"', false);
     }
 
     public function test_a_second_buy_now_button_follows_the_product_details(): void
@@ -176,13 +175,26 @@ class StorefrontProductPageTest extends TestCase
         $this->assertStringContainsString('id="pdSizeErr">Please select a size.</div>', $html);
     }
 
-    public function test_product_cards_list_only_the_active_sizes(): void
+    public function test_the_product_page_has_a_wishlist_button_for_its_product(): void
     {
         $product = $this->product('Festive Co-ord Set');
+
+        $html = $this->get(route('shop.product', $product->slug))->getContent();
+
+        $this->assertStringContainsString('id="pd" data-id="'.$product->id.'"', $html);
+        $this->assertStringContainsString('class="btn btn-line pd-wish" data-action="wish" aria-pressed="false" aria-label="Add to wishlist">♡</button>', $html);
+    }
+
+    public function test_product_cards_show_the_short_description_but_not_the_sizes(): void
+    {
+        $product = $this->product('Festive Co-ord Set');
+        $product->update(['short_description' => 'M, L, XL, XXL']);
         $product->variants()->whereIn('option_label', ['XS', 'XXL'])->update(['is_active' => false]);
 
         $this->get(route('shop.women'))
-            ->assertSee('<div class="psizes">Sizes: S · M · L · XL</div>', false);
+            ->assertSee('data-sizes="S|M|L|XL"', false)
+            ->assertSee('<p class="pshort">M, L, XL, XXL</p>', false)
+            ->assertDontSee('class="psizes"', false);
     }
 
     public function test_product_cards_link_to_their_product_page(): void

@@ -92,7 +92,7 @@
         <div class="trust-item">
           <i>⌂</i>
           <p>
-            <b>Aao ji, visit us</b><span>22, Katra Jaimal Singh</span>
+            <b>Aao ji, visit us</b><span> 22, Katra Jaimal Singh, Amritsar</span>
           </p>
         </div>
       </div>
@@ -381,7 +381,7 @@
       <div class="col-lg-6" data-aos="fade-left" data-aos-delay="150">
         <div class="store-card">
           <h3>M/s Ravi Exclusive</h3>
-          <p>22, Katra Jaimal Singh</p>
+          <p> 22, Katra Jaimal Singh, Amritsar</p>
           <p>Amritsar, Punjab, India – 143001</p>
           <p class="mt-10">
             Ph: <a href="tel:+918148146262">+91-814-814-62-62</a>

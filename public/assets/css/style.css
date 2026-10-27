@@ -1355,12 +1355,6 @@ section[id] {
   font-size: 0.95rem;
 }
 
-.psizes {
-  margin-top: 4px;
-  color: var(--muted);
-  font-size: 0.76rem;
-}
-
 .price .price-from {
   color: var(--muted);
   font-size: 0.8rem;
@@ -1821,6 +1815,28 @@ select {
   display: grid;
   gap: 10px;
   margin-top: 26px;
+}
+
+/* Add to Bag takes the row; the wishlist heart sits beside it as a square button */
+.pd-buy-row {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 10px;
+}
+
+.pd-wish {
+  --bs-btn-padding-x: 0;
+  --bs-btn-font-size: 1.35rem;
+  --bs-btn-line-height: 1;
+  width: 56px;
+  letter-spacing: 0;
+}
+
+.pd-wish.on {
+  --bs-btn-color: var(--red);
+  --bs-btn-border-color: var(--red);
+  --bs-btn-hover-bg: var(--red);
+  --bs-btn-hover-border-color: var(--red);
 }
 
 .mdetails {

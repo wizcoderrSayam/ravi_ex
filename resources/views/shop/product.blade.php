@@ -90,7 +90,10 @@
           <p class="pshort">{{ $product->short_description }}</p>
         @endif
         <div class="mactions">
-          <button type="button" class="btn btn-red btn-block" id="pdAdd">Add to Bag</button>
+          <div class="pd-buy-row">
+            <button type="button" class="btn btn-red btn-block" id="pdAdd">Add to Bag</button>
+            <button type="button" class="btn btn-line pd-wish" data-action="wish" aria-pressed="false" aria-label="Add to wishlist">♡</button>
+          </div>
           <button type="button" class="btn btn-wa btn-block" id="pdBuy" data-buy-now>Buy now on WhatsApp</button>
         </div>
 

@@ -77,7 +77,7 @@ class StoreContentSeedersTest extends TestCase
         );
         $this->assertNotNull(CmsPage::firstWhere('slug', 'about-us')->published_at);
         $this->assertNull(CmsPage::firstWhere('slug', 'shipping-policy')->published_at);
-        $this->assertStringContainsString('22, Katra Jaimal Singh', CmsPage::firstWhere('slug', 'contact-us')->content);
+        $this->assertStringContainsString(' 22, Katra Jaimal Singh, Amritsar', CmsPage::firstWhere('slug', 'contact-us')->content);
         $this->assertStringContainsString('Orders above ₹999 ship free', CmsPage::firstWhere('slug', 'shipping-policy')->content);
     }
 

@@ -59,7 +59,7 @@ class HomepageContentSeeder extends Seeder
                         ['title' => 'Amritsari style', 'text' => 'Handpicked from Katra Jaimal Singh'],
                         ['title' => 'Fitting & alterations', 'text' => 'Ask us before you order'],
                         ['title' => 'Order on WhatsApp', 'text' => 'Personal service, ji'],
-                        ['title' => 'Aao ji, visit us', 'text' => '22, Katra Jaimal Singh'],
+                        ['title' => 'Aao ji, visit us', 'text' => ' 22, Katra Jaimal Singh, Amritsar'],
                     ],
                 ],
             ],

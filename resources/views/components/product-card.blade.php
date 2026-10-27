@@ -23,9 +23,5 @@
     @if (filled($product->short_description))
       <p class="pshort">{{ $product->short_description }}</p>
     @endif
-    {{-- The active sizes; a product without any is sold as Free Size, so there's nothing to list. --}}
-    @if ($sizes !== 'Free Size')
-      <div class="psizes">{{ str_contains($sizes, '|') ? 'Sizes' : 'Size' }}: {{ str_replace('|', ' · ', $sizes) }}</div>
-    @endif
   </div>
 </article>
