@@ -30,13 +30,9 @@ class DatabaseSeeder extends Seeder
         }
 
         $this->call([
-            StorefrontCatalogSeeder::class,
+            RaviProductListSeeder::class,
             HomepageContentSeeder::class,
             CmsPageSeeder::class,
         ]);
-
-        if (app()->environment('local', 'testing')) {
-            $this->call(DemoOrderSeeder::class);
-        }
     }
 }

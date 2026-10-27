@@ -10,7 +10,7 @@ use Illuminate\Database\Seeder;
 
 /**
  * Fills the admin's Homepage editor and slides with the demo site's home page
- * content. Run after StorefrontCatalogSeeder, since the category and featured
+ * content. Run after RaviProductListSeeder, since the category and featured
  * sections point at seeded rows. Safe to re-run: existing sections and slides
  * are left alone, so edits made in the admin survive.
  */
