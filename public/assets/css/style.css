@@ -418,8 +418,8 @@ h3 {
 
 .ssi-img {
   flex: 0 0 auto;
-  width: 53px;
-  height: 62px;
+  width: 62px;
+  height: 73px;
   border-radius: 8px;
   overflow: hidden;
   background: var(--cream);
