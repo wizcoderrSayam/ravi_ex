@@ -68,11 +68,14 @@
     </div>
     <div class="search-panel collapse" id="searchPanel">
       <div class="container">
-        <form class="search" id="search" action="{{ route('shop.search') }}" method="get" role="search">
+        <form class="search" id="search" action="{{ route('shop.search') }}" method="get" role="search" autocomplete="off">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7" /><path d="m20 20-4-4" /></svg>
-          <input id="q" name="q" type="search" placeholder="Search sherwani, lehenga, kurta pajama, co-ord set…" aria-label="Search products">
+          <input id="q" name="q" type="search" placeholder="Search sherwani, lehenga, kurta pajama, co-ord set…" aria-label="Search products" autocomplete="off" aria-expanded="false" aria-controls="searchSuggest">
           <button type="submit" class="btn btn-red">Search</button>
         </form>
+        <div class="search-suggest" id="searchSuggest" role="listbox" hidden></div>
       </div>
     </div>
   </header>
+
+  <script>window.SEARCH_INDEX = @json($searchIndex ?? []);</script>

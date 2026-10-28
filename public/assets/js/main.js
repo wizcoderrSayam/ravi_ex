@@ -204,6 +204,40 @@
     if (e.target.closest("a[href]")) bootstrap.Offcanvas.getOrCreateInstance($("mnav")).hide();
   });
 
+  /* ---------- search panel: instant suggestions as you type ---------- */
+  const qInput = $("q"), searchSuggest = $("searchSuggest");
+  const searchIndex = window.SEARCH_INDEX || [];
+  const SUGGEST_MIN_CHARS = 2, SUGGEST_MAX = 6;
+  const escapeHtml = s => s.replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+
+  function matchProducts(term) {
+    const words = term.toLowerCase().split(/\s+/).filter(Boolean);
+    return searchIndex.filter(p => words.every(w => p.search.includes(w.replace(/s$/, "")))).slice(0, SUGGEST_MAX);
+  }
+
+  function renderSuggestions(term) {
+    if (term.length < SUGGEST_MIN_CHARS) { searchSuggest.hidden = true; searchSuggest.innerHTML = ""; qInput.setAttribute("aria-expanded", "false"); return }
+    const matches = matchProducts(term);
+    searchSuggest.innerHTML = matches.length
+      ? matches.map(p => `<a class="search-suggest-item" role="option" href="${p.url}">
+          <span class="ssi-img">${p.image ? `<img src="${p.image}" alt="" loading="lazy">` : ""}</span>
+          <span class="ssi-body"><b>${escapeHtml(p.name)}</b><em>${p.price}</em></span>
+        </a>`).join("")
+      : `<p class="search-suggest-empty">No products match “${escapeHtml(term)}”.</p>`;
+    searchSuggest.hidden = false;
+    qInput.setAttribute("aria-expanded", "true");
+  }
+
+  let suggestTimer;
+  qInput.addEventListener("input", () => {
+    clearTimeout(suggestTimer);
+    suggestTimer = setTimeout(() => renderSuggestions(qInput.value.trim()), 120);
+  });
+  qInput.addEventListener("focus", () => { if (qInput.value.trim().length >= SUGGEST_MIN_CHARS) renderSuggestions(qInput.value.trim()) });
+  document.addEventListener("click", e => {
+    if (!e.target.closest(".search-panel")) { searchSuggest.hidden = true; qInput.setAttribute("aria-expanded", "false") }
+  });
+
   /* ---------- listing pages: subcategory, filter panel, sort, pagination ---------- */
   const plist = $("plist");
   const cols = plist ? [...plist.children] : [];
