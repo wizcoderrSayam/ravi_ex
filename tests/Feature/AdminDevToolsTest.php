@@ -6,6 +6,7 @@ use App\Models\User;
 use Carepeerinfotech\Ecommerce\Database\Seeders\EcommerceSeeder;
 use Carepeerinfotech\Ecommerce\Models\Role;
 use Carepeerinfotech\Ecommerce\Services\Backup\BackupRestorer;
+use Illuminate\Filesystem\Filesystem;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Process\PendingProcess;
@@ -126,6 +127,49 @@ class AdminDevToolsTest extends TestCase
 
         Process::assertRan(fn (PendingProcess $process) => $this->isBinary($process, 'mysqldump')
             && collect($process->command)->every(fn (string $argument) => ! str_starts_with($argument, '--ignore-table=')));
+    }
+
+    public function test_media_export_skips_symlinks_inside_the_public_disk(): void
+    {
+        $this->fakeMysql();
+
+        // Storage::fake() drops the disk's "links" option, so use the real disk config on a scratch root.
+        $root = storage_path('framework/testing/disks/public-links');
+        $link = $root.'/storage';
+        $files = new Filesystem;
+        $files->deleteDirectory($root);
+        $files->ensureDirectoryExists($root.'/products/1');
+        file_put_contents($root.'/products/1/shirt.jpg', 'image');
+
+        if (! @symlink($root, $link)) {
+            $files->deleteDirectory($root);
+            $this->markTestSkipped('Symlinks are not available on this system.');
+        }
+
+        config(['filesystems.disks.public.root' => $root]);
+        Storage::forgetDisk('public');
+
+        try {
+            $this->actingAs($this->adminWithRole('super-admin'))
+                ->post(route('admin.dev-tools.export'), [
+                    'include_media' => '1',
+                    'exclude_runtime_tables' => '1',
+                ])
+                ->assertSessionHas('success');
+
+            $zip = $this->openOnlyBackup();
+
+            $this->assertSame('image', $zip->getFromName('media/products/1/shirt.jpg'));
+            $this->assertFalse($zip->locateName('media/storage/products/1/shirt.jpg'));
+            $zip->close();
+        } finally {
+            // Windows removes directory links with rmdir(), everything else with unlink().
+            if (is_link($link) && ! @unlink($link)) {
+                @rmdir($link);
+            }
+
+            $files->deleteDirectory($root);
+        }
     }
 
     public function test_import_requires_typing_confirm(): void
