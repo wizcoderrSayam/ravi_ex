@@ -1,0 +1,201 @@
+- generic [active] [ref=f1e1]:
+  - generic [ref=f1e2]:
+    - text: ਜੀ ਆਇਆਂ ਨੂੰ · Welcome to Ravi Exclusive, Katra Jaimal Singh, Amritsar · WhatsApp
+    - link "+91-814-814-62-62" [ref=f1e3] [cursor=pointer]:
+      - /url: tel:+918148146262
+  - banner [ref=f1e4]:
+    - generic [ref=f1e6]:
+      - link [ref=f1e8] [cursor=pointer]:
+        - /url: http://localhost:8000
+        - img "Ravi Exclusive logo" [ref=f1e10]
+      - navigation "Main" [ref=f1e11]:
+        - list [ref=f1e12]:
+          - listitem [ref=f1e13]:
+            - link "Girls" [ref=f1e14] [cursor=pointer]:
+              - /url: http://localhost:8000/girls
+          - listitem [ref=f1e15]:
+            - link "Boys" [ref=f1e16] [cursor=pointer]:
+              - /url: http://localhost:8000/boys
+          - listitem [ref=f1e17]:
+            - link "Men" [ref=f1e18] [cursor=pointer]:
+              - /url: http://localhost:8000/men
+          - listitem [ref=f1e19]:
+            - link "Women" [ref=f1e20] [cursor=pointer]:
+              - /url: http://localhost:8000/women
+          - listitem [ref=f1e21]:
+            - link "New Arrivals" [ref=f1e22] [cursor=pointer]:
+              - /url: http://localhost:8000/new-arrivals
+      - generic [ref=f1e24]:
+        - button "Search" [ref=f1e25] [cursor=pointer]
+        - link "Wishlist" [ref=f1e29] [cursor=pointer]:
+          - /url: http://localhost:8000/wishlist
+        - button "Cart" [ref=f1e32] [cursor=pointer]
+  - main [ref=f1e36]:
+    - generic [ref=f1e37]:
+      - navigation "Breadcrumb" [ref=f1e38]:
+        - link "Home" [ref=f1e39] [cursor=pointer]:
+          - /url: http://localhost:8000
+        - text: /
+        - link "Men" [ref=f1e40] [cursor=pointer]:
+          - /url: http://localhost:8000/men
+        - text: /
+        - link "Indo-Westerns" [ref=f1e41] [cursor=pointer]:
+          - /url: http://localhost:8000/men#indo-westerns
+        - text: / Festive Sherwani
+      - generic [ref=f1e42]:
+        - img "Festive Sherwani" [ref=f1e45]
+        - generic [ref=f1e47]:
+          - text: Men · Indo-Westerns
+          - heading "Festive Sherwani" [level=1] [ref=f1e48]
+          - generic [ref=f1e49]:
+            - generic [ref=f1e50]: ₹5,399
+            - generic [ref=f1e51]: onwards
+            - generic [ref=f1e52]: ₹7,199
+            - emphasis [ref=f1e53]: 25% off
+          - paragraph [ref=f1e54]: Inclusive of all taxes
+          - generic [ref=f1e55]:
+            - heading "Size" [level=5] [ref=f1e56]
+            - generic [ref=f1e57]:
+              - button "S" [ref=f1e58] [cursor=pointer]
+              - button "M" [ref=f1e59] [cursor=pointer]
+              - button "L" [ref=f1e60] [cursor=pointer]
+              - button "XL" [ref=f1e61] [cursor=pointer]
+              - button "XXL" [ref=f1e62] [cursor=pointer]
+              - button "3XL" [ref=f1e63] [cursor=pointer]
+          - paragraph [ref=f1e64]: "Fabric: Silk Blend"
+          - generic [ref=f1e65]:
+            - generic [ref=f1e66]:
+              - button "Add to Bag" [ref=f1e67] [cursor=pointer]
+              - button "Add to wishlist" [ref=f1e68] [cursor=pointer]: ♡
+            - button "Buy now on WhatsApp" [ref=f1e69] [cursor=pointer]
+          - generic [ref=f1e70]:
+            - generic [ref=f1e71]: "Colour: As shown (more shades in store)"
+            - generic [ref=f1e72]: "Product code: RE-0035"
+            - generic [ref=f1e73]:
+              - text: Need help with size or customisation? Call
+              - link "+91-814-814-62-62" [ref=f1e74] [cursor=pointer]:
+                - /url: tel:+918148146262
+          - generic [ref=f1e75]:
+            - heading "Product details" [level=2] [ref=f1e76]
+            - paragraph [ref=f1e77]: Festive Sherwani in Silk Blend, from our Indo-Westerns collection. Indo-westerns, sherwanis and jodhpuris that blend traditional silhouettes with modern tailoring.
+            - paragraph [ref=f1e78]: "Fabric: Silk Blend Sizes: S, M, L, XL, XXL, 3XL Care: Dry clean only. Store folded in a muslin cloth, away from damp."
+            - paragraph [ref=f1e79]: Need help with sizing or alterations? WhatsApp us on +91-814-814-62-62 or visit our store at 22, Katra Jaimal Singh, Amritsar.
+          - button "Buy now on WhatsApp" [ref=f1e81] [cursor=pointer]
+    - generic [ref=f1e83]:
+      - generic [ref=f1e84]:
+        - generic [ref=f1e85]:
+          - text: More Indo-Westerns
+          - heading "You may also like" [level=2] [ref=f1e86]
+        - link "View all →" [ref=f1e87] [cursor=pointer]:
+          - /url: http://localhost:8000/men#indo-westerns
+      - generic [ref=f1e88]:
+        - article [ref=f1e90]:
+          - generic [ref=f1e91] [cursor=pointer]:
+            - img "Pure Silk Sherwani" [ref=f1e92]
+            - link [aria-hidden] [ref=f1e93]:
+              - /url: http://localhost:8000/product/pure-silk-sherwani
+            - button "Add to wishlist" [ref=f1e94]: ♡
+          - generic [ref=f1e95]:
+            - generic [ref=f1e96]: Men · Indo-Westerns
+            - heading [level=4] [ref=f1e97] [cursor=pointer]:
+              - link "Pure Silk Sherwani" [ref=f1e98]:
+                - /url: http://localhost:8000/product/pure-silk-sherwani
+            - generic [ref=f1e99]:
+              - generic [ref=f1e100]: ₹21,999
+              - generic [ref=f1e101]: onwards
+            - paragraph [ref=f1e102]: "Fabric: Velvet"
+        - article [ref=f1e104]:
+          - generic [ref=f1e105] [cursor=pointer]:
+            - img "Heritage Sherwani" [ref=f1e106]
+            - link [aria-hidden] [ref=f1e107]:
+              - /url: http://localhost:8000/product/heritage-sherwani
+            - button "Add to wishlist" [ref=f1e108]: ♡
+          - generic [ref=f1e109]:
+            - generic [ref=f1e110]: Men · Indo-Westerns
+            - heading [level=4] [ref=f1e111] [cursor=pointer]:
+              - link "Heritage Sherwani" [ref=f1e112]:
+                - /url: http://localhost:8000/product/heritage-sherwani
+            - generic [ref=f1e113]:
+              - generic [ref=f1e114]: ₹26,099
+              - generic [ref=f1e115]: onwards
+            - paragraph [ref=f1e116]: "Fabric: Jacquard"
+        - article [ref=f1e118]:
+          - generic [ref=f1e119] [cursor=pointer]:
+            - img "Zari Embroidered Sherwani" [ref=f1e120]
+            - link [aria-hidden] [ref=f1e121]:
+              - /url: http://localhost:8000/product/zari-embroidered-sherwani
+            - generic: New
+            - button "Add to wishlist" [ref=f1e122]: ♡
+          - generic [ref=f1e123]:
+            - generic [ref=f1e124]: Men · Indo-Westerns
+            - heading [level=4] [ref=f1e125] [cursor=pointer]:
+              - link "Zari Embroidered Sherwani" [ref=f1e126]:
+                - /url: http://localhost:8000/product/zari-embroidered-sherwani
+            - generic [ref=f1e127]:
+              - generic [ref=f1e128]: ₹7,749
+              - generic [ref=f1e129]: onwards
+            - paragraph [ref=f1e130]: "Fabric: Silk Blend"
+        - article [ref=f1e132]:
+          - generic [ref=f1e133] [cursor=pointer]:
+            - img "Sequinned Sherwani" [ref=f1e134]
+            - link [aria-hidden] [ref=f1e135]:
+              - /url: http://localhost:8000/product/sequinned-sherwani
+            - generic: New
+            - button "Add to wishlist" [ref=f1e136]: ♡
+          - generic [ref=f1e137]:
+            - generic [ref=f1e138]: Men · Indo-Westerns
+            - heading [level=4] [ref=f1e139] [cursor=pointer]:
+              - link "Sequinned Sherwani" [ref=f1e140]:
+                - /url: http://localhost:8000/product/sequinned-sherwani
+            - generic [ref=f1e141]:
+              - generic [ref=f1e142]: ₹18,349
+              - generic [ref=f1e143]: onwards
+            - paragraph [ref=f1e144]: "Fabric: Brocade"
+  - contentinfo [ref=f1e146]:
+    - generic [ref=f1e147]:
+      - generic [ref=f1e149]:
+        - generic [ref=f1e150]:
+          - img "Ravi Exclusive" [ref=f1e152]
+          - paragraph [ref=f1e153]: Designer ethnic and occasion wear for the whole family, from the heart of Amritsar.
+        - generic [ref=f1e154]:
+          - heading "Shop" [level=4] [ref=f1e155]
+          - list [ref=f1e156]:
+            - listitem [ref=f1e157]:
+              - link "Boys" [ref=f1e158] [cursor=pointer]:
+                - /url: http://localhost:8000/boys
+            - listitem [ref=f1e159]:
+              - link "Girls" [ref=f1e160] [cursor=pointer]:
+                - /url: http://localhost:8000/girls
+            - listitem [ref=f1e161]:
+              - link "Women" [ref=f1e162] [cursor=pointer]:
+                - /url: http://localhost:8000/women
+            - listitem [ref=f1e163]:
+              - link "Men" [ref=f1e164] [cursor=pointer]:
+                - /url: http://localhost:8000/men
+        - generic [ref=f1e165]:
+          - heading "Help" [level=4] [ref=f1e166]
+          - list [ref=f1e167]:
+            - listitem [ref=f1e168]:
+              - link "Visit the store" [ref=f1e169] [cursor=pointer]:
+                - /url: http://localhost:8000#store
+            - listitem [ref=f1e170]:
+              - link "Order on WhatsApp" [ref=f1e171] [cursor=pointer]:
+                - /url: https://wa.me/918148146262
+            - listitem [ref=f1e172]:
+              - link "Instagram" [ref=f1e173] [cursor=pointer]:
+                - /url: https://www.instagram.com/ravi.exclusif/
+        - generic [ref=f1e174]:
+          - heading "Contact" [level=4] [ref=f1e175]
+          - generic [ref=f1e176]:
+            - text: M/s Ravi Exclusive 22, Katra Jaimal Singh, AmritsarAmritsar, Punjab, India – 143001
+            - 'link "Ph: +91-814-814-62-62" [ref=f1e177] [cursor=pointer]':
+              - /url: tel:+918148146262
+      - generic [ref=f1e178]:
+        - generic [ref=f1e179]: © 2026 Ravi Exclusive. All rights reserved.
+        - generic [ref=f1e180]:
+          - text: Website designed by
+          - link "Peer Infotech" [ref=f1e181] [cursor=pointer]:
+            - /url: https://peerinfotech.com/
+  - link "Chat on WhatsApp" [ref=f1e182] [cursor=pointer]:
+    - /url: https://wa.me/918148146262?text=Hi%2C%20I%20visited%20your%20website%20and%20am%20interested%20in%20your%20products
+  - status [ref=f1e185]

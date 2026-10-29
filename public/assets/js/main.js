@@ -19,6 +19,40 @@
   const code = id => "RE-" + String(id).padStart(4, "0");
   const tint = hex => `linear-gradient(160deg,${hex}22,${hex}44)`;
   const esc = s => String(s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+
+  // edit distance between two short strings, used to tolerate typos in search terms
+  function levenshtein(a, b) {
+    const m = a.length, n = b.length;
+    if (!m) return n;
+    if (!n) return m;
+    let prev = Array.from({ length: n + 1 }, (_, i) => i);
+    for (let i = 1; i <= m; i++) {
+      const row = [i];
+      for (let j = 1; j <= n; j++) {
+        row[j] = a[i - 1] === b[j - 1]
+          ? prev[j - 1]
+          : 1 + Math.min(prev[j - 1], prev[j], row[j - 1]);
+      }
+      prev = row;
+    }
+    return prev[n];
+  }
+
+  // true if `word` appears in `haystack` outright, or is a near-miss (typo) of one of its words.
+  // typos are assumed to land after the first two letters, so only tokens sharing that
+  // prefix are considered — keeps "saree" from fuzzy-matching an unrelated "spree".
+  function fuzzyIncludes(haystack, word) {
+    if (!word) return true;
+    if (haystack.includes(word)) return true;
+    if (word.length < 4) return false; // too short for a meaningful typo tolerance
+    const anchor = word.slice(0, 2);
+    const threshold = word.length <= 6 ? 1 : 2;
+    return haystack.split(/\s+/).some(token =>
+      token.slice(0, 2) === anchor
+      && Math.abs(token.length - word.length) <= threshold
+      && levenshtein(token, word) <= threshold
+    );
+  }
   const store = {
     get(k, d) { try { return JSON.parse(localStorage.getItem("re_" + k)) ?? d } catch (e) { return d } },
     set(k, v) { try { localStorage.setItem("re_" + k, JSON.stringify(v)) } catch (e) { } }
@@ -204,6 +238,40 @@
     if (e.target.closest("a[href]")) bootstrap.Offcanvas.getOrCreateInstance($("mnav")).hide();
   });
 
+  /* ---------- search panel: instant suggestions as you type ---------- */
+  const qInput = $("q"), searchSuggest = $("searchSuggest");
+  const searchIndex = window.SEARCH_INDEX || [];
+  const SUGGEST_MIN_CHARS = 2, SUGGEST_MAX = 6;
+  const escapeHtml = s => s.replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+
+  function matchProducts(term) {
+    const words = term.toLowerCase().split(/\s+/).filter(Boolean);
+    return searchIndex.filter(p => words.every(w => fuzzyIncludes(p.search, w.replace(/s$/, "")))).slice(0, SUGGEST_MAX);
+  }
+
+  function renderSuggestions(term) {
+    if (term.length < SUGGEST_MIN_CHARS) { searchSuggest.hidden = true; searchSuggest.innerHTML = ""; qInput.setAttribute("aria-expanded", "false"); return }
+    const matches = matchProducts(term);
+    searchSuggest.innerHTML = matches.length
+      ? matches.map(p => `<a class="search-suggest-item" role="option" href="${p.url}">
+          <span class="ssi-img">${p.image ? `<img src="${p.image}" alt="" loading="lazy">` : ""}</span>
+          <span class="ssi-body"><b>${escapeHtml(p.name)}</b><em>${p.price}</em></span>
+        </a>`).join("")
+      : `<p class="search-suggest-empty">No products match “${escapeHtml(term)}”.</p>`;
+    searchSuggest.hidden = false;
+    qInput.setAttribute("aria-expanded", "true");
+  }
+
+  let suggestTimer;
+  qInput.addEventListener("input", () => {
+    clearTimeout(suggestTimer);
+    suggestTimer = setTimeout(() => renderSuggestions(qInput.value.trim()), 120);
+  });
+  qInput.addEventListener("focus", () => { if (qInput.value.trim().length >= SUGGEST_MIN_CHARS) renderSuggestions(qInput.value.trim()) });
+  document.addEventListener("click", e => {
+    if (!e.target.closest(".search-panel")) { searchSuggest.hidden = true; qInput.setAttribute("aria-expanded", "false") }
+  });
+
   /* ---------- listing pages: subcategory, filter panel, sort, pagination ---------- */
   const plist = $("plist");
   const cols = plist ? [...plist.children] : [];
@@ -292,7 +360,7 @@
       return (filters.min === null || price >= filters.min)
         && (filters.max === null || price <= filters.max)
         && (!filters.inStock || d.stock !== "0")
-        && words.every(w => d.search.includes(w.replace(/s$/, "")))
+        && words.every(w => fuzzyIncludes(d.search, w.replace(/s$/, "")))
         && (page !== "wishlist" || wish.includes(+d.id));
     });
     const matches = passesFilters.filter(col => !sub || col.firstElementChild.dataset[chipKey] === sub);
