@@ -379,6 +379,240 @@ class AdminDevToolsTest extends TestCase
         $this->assertCount(1, Storage::disk('local')->files('backups'));
     }
 
+    public function test_backup_command_can_back_up_media_only(): void
+    {
+        $this->fakeMysql();
+        Storage::disk('public')->put('products/1/shirt.jpg', 'image');
+
+        $this->artisan('ecommerce:backup', ['--media-only' => true])->assertSuccessful();
+
+        $zip = $this->openOnlyBackup();
+        $this->assertSame('image', $zip->getFromName('media/products/1/shirt.jpg'));
+        $this->assertFalse($zip->getFromName('database.sql'));
+        $zip->close();
+
+        Process::assertNothingRan();
+    }
+
+    public function test_media_backup_zips_only_the_media_library(): void
+    {
+        $this->fakeMysql();
+        Storage::disk('public')->put('products/1/shirt.jpg', 'image');
+
+        $this->actingAs($this->adminWithRole('super-admin'))
+            ->post(route('admin.dev-tools.media.export'))
+            ->assertRedirect(route('admin.dev-tools.index'))
+            ->assertSessionHas('success');
+
+        $zip = $this->openOnlyBackup();
+        $manifest = json_decode($zip->getFromName('manifest.json'), true);
+
+        $this->assertSame('image', $zip->getFromName('media/products/1/shirt.jpg'));
+        $this->assertFalse($zip->getFromName('database.sql'));
+        $this->assertSame('media', $manifest['type']);
+        $this->assertStringStartsWith('media-', basename($zip->filename));
+        $zip->close();
+
+        Process::assertNothingRan();
+    }
+
+    public function test_backup_list_marks_media_only_backups(): void
+    {
+        $this->fakeMysql();
+        $this->storeMediaBackup('media-2026-01-01_000000.zip', ['media/products/1/a.jpg' => 'a']);
+
+        $this->actingAs($this->adminWithRole('super-admin'))
+            ->get(route('admin.dev-tools.index'))
+            ->assertOk()
+            ->assertSee('Back up media library')
+            ->assertSee('Media only')
+            ->assertSee('data-restore-media="media-2026-01-01_000000.zip"', false)
+            ->assertDontSee('data-restore="media-2026-01-01_000000.zip"', false);
+    }
+
+    public function test_media_restore_merges_into_the_current_media(): void
+    {
+        $this->fakeMysql();
+        Storage::disk('public')->put('products/1/kept.jpg', 'uploaded after the backup');
+        Storage::disk('public')->put('products/1/changed.jpg', 'new version');
+        Storage::disk('public')->put('products/1/same.jpg', 'same');
+        $this->storeMediaBackup('media-2026-01-01_000000.zip', [
+            'media/products/1/missing.jpg' => 'missing',
+            'media/products/1/changed.jpg' => 'old version',
+            'media/products/1/same.jpg' => 'same',
+        ]);
+
+        $this->actingAs($this->adminWithRole('super-admin'))
+            ->post(route('admin.dev-tools.media.import'), ['media_backup' => 'media-2026-01-01_000000.zip'])
+            ->assertRedirect(route('admin.dev-tools.index'))
+            ->assertSessionHas('success', fn (string $message) => str_contains($message, '1 added, 1 updated')
+                && str_contains($message, 'pre-media-import-'));
+
+        $public = Storage::disk('public');
+        $this->assertSame('missing', $public->get('products/1/missing.jpg'));
+        $this->assertSame('old version', $public->get('products/1/changed.jpg'));
+        $this->assertSame('uploaded after the backup', $public->get('products/1/kept.jpg'));
+        $this->assertSame('same', $public->get('products/1/same.jpg'));
+
+        $safetyBackups = collect(Storage::disk('local')->files('backups'))
+            ->filter(fn (string $path) => str_starts_with(basename($path), 'pre-media-import-'));
+        $this->assertCount(1, $safetyBackups);
+
+        // Only the file that was overwritten goes into the safety backup.
+        $zip = new ZipArchive;
+        $zip->open(Storage::disk('local')->path($safetyBackups->first()));
+        $this->assertSame('new version', $zip->getFromName('media/products/1/changed.jpg'));
+        $this->assertFalse($zip->getFromName('media/products/1/kept.jpg'));
+        $this->assertSame('media', json_decode($zip->getFromName('manifest.json'), true)['type']);
+        $zip->close();
+
+        Process::assertNothingRan();
+        $this->assertFalse(app()->isDownForMaintenance());
+    }
+
+    public function test_media_can_be_restored_from_an_uploaded_full_backup_without_touching_the_database(): void
+    {
+        $this->fakeMysql();
+        $this->storeBackup('backup-2026-01-01_000000-media.zip', ['media/products/2/new.jpg' => 'new']);
+        $contents = Storage::disk('local')->get('backups/backup-2026-01-01_000000-media.zip');
+        Storage::disk('local')->delete('backups/backup-2026-01-01_000000-media.zip');
+
+        $this->actingAs($this->adminWithRole('super-admin'))
+            ->post(route('admin.dev-tools.media.import'), [
+                'media_file' => UploadedFile::fake()->createWithContent('backup.zip', $contents),
+            ])
+            ->assertSessionHas('success', fn (string $message) => str_contains($message, '1 added, 0 updated'));
+
+        $this->assertSame('new', Storage::disk('public')->get('products/2/new.jpg'));
+        $this->assertSame([], Storage::disk('local')->files('backups'));
+        Process::assertNothingRan();
+    }
+
+    public function test_media_restore_never_writes_executable_or_hidden_files(): void
+    {
+        $this->fakeMysql();
+        $this->storeMediaBackup('media-2026-01-01_000000.zip', [
+            'media/products/1/photo.jpg' => 'jpg',
+            'media/products/1/shell.php' => '<?php',
+            'media/products/1/logo.svg' => '<svg onload="alert(1)"/>',
+            'media/products/1/page.html' => '<script>alert(1)</script>',
+            'media/products/1/app.js' => 'alert(1)',
+            'media/web.config' => '<configuration/>',
+            'media/.htaccess' => 'Options +ExecCGI',
+            // Windows would write both of these as an executable shell.php / a.jpg.
+            'media/products/1/shell.php.' => '<?php',
+            'media/products/1/a.jpg::$DATA' => '<?php',
+        ]);
+
+        $this->actingAs($this->adminWithRole('super-admin'))
+            ->post(route('admin.dev-tools.media.import'), ['media_backup' => 'media-2026-01-01_000000.zip'])
+            ->assertSessionHas('success');
+
+        $public = Storage::disk('public');
+        $public->assertExists('products/1/photo.jpg');
+        $public->assertMissing('products/1/shell.php');
+        $public->assertMissing('products/1/logo.svg');
+        $public->assertMissing('products/1/page.html');
+        $public->assertMissing('products/1/app.js');
+        $public->assertMissing('web.config');
+        $public->assertMissing('.htaccess');
+        $public->assertMissing('products/1/a.jpg');
+    }
+
+    public function test_full_restore_still_accepts_media_names_that_only_windows_rejects(): void
+    {
+        $this->fakeMysql();
+        $this->storeBackup('backup-2026-01-01_000000-media.zip', [
+            'media/products/1/photo.jpg' => 'jpg',
+            'media/homepage/slides/Banner 10:30.jpg' => 'banner',
+        ]);
+
+        $this->actingAs($this->adminWithRole('super-admin'))
+            ->post(route('admin.dev-tools.import'), [
+                'backup' => 'backup-2026-01-01_000000-media.zip',
+                'confirm' => 'CONFIRM',
+            ])
+            ->assertSessionHas('success');
+
+        Storage::disk('public')->assertExists('products/1/photo.jpg');
+    }
+
+    public function test_restoring_a_backup_of_an_empty_media_library_changes_nothing(): void
+    {
+        $this->fakeMysql();
+        $admin = $this->adminWithRole('super-admin');
+
+        $this->actingAs($admin)->post(route('admin.dev-tools.media.export'))->assertSessionHas('success');
+        $backup = basename(Storage::disk('local')->files('backups')[0]);
+
+        $this->actingAs($admin)
+            ->post(route('admin.dev-tools.media.import'), ['media_backup' => $backup])
+            ->assertSessionHas('success', 'Media is already up to date. Nothing was changed.');
+    }
+
+    public function test_media_restore_rejects_backups_without_media_or_with_unsafe_paths(): void
+    {
+        $this->fakeMysql();
+        $this->storeBackup('backup-2026-01-01_000000.zip');
+        $this->storeMediaBackup('media-2026-01-01_000000.zip', [
+            'media/products/1/a.jpg' => 'a',
+            'media/../../evil.php' => '<?php',
+        ]);
+        $admin = $this->adminWithRole('super-admin');
+
+        $this->actingAs($admin)
+            ->post(route('admin.dev-tools.media.import'), ['media_backup' => 'backup-2026-01-01_000000.zip'])
+            ->assertSessionHas('error', fn (string $message) => str_contains($message, 'no media'));
+
+        $this->actingAs($admin)
+            ->post(route('admin.dev-tools.media.import'), ['media_backup' => 'media-2026-01-01_000000.zip'])
+            ->assertSessionHas('error', fn (string $message) => str_contains($message, 'unsafe path'));
+
+        $this->assertSame([], Storage::disk('public')->allFiles());
+
+        $this->actingAs($admin)
+            ->post(route('admin.dev-tools.media.import'), ['media_backup' => '../.env'])
+            ->assertSessionHasErrors('media_backup', errorBag: 'media');
+    }
+
+    public function test_full_import_refuses_a_media_only_backup(): void
+    {
+        $this->fakeMysql();
+        $this->storeMediaBackup('media-2026-01-01_000000.zip', ['media/products/1/a.jpg' => 'a']);
+
+        $this->actingAs($this->adminWithRole('super-admin'))
+            ->post(route('admin.dev-tools.import'), [
+                'backup' => 'media-2026-01-01_000000.zip',
+                'confirm' => 'CONFIRM',
+            ])
+            ->assertSessionHas('error', fn (string $message) => str_contains($message, 'media-only backup'));
+
+        Process::assertNothingRan();
+    }
+
+    public function test_media_restore_waits_for_a_running_restore(): void
+    {
+        $this->fakeMysql();
+        $this->storeMediaBackup('media-2026-01-01_000000.zip', ['media/products/1/a.jpg' => 'a']);
+        $lock = Cache::lock(BackupRestorer::LOCK, 60);
+        $lock->get();
+
+        $this->actingAs($this->adminWithRole('super-admin'))
+            ->post(route('admin.dev-tools.media.import'), ['media_backup' => 'media-2026-01-01_000000.zip'])
+            ->assertSessionHas('error', fn (string $message) => str_contains($message, 'already running'));
+
+        $lock->release();
+        Storage::disk('public')->assertMissing('products/1/a.jpg');
+    }
+
+    public function test_only_super_admins_can_back_up_or_restore_media(): void
+    {
+        $admin = $this->adminWithRole('admin');
+
+        $this->actingAs($admin)->post(route('admin.dev-tools.media.export'))->assertForbidden();
+        $this->actingAs($admin)->post(route('admin.dev-tools.media.import'), [])->assertForbidden();
+    }
+
     private function adminWithRole(string $role): User
     {
         // fresh() loads is_active's database default, which the admin middleware checks.
@@ -429,6 +663,23 @@ class AdminDevToolsTest extends TestCase
         $zip->addFromString('database.sql', "-- fixture\n");
         $zip->addFromString('manifest.json', json_encode(['version' => 1, 'includes_media' => $extraEntries !== []]));
         foreach ($extraEntries as $entry => $contents) {
+            $zip->addFromString($entry, $contents);
+        }
+        $zip->close();
+    }
+
+    /**
+     * @param  array<string, string>  $entries
+     */
+    private function storeMediaBackup(string $name, array $entries): void
+    {
+        $path = Storage::disk('local')->path('backups/'.$name);
+        Storage::disk('local')->makeDirectory('backups');
+
+        $zip = new ZipArchive;
+        $zip->open($path, ZipArchive::CREATE | ZipArchive::OVERWRITE);
+        $zip->addFromString('manifest.json', json_encode(['version' => 1, 'type' => 'media', 'includes_media' => true]));
+        foreach ($entries as $entry => $contents) {
             $zip->addFromString($entry, $contents);
         }
         $zip->close();
